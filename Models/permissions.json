@@ -1,0 +1,46 @@
+[
+  {
+    "name": "read_only",
+    "description": "Read-only access to resources"
+  },
+  {
+    "name": "admin_permission",
+    "description": "Administrative permissions"
+  },
+  {
+    "name": "update_service",
+    "description": "Update service information"
+  },
+  {
+    "name": "update_technical",
+    "description": "Update technical information"
+  },
+  {
+    "name": "update_testing",
+    "description": "Update testing information"
+  },
+  {
+    "name": "add_contact",
+    "description": "Add contact information"
+  },
+  {
+    "name": "add_document",
+    "description": "Add document"
+  },
+  {
+    "name": "update_document",
+    "description": "Update document"
+  },
+  {
+    "name": "delete_document",
+    "description": "Delete document"
+  },
+  {
+    "name": "create_client",
+    "description": "Create client"
+  },
+  {
+    "name": "download_document",
+    "description": "Download document"
+  }
+]

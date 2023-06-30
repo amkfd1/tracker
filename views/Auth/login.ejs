@@ -1,0 +1,83 @@
+<!-- head Includes -->
+<%- include('../includes/head') %>
+<style>
+  .mkelTheme{
+    background-color: #1DA1F2;
+    border: #1DA1F2;
+  }
+  .mkelTheme:hover{
+    background-color: #58aee4;
+  }
+</style>
+<body class="sidebar-dark">
+	<div class="main-wrapper">
+		<div class="page-wrapper full-page ">
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				<div class="card " style=" width: 90% ">
+					
+					<div class="card-body card-body-alt px-5" >
+						
+
+
+                        <!-- <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false"> -->
+                                            
+                            <div class="d-flex align-items-center justify-content-center">
+                              <div class="col-md-4 pl-md-0">
+                                        <div class="auth-form-wrapper px-4 py-5">
+                                        <div class=" page-contents d-flex align-items-center justify-content-center">
+                                          <img src="../../../assets/images/mkel-logo.png" style="height: 4rem; width:6rem;">
+
+                                        </div>
+                                         <h5 class="text-muted font-weight-normal mt-2 mb-4">Welcome back! Log in to your account.</h5>
+                                          <form class="forms-sample" action="/auth/login" method="post">
+                                            <div class="form-group">
+                                              <label for="exampleInputEmail1">Username: </label>
+                                              <input type="text" name="username" class="form-control" id="exampleInputEmail1" placeholder="username">
+                                            </div>
+                                            <div class="form-group">
+                                              <label for="exampleInputPassword1">Password</label>
+                                              <input type="password" name="password" class="form-control" id="exampleInputPassword1" autocomplete="current-password" placeholder="Password">
+                                            </div>
+                                            <!-- <div class="form-check form-check-flat form-check-primary">
+                                              <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input">
+                                                Remember me
+                                              <i class="input-frame"></i></label>
+                                            </div> -->
+                                            <div class="page-contents d-flex align-items-center justify-content-center mt-3">
+                                              <button type="submit" class="btn btn-primary mr-2 mb-2 mb-md-0 text-white mkelTheme" >Login</button>
+                                              <br>
+
+                                            </div>
+                                            <div class="page-contents d-flex align-items-center justify-content-center ">
+                                              <a href="/Auth/password-reset" class="d-block mt-3 text-muted">Forget Password?</a>
+
+                                            </div>
+                                          </form>
+                                        </div>
+                                      </div>
+                            </div>
+                          <!-- </div> -->
+
+
+                        
+
+					</div>
+
+				</div>
+				
+				
+				
+
+			</div>
+
+		
+			<!-- Nav Includes -->
+			<%- include('../includes/nav') %>
+		</div>
+		
+	</div>
+
+<!-- End Includes -->
+<%- include('../includes/end') %>

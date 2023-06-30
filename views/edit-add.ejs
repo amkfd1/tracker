@@ -1,0 +1,221 @@
+<!-- head Includes -->
+<%- include('partials/head') %>
+
+<body class="sidebar-dark">
+	<div class="main-wrapper">
+		<div class="page-wrapper full-page ">
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				<div class="card " style=" width: 90% ">
+					
+					<div class="card-body card-body-alt px-5" >
+						<h5 class="card-title mb-3">Create New Customer</h5>
+						<p class="card-description">Add new Client below. Fill out the form to keep track of Onboarding processes</p>
+						<form action="/track/newClient" method="POST" class="forms-sample">
+							<section >
+								
+								<h4 class="card-title text-muted">
+									<div class="mb-2 border-bottom ">
+										
+										CUSTOMER INFO
+										<div class="mt-2 border-top"></div>
+									</div>
+								</h4>
+								
+								<div class="form-group row ">
+									<div class="col-md-5 border-right">
+										<label>Company Name:</label>
+										<input value="" name="Customer_Name" class="form-control mb-4 mb-md-0" >
+										<div class="row mt-3">
+											<div class="col">
+												<label>Stage:</label>
+												<input value="" class="form-control mb-4 mb-md-0" >
+											</div>
+											<div class="col">
+												<label>Status:</label>
+												<input value="Initiated" class="form-control mb-4 mb-md-0" >
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="row">
+											<div class= "col-md-4">
+												<label>Building No:</label>
+												<input class="form-control" name="building_number" >
+											</div>
+											<div class= "col-md-4">
+												<label>Street:</label>
+												<input class="form-control" name="street">
+											</div>
+											<div class= "col-md-4">
+												<label>City:</label>
+												<input class="form-control" name="city" >
+											</div>
+											
+										</div>
+										<div class="row mt-4">
+											<div class= "col-md-5">
+												<label>Zip:</label>
+												<input class="form-control" name="zip">
+											</div>
+											<div class= "col-md-6">
+												<label>Country: </label>
+												<input class="form-control" name="country">
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</section>
+							<!--Contact Points-->
+							<section class="mt-3">
+								<h4 class="card-title text-muted">
+									<div class="mb-2 border-bottom ">
+										CONTACTS 
+										<div class="mt-2 border-top"></div>
+									</div>
+								</h4>
+								<div class="form-group row ">
+									<div class="col">
+										<label>Platform:</label>
+										<input class="form-control mb-4 mb-md-0" name="platform" >
+									</div>
+									<div class="col-md-6">
+										<label>Contact Link <span>(Chat Room)</span>: </label>
+										<input class="form-control " name="contact_link">
+									</div>
+								</div>
+							</section>
+							
+							<!--SERVICE INTEREST-->
+							<section class="mt-3">
+								<h4 class="card-title text-muted">
+									<div class="mb-2 border-bottom ">
+										SERVICES
+										<div class="mt-2 border-top"></div>
+									</div>
+								</h4>
+								<div class="form-group row ">
+									<div class="col-md-4">
+										<label>Service Type:</label>
+										<input class="form-control mb-4 mb-md-0" name="service_name">
+									</div>
+									<div class="col-md-3">
+										<label>Interested Routes: </label>
+										<input class="form-control" name="routes">
+									</div>
+									<div class="col-md-3">
+										<label>Rates Offered: </label>
+										<input class="form-control" name="rates_offered">
+									</div>
+									<div class="col-md-2">
+										<label>Currency: </label>
+										<input Value="USD" class="form-control" name="currency">
+									</div>
+									<div class="col-md-6 mt-3">
+										<label>Status: </label>
+										<input class="form-control" name="status">
+									</div>
+								</div>
+							</section>
+
+							<!--tECHNICAL DETAILS-->
+
+							<section class="mt-3">
+								<h4 class="card-title text-muted">
+									<div class="mb-2 border-bottom ">
+										TECHNICAL INFO
+										
+										<div class="mt-2 border-top"></div>
+									</div>
+								</h4>
+								<div class="form-group row ">
+									<div class="col-md-2">
+										<label>Service Type:</label>
+										<input class="form-control mb-4 mb-md-0" name="TI_service_name">
+									</div>
+									<div class="col-md-5">
+										<label>Signalling IP(s): </label>
+										
+										<input class="form-control" name="signalling_Ip">
+									</div>
+									<div class="col-md-5">
+										<label>Media IP(s): </label>
+										<input class="form-control" name="media_Ip">
+									</div>
+									<div class="col-md-4 mt-3">
+										<label>Prefix: </label>
+										<input class="form-control" name="prefix">
+									</div>
+									<div class="col-md-4 mt-3">
+										<label>Port: </label>
+										<input class="form-control" name="port">
+									</div>
+									<div class="col-md-4 mt-3">
+										<label>Codices: </label>
+										<input class="form-control" name="codices">
+									</div>
+								</div>
+							</section>
+
+							<section class="mt-3">
+								<h4 class="card-title text-muted">
+									<div class="mb-2 border-bottom ">
+										TECHNICAL INFO
+									
+										<div class="mt-2 border-top"></div>
+									</div>
+								</h4>
+								
+								<div class="form-group row ">
+									<div class="col-md-2">
+										<label>Routes To Test:</label>
+										<input class="form-control mb-4 mb-md-0" name="routes_to_test">
+									</div>
+									<div class="col-md-5">
+										<label>Trunk: </label>
+										<input class="form-control" name="trunk">
+									</div>
+									<div class="col-md-5">
+										<label>Date Initiated: </label>
+										<div class="input-group date datepicker" id="datePickerExample">
+											<input  name="date_started" type="text" class="form-control"><span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+										</div>
+										<!-- <input class="form-control"> -->
+									</div>
+									<div class="col-md-4 mt-3">
+										<label>Date Concluded: </label>
+										<input class="form-control" name="date_finished">
+									</div>
+									<div class="col-md-4 mt-3">
+										<label>Status: </label>
+										<input class="form-control" name="testing_status">
+									</div>
+									<div class="col-md-4 mt-3">
+										<label>Notes: </label>
+										<textarea name="notes" id="maxlength-textarea" class="form-control" maxlength="100" rows="8" placeholder="This textarea has a limit of 100 chars."></textarea>
+									</div>
+								</div>
+							</section>
+
+						<button type="submit" class="btn btn-success"><i data-feather="check"></i>Add New Tracker</button>
+
+						</form>
+					</div>
+
+				</div>
+				
+				
+				
+
+			</div>
+
+		
+			<!-- Nav Includes -->
+			<%- include('partials/nav') %>
+		</div>
+		
+	</div>
+
+<!-- End Includes -->
+<%- include('partials/end') %>

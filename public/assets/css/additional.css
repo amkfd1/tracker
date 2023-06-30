@@ -1,0 +1,117 @@
+.page-wrapper-alt{ 
+    height: 100vh;
+    overflow-y: hidden;
+}
+
+.card-body-alt { 
+    overflow-y: scroll;
+    height: 80vh;
+}
+
+.footer-alt { 
+    margin-top: 32px;
+}
+
+/* Scroll Bar */
+.card-body-alt::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+.card-body-alt::-webkit-scrollbar-track {
+    background: #0c1427;
+  }
+  
+  /* Handle */
+.card-body-alt::-webkit-scrollbar-thumb {
+    background:  #3d4352;
+  }
+  
+  /* Handle on hover */
+.card-body-alt::-webkit-scrollbar-thumb:hover {
+    background: #242c3d;
+}
+
+
+.page-wrapper-alt{ 
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.card-body-alt { 
+  overflow-y: scroll;
+  height: 80vh;
+}
+
+.footer-alt { 
+  margin-top: 32px;
+}
+
+/* Scroll Bar */
+.card-body-alt::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.card-body-alt::-webkit-scrollbar-track {
+  background: #0c1427;
+}
+
+/* Handle */
+.card-body-alt::-webkit-scrollbar-thumb {
+  background:  #3d4352;
+}
+
+/* Handle on hover */
+.card-body-alt::-webkit-scrollbar-thumb:hover {
+  background: #242c3d;
+}
+
+.card-body-hor { 
+  overflow-x: scroll;
+  height: 38vh;
+}
+
+/* Scroll Bar */
+.card-body-hor::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+.card-body-hor::-webkit-scrollbar-track {
+  background: #0c1427;
+}
+
+/* Handle */
+.card-body-hor::-webkit-scrollbar-thumb {
+  background:  #3d4352;
+}
+
+/* Handle on hover */
+.card-body-hor::-webkit-scrollbar-thumb:hover {
+  background: #242c3d;
+}
+
+/* Scroll Bar */
+.card-body-hor::-webkit-scrollbar {
+  height: 4px;
+}
+
+/* Track */
+.card-body-hor::-webkit-scrollbar-track {
+  background: #0c1427;
+}
+
+/* Handle */
+.card-body-hor::-webkit-scrollbar-thumb {
+  background:  #3d4352;
+}
+
+/* Handle on hover */
+.card-body-hor::-webkit-scrollbar-thumb:hover {
+  background: #242c3d;
+}
+
+.modalWidth{
+  width: 60%;
+}

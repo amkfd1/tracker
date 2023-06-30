@@ -1,0 +1,331 @@
+<!-- head Includes -->
+<%- include('includes/head') %>
+<style>
+    .appIcons{
+        width: 15px;
+        height: 15px;
+    }
+</style>
+<body class="sidebar-dark">
+	<div class="main-wrapper">
+		<div class="page-wrapper full-page ">
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				<div class="card " style=" width: 90% ">
+                    
+					<div class="card-body card-body-alt px-5" >
+						
+                        <div class="">
+							<div class="row">
+                                
+                               <div class="col-md-8">
+                                    <h5 class="card-title mb-3">OnBoarding Tracker</h5>
+                                    <p class="card-description">Monitor on-boarding processes of every customer</p>
+                                    <!-- <h5 class="card-title mb-3">trackers SERVICE</h5> -->
+                                    
+                                    <% if (message) {%>
+                                        <div id="alert-message" class="alert alert-success alert-dismissible fade show" role="alert">
+                                          <i data-feather="check"></i> <strong>  <%= message%></strong>
+                        
+                                        </div>
+                                          
+                                    <%}%>
+                                      
+                                    
+                               </div>
+                               <div class="col-md-4">   
+                                <!--  -->
+                                <div class="card bg-transparent"  style="height: 10rem;">
+                                    <ul class="list-group list-group-flush card-body-hor py-2">
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-6 ">
+                                                    <label class="text-muted">My Clients:
+                                                    </label>
+                                                    <span class="float-right">
+                                                        <a href="#" data-toggle="modal" data-target=".assigned">
+                                                            <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                    
+                                                        </a>
+                                                    </span>
+                                                    
+                                                    <h5 class="text-info"><%= mytasks.length %></h5>
+                                                </div>
+                                                <div class="col-md-6 ">
+                                                    <label class="text-muted">Notes:
+                                                    </label>
+                                                    <span class="float-right">
+                                                       <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg">
+                                                            <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                        </a>
+                                                    </span>
+                                                        <h5 class="text-warning"><%= userNotes.length%></h5>
+                                                </div>
+                                            </div>						
+                                        </li>
+                                        
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="text-muted">Completed:
+                                                    </label>
+                                                    <span class="float-right">
+                                                        <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                    </span>
+                                                    <a><h5 class="text-success"><%= completedPercentile%>%</h5></a>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="text-muted">Incomplete:
+                                                    </label>
+                                                    <span class="float-right">
+                                                        <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                    </span>
+                                                    <a><h5 class="text-danger"><%= incompletePercentile%>%</h5></a>
+                                                    
+                                                </div>
+                                            </div>	
+                                        </li>
+                                        
+                                    </ul>
+                                </div>
+                                <!--  -->
+                                
+                                    <!-- <% if (!mytasks) {%>
+                                        <div class="card bg-dark" style="height: 10rem;">
+                                    
+                                            <div class="page-content d-flex justify-content-center align-items-center py-2 px-2">
+                                            <h6 class="card-title mt-3">You Have no assigned tasks/clients</h6>
+                                            </div>
+                                                                           
+                                        </div>
+                                    <%} else {%>
+                                        <div class="card bg-dark card-body-alt card-body-hor" style="height: 10rem; width:22rem;">
+                                    
+                                            <div class=" row py-2 px-2">
+                                                
+                                                    <div class="col">
+                                                        <h5 class="card-title pt-2">My Clients</h5>
+                                                        <% for (i in mytasks) {%>
+                                                            <a href="/client/<%= mytasks[i]._id%>" ><span class="text-muted">Client: </span><%= mytasks[i].Customer_Name%></a>
+                                                        <% } %>
+                                                    </div>
+                                                    <div class="col">
+                                                        <h5 class="card-title pt-2">Summaries</h5>
+                                                        <h6>My Clients: </h6> 
+                                                        <div class="page-content d-flex justify-content-center align-items-center py-2 px-2">
+
+                                                            <h4 class="text-success">  <%= mytasks.length%></h4>
+                                                        </div>
+                                                        <h6>Notes: </h6> 
+                                                    </div>
+                                                
+                                            </div>
+                                                                           
+                                        </div>
+                                    <% } %> -->
+                                </div>
+                            </div>
+                            
+    
+                                <section class="mt-3 mb-5">
+                                    <div class="table-responsive ">
+                                        <table class="table table-striped " id="voipTable">
+                                            <thead class="border-info">
+                                                <tr>
+                                                    <th>
+                                                        Company
+                                                    </th>
+                                                    <th>
+                                                        Stage
+                                                    </th>
+                                                    <th>
+                                                        
+                                                    </th>
+                                                    <th>
+                                                        Status
+                                                    </th>
+                                                    <th>
+                                                        Service
+                                                    </th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for (i in trackers) {%>
+    
+                                                    <tr>
+                                                        <td class="py-1">
+                                                            <a href="/client/<%= trackers[i]._id%>"><%= trackers[i].Customer_Name%></a>
+                                                        </td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                
+                                                                <button class="btn btn-dark bg-transparent dropdown-toggle" type="button" id="dropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <%= trackers[i].stage.process_stage%>
+                                                                </button>
+                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
+                                                                    <%for (j in stages) {%>
+                                                                        
+                                                                        <form action="/track/updateStage/<%= trackers[i]._id%>" method="post">
+                                                                            <button type="submit"  class="dropdown-item" style="border:none;">
+                                                                                <%= stages[j]%>
+                                                                            </button>
+                                                                            <input type="hidden" name="stage" value="<%= stages[j]%>">
+                                                                        </form>
+                                                                    <% } %>
+                                                                    <div class="dropdown-divider"></div>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            
+    
+                                                        </td>
+                                                        <td>
+                                                            <%if (trackers[i].stage.process_stage === "Overall Completion") {%>
+                                                                <h6 class="
+                                                                <%if (trackers[i].completionPercentage <40 ){%> text-danger  %>
+                                                                <%}else if (trackers[i].completionPercentage > 30 && trackers[i].completionPercentage <= 60) {%>
+                                                                     text-warning																
+                                                                <%}else %> text-success ">
+                                                                        
+                                                                    <i data-feather="percent"></i> 
+                                                                    <%= trackers[i].completionPercentage%></h6>
+                                                            <% }else {%>
+                                                                <h6 class="
+                                                                <%if (trackers[i].stage.status == 'NA' || trackers[i].stage.status == '' ){%> text-danger  %>
+                                                                <%}else if (trackers[i].stage.status == 'Incomplete' || trackers[i].stage.status == 'Initiated') {%>
+                                                                     text-warning
+                                                                <%}else if (trackers[i].stage.status == 'Ongoing' ) {%>	
+                                                                    text-warning															
+                                                                <%}else %> text-success ">
+                                                                        <%if (trackers[i].stage.status == "Complete" || trackers[i].stage.status == "Completed") { %>
+                                                                            <i data-feather="check"></i>
+                                                                            <%= trackers[i].stage.status%>
+                                                                        <%} else if(trackers[i].stage.status == "Incomplete" || trackers[i].stage.status == "Ongoing"){%>
+                                                                            <i data-feather="minus"></i> 
+                                                                            <%= trackers[i].stage.status%>
+                                                                        <%} else {%>
+                                                                            <i data-feather="percent"></i> 
+                                                                            <%= trackers[i].stage.status%>
+                                                                        </h6>
+                                                                        <% } %>
+                                                            <%}%>
+                                                        </td>
+                                                        <td>
+                                                            <div class="progress">
+                                                                <% if (trackers[i].stage.status === '' || trackers[i].stage.status === 'NA'){%>
+                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 5%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                                        <%= trackers[i].stage.status%>
+                                                                    
+                                                                    </div>
+                                                                <%} else if (trackers[i].stage.status === 'Initiated') {%>
+                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
+                                                                        <%= trackers[i].stage.status%>
+                                                                    
+                                                                    </div>
+                                                                <% } else if (trackers[i].stage.status === 'Ongoing' || trackers[i].stage.status === 'Incomplete'  ) {%>
+                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 60%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+                                                                        <%= trackers[i].stage.status%>
+                                                                    
+                                                                    </div>
+                                                                <% } else if (trackers[i].stage.status === 'Complete' || trackers[i].stage.status === 'Completed'  ) {%>
+                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                                        <%= trackers[i].stage.status%>
+                                                                    
+                                                                    </div>
+                                                                <% } else { %>
+                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated
+                                                                    <%if (trackers[i].completionPercentage <40 ){%> bg-danger  %>
+                                                                    <%}else if (trackers[i].completionPercentage > 30 && trackers[i].completionPercentage <= 60) {%>
+                                                                         bg-warning																
+                                                                    <%}else %> bg-success " role="progressbar"  aria-valuenow="<%= trackers[i].completionPercentage%>" aria-valuemin="0" aria-valuemax="100">
+                                                                        <%= trackers[i].completionPercentage%>
+                                                                    
+                                                                    </div>
+                                                                <% } %>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <%= trackers[i].service_interest.service_name%>
+    
+                                                        </td>
+                                                        
+                                                    </tr>
+                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>		
+                                </section>
+                                
+        
+        
+        
+                                <div class="mb-2 mt-4 border-bottom ">
+                                            
+                                    
+                                    <div class="mt-2 border-top"></div>
+                                </div>
+        
+                            		
+                            
+                        </div>
+
+					</div>
+
+				</div>
+				
+				
+				
+
+			</div>
+            	<!-- Expand Notes -->
+			<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+				  <div class="modal-content card-body-alt">
+					<table class="table table-striped " >
+						<thead class="border-info">
+							<tr>
+								<th>
+									Client
+								</th>
+								<th>
+									Note
+								</th>
+								<th>
+									Date
+								</th>
+								
+								
+							</tr>
+						</thead>
+						<tbody>
+							<% for (i in userNotes) {%>
+								<tr>
+									<td>
+										<%= userNotes[i].tracker.Customer_Name%>
+									</td>
+
+									<td>
+										<%= userNotes[i].note%>
+									</td>
+
+									<td>
+										<%= userNotes[i].createdAt%>
+									</td>
+								</tr>
+							<% } %>
+							
+						</tbody>
+					</table>
+				  </div>
+				</div>
+			  </div>
+		
+			<!-- Nav Includes -->
+			<%- include('includes/nav') %>
+		</div>
+		
+	</div>
+
+<!-- End Includes -->
+<%- include('includes/end') %>

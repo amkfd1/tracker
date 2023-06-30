@@ -1,0 +1,63 @@
+<!-- core:js -->
+<script src="../../../assets/vendors/core/core.js"></script>
+<!-- endinject -->
+<!-- plugin js for this page -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/bloodhound.min.js"></script>
+<script>
+    // Function to hide the alert message after 3 seconds
+    setTimeout(function() {
+      document.getElementById('alert-message').style.display = 'none';
+    }, 3000);
+  </script>
+<script>
+    // Initialize Bloodhound for remote search
+    const bloodhound = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('Customer_Name'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+        url: 'http://localhost:3003/track/search?input=%QUERY',
+        wildcard: '%QUERY',
+    },
+    });
+
+    // Initialize the typeahead input field
+    $('#search-input').typeahead(
+    {
+        hint: true,
+        highlight: true,
+        minLength: 1,
+    },
+    {
+        name: 'customers',
+        display: 'Customer_Name',
+        source: bloodhound,
+        templates: {
+        suggestion: function (data) {
+            return `<div class="bg-dark"><a class="" href="/track/tracker/${data._id}">${data.Customer_Name}</a></div>`;
+        },
+        },
+    }
+    );
+</script>
+<!-- end plugin js for this page -->
+<script src="../../../assets/js/data-table.js"></script>
+<script src="../../../assets/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="../../../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="../../../assets/vendors/dropify/dist/dropify.min.js"></script>
+<script src="../../../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="../../../assets/vendors/sweetalert2/sweetalert2.min.js"></script>
+<script src="../../../assets/vendors/promise-polyfill/polyfill.min.js"></script>
+<!-- inject:js -->
+<script src="../../../assets/vendors/feather-icons/feather.min.js"></script>
+<script src="../../../assets/js/template.js"></script>
+<!-- endinject -->
+<!-- custom js for this page -->
+<script src="../../../assets/js/dropify.js"></script>
+<script src="../../../assets/js/dashboard.js"></script>
+<script src="../../../assets/js/datepicker.js"></script>
+<script src="../../../assets/js/sweet-alert.js"></script>
+<!-- end custom js for this page -->
+</body>
+</html>

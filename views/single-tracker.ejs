@@ -1,0 +1,799 @@
+<style>
+	.smallIcons{
+		max-width: 15px;
+		max-height: 15px;
+	}
+</style>
+<%- include('partials/head') %>
+
+<body class="sidebar-dark">
+	<div class="main-wrapper">
+		<div class="page-wrapper full-page ">
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				<div class="card " style=" width: 90% ">
+					
+					<div class="card-body card-body-alt px-5" >
+						<div class="row">
+							<div class="col">
+								<h4 class="card-title mb-3"><%= Tracker.Customer_Name %> 
+									<span>
+										<i class="mdi mdi-grease-pencil ml-2" ></i>
+									</span>
+								</h4>
+								<p class="card-description">Monitor on-boarding processes of every customer</p>
+								<% if (flash.length > 0) { %>
+									<div id="alert-message" class="alert  text-center alert-success alert-dismissible fade show" role="alert">
+									  <i data-feather="check"></i> <strong><%= flash[0] %></strong>
+									</div>
+								  <% } %>
+							</div>
+							<div class="col">
+								<p>
+									<div class="btn-group" role="group" aria-label="Basic example">
+										<a class="btn btn-outline-dark text-muted " data-toggle="collapse" href="#notes" role="button" aria-expanded="false" aria-controls="collapseExample">
+										Notes
+										</a>
+										<a class="btn btn-outline-dark text-muted"  data-toggle="collapse" href="#collapseExample2" aria-expanded="true" aria-controls="collapseExample">
+										Option
+										<a>
+									</div>
+								</p>
+								  <div class="collapse" id="notes">
+									<div class="card mt-2 card-body-alt" style="max-height: 6rem;">
+										<div class="card-header ">
+											<a href="#" data-toggle="modal" data-target="#sendNote" data-whatever="">
+												<i class=" px-2 py-2 " data-feather="plus-circle"></i> Add Notes</h6>
+											</a>
+										</div>
+										<div class="card-body">
+											<% for (i in notes) {%>
+												<button type="button" class="btn btn-outline-primary my-1" data-toggle="modal" href="#" data-target="#viewNotes<%[i]%>" data-whatever="">
+													<%= notes[i].createdAt %>
+												</button>
+												<!-- view Notes  -->
+												<div class="modal fade "  id="viewNotes<%[i]%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+													
+														<div class="modal-dialog " >
+														<div class="modal-content ">
+															<div class="modal-header">
+															</div>
+															<div class="modal-body">
+																<p><%= notes[i].note%></p>
+															</div>
+															
+														</div>
+														</div>
+												</div>
+											<% } %>
+										</div>
+										
+									</div>
+								  </div>
+								  <div class="collapse" id="collapseExample2">
+									<div class="card mt-2 card-body">
+										<div class="btn-group" role="group" aria-label="Basic example">
+											<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#assign" data-whatever="">
+												Assign
+											</button>
+											
+											<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#grantAccess" data-whatever="">
+												Grant Access
+											</button>
+
+											<button type="button" class="btn btn-outline-secondary" data-toggle="collapse" href="#options" data-target="#options" aria-expanded="false" aria-controls="collapseExample">
+												Options
+											</button>
+										</div>
+										
+									</div>
+								  </div>
+								  <!-- options dropdown -->
+								  <div class="collapse" id="options">
+									<div class="card mt-2 card-body">
+										<div class="btn-group" role="group" aria-label="Basic example">
+											<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#customer_info" data-whatever="">
+												Address
+											</button>
+											
+											<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal" data-whatever="">
+												Contact
+											</button>
+
+											<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#services" aria-expanded="false" aria-controls="collapseExample">
+												Service
+											</button>
+
+											<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#technical" data-whatever="">
+												Technical
+											</button>
+										</div>
+									</div>
+								  </div>
+							</div>
+						</div>
+						<!-- end of toolbar top -->
+                        <div class="row mb-5">
+                            <div class="col-md-4 mt-3 border-right border-warning">
+                                <label><h4 class="text-muted">Address:</h4>  </label>
+                                <a href="#" class="float-right text-secondary" data-toggle="modal" data-target="#customer_info" data-whatever="@fat">
+                                    <i class="" data-feather="edit" aria-hidden="true"></i>
+                                </a>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><label class="text-muted mr-5">Building No: </label> <%= Tracker.address.building_number %></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Street: </label><%= Tracker.address.street%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">City: </label> <%= Tracker.address.city%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Zip: </label><%= Tracker.address.zip%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Country: </label> <%= Tracker.address.country%></li>
+                                </ul>
+                            </div>
+
+                            <div class="col-md-4 mt-3 border-right border-warning">
+                                <label><h4 class="text-muted">Contact Point:</h4>  </label>
+                                <a href="#" class="float-right text-secondary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">
+                                    <i class="" data-feather="plus" aria-hidden="true"></i>
+                                </a>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><label class="text-muted mr-5">Platform: </label><%= Tracker.contact_point.platform%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Contact Link (Chat Room): </label> <%= Tracker.contact_point.contact_link%></li>
+                                </ul>
+								<a class="text-decondary ml-3 mb-1" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+									Additional Contacts
+								</a>
+								<div class="collapse" id="collapseExample">
+									<div class="card card-body card-body-alt" style="max-height:9rem;">
+										<ul class="list-group list-group-flush">
+											<%for (i in more_contacts) {%>
+												<li class="list-group-item">
+													<label class="text-muted mr-5">Platform: </label>
+													<%= more_contacts[i].platform%>
+												</li>
+												<li class="list-group-item">
+													<label class="text-muted mr-5">Handle / Link: </label>
+													<%= more_contacts[i].contact_link%>
+												</li>
+											<% } %>
+										</ul>
+									</div>
+								  </div>
+                            </div>
+
+                            <div class="col-md-4 mt-3">
+                                <label><h4 class="text-muted">Services:</h4>  </label>
+                                <a href="#" class="float-right text-secondary" data-toggle="modal" data-target="#services" data-whatever="@fat">
+                                    <i class="" data-feather="edit" aria-hidden="true"></i>
+                                </a>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><label class="text-muted mr-5">Service Type: </label><%= Tracker.service_interest.service_name%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Interested Routes: </label><%= Tracker.service_interest.routes%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Rates Offered: </label><%= Tracker.service_interest.rates_offered%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Currency: </label><%= Tracker.service_interest.currency%></li>
+									<li class="list-group-item"><label class="text-muted mr-5">Status: </label><%= Tracker.service_interest.status%></li>
+								</ul>
+                            </div>
+                        </div>
+                        <div class="border-bottom"></div>
+                        <div class="row mt-3 mb-5">
+                            <div class="col-md-4 mt-3 border-right border-warning">
+                                <label><h4 class="text-muted">Technical Info:</h4>  </label>
+                                <a href="#" class="float-right text-secondary" data-toggle="modal" data-target="#technical" data-whatever="@fat">
+                                    <i class="" data-feather="edit" aria-hidden="true"></i>
+                                </a>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><label class="text-muted mr-5">Service Type: </label> <%= Tracker.Tech_info.TI_service_name%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Signalling IP(s): </label> <%= Tracker.Tech_info.signalling_Ip%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Media IP(s): </label><%= Tracker.Tech_info.media_Ip%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Prefix: </label> <%= Tracker.Tech_info.prefix%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Port: </label><%= Tracker.Tech_info.port%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Codices: </label><%= Tracker.Tech_info.codices%></li>
+									<li class="list-group-item"><label class="text-muted mr-5">Status: </label><%= Tracker.Tech_info.status%></li>
+                                </ul>
+                            </div>
+
+                            <div class="col-md-4 mt-3 border-right border-warning">
+                                <label> <h4 class="text-muted"> Testing:</h4></label>
+                                <a href="#" class="float-right text-secondary" data-toggle="modal" data-target="#testing" data-whatever="@fat">
+                                    <i class="" data-feather="edit" aria-hidden="true"></i>
+                                </a>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <label class="text-muted mr-5">Routes To Test:</label>
+                                        <%= Tracker.testing.routes_to_test%>
+                                        </li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Trunk: </label> <%= Tracker.testing.trunk%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Date Initiated: </label> <%= Tracker.testing.date_started%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Date Updated: </label> <%= Tracker.testing.date_finished%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Status: </label> <%= Tracker.testing.status%></li>
+                                    <li class="list-group-item" style="height:3rem;"><label class="text-muted mr-5">Notes: </label> <%= Tracker.testing.notes%></li>
+                                </ul>
+                            </div>
+
+                            <div class="col-md-4 mt-3">
+                                <label><h4 class="text-muted">Documents:</h4> </label>
+								<a href="#" class="float-right text-secondary" data-toggle="modal" data-target="#docs" data-whatever="">
+                                    <i class="text-success" data-feather="plus-circle" aria-hidden="true" ></i>
+                                </a>
+								<!-- <a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#updateDocs[i]" data-whatever="">
+									<i class="text-info" data-feather="edit" aria-hidden="true"></i>
+								</a> -->
+								<%for (i in documents) {%>
+                                <ul class="list-group list-group-flush">
+                                    
+                                    <li class="list-group-item">
+										
+											<img class="mr-3" src="../../../assets/images/<%= documents[i].documentType %>.png%>" width="35px" height="40px">
+											<a href="/track/<%= documents[i].documentId %>?doc=<%= documents[i].documentPath %>" target="_blank"><%= documents[i].documentTitle %></a>
+											<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#sendDoc<%=[i]%>" data-whatever="">
+												<i class="smallIcons" data-feather="send" aria-hidden="true"></i>
+											</a>
+											<a href="#" class="float-right text-secondary" >
+												<i class="smallIcons" data-feather="download-cloud" aria-hidden="true"></i>
+											</a>
+											<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#updateDoc<%=[i]%>" data-whatever="">
+												<i class="smallIcons" data-feather="edit-2" aria-hidden="true"></i>
+											</a>
+										</li>
+                                </ul>
+
+								<!-- Documents Upload update Modal -->
+								<!-- Update doc Modal -->
+								<div class="modal fade " id="updateDoc<%=[i]%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div  style="">
+										<div class="modal-dialog " >
+										<div class="modal-content ">
+											<div class="modal-header">
+											<h4 class="modal-title" id="exampleModalLabel">Update Document for <code><%= Tracker.Customer_Name %> </code></h4>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+											</div>
+											<div class="modal-body">
+											<form method="post" action="/track/upload/update/<%= documents[i].documentId%>" enctype="multipart/form-data">
+												<div class="form-group row ">
+													<div class="col">
+														<label>Title:</label>
+														<input disabled value="<%= documents[i].documentTitle %>" class="form-control mb-4 mb-md-0" name="documentTitle">
+													</div>
+													<div class="col-md-6">
+														<label>Document: </label>
+														<input type="file" name="document" id="myDropify" class="border">								</div>
+												</div>
+												<input type="hidden" value="<%= Tracker._id%>" name="customerRefId">
+												<div class="modal-footer moveModal">
+													<button type="submit" class="btn btn-info">Update Document</button>
+													</div>
+											</form>
+											</div>
+											
+										</div>
+										</div>
+									</div>
+								</div>
+								<!-- Send Doc Modal -->
+								<div class="modal fade " id="sendDoc<%=[i]%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div  style="">
+										<div class="modal-dialog " >
+										<div class="modal-content ">
+											<div class="modal-header">
+											<h4 class="modal-title" id="exampleModalLabel">Send Document <code><%= Tracker.Customer_Name %> </code></h4>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+											</div>
+											<div class="modal-body">
+											<form method="post" action="/track/document/send/<%= documents[i].documentId%>" >
+												<div class="form-group row ">
+													<div class="col">
+														<label>Title:</label>
+														<input disabled value="<%= documents[i].documentTitle %>" class="form-control mb-4 mb-md-0" name="documentTitle">
+													</div>
+													<div class="col-md-3">
+														<label>Tag User: </label>
+														<select name="userId" class="form-control form-control-sm mb-3">
+															<option  selected=""></option>
+															<%for (i in users) {%>
+																<option name="userId" value="<%= users[i]._id%>"><%= users[i].name%></option>
+															<% } %>		
+																							
+														</select>
+													</div>
+													<div class="col-md-3">
+														<label>Permission: </label>
+														<select name="permission" class="form-control form-control-sm mb-3">
+															<option  selected=""></option>
+															<option  value="Read_Only">Read only</option>
+															<option  value="Read_Update">Read and Update</option>
+																							
+														</select>
+													</div>											
+												</div>
+												</div>
+												<div class="modal-footer moveModal">
+													<button type="submit" class="btn btn-info">Permit Access</button>
+													</div>
+											</form>
+											</div>
+											
+										</div>
+										</div>
+									</div>
+								
+								<% } %>
+                            </div>
+                        </div>
+							
+					</div>
+
+				</div>
+				
+				
+				
+
+			</div>
+
+			<!--MODALS-->
+
+			<!-- Assign account manager  -->
+			<div class="modal fade " id="assign" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div  style="">
+					<div class="modal-dialog " >
+					<div class="modal-content ">
+						<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">Assign Client to Account Manager <code><%=Tracker._Customer_Name %> </code></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+						<form method="post" action="/track/assign/account-manager/<%= Tracker._id%>" >
+							<div class="form-group row ">
+								<div class="col">
+									<label>Title:</label>
+									<input disabled value="<%=Tracker.Customer_Name %>" class="form-control mb-4 mb-md-0" name="documentTitle">
+								</div>
+								<div class="col">
+									<label>Assign Account Manager: </label>
+									<select name="userId" class="form-control form-control-sm mb-3">
+										<option  selected=""></option>
+										<%for (i in users) {%>
+											<option value="<%= users[i].id%>"><%= users[i].name%></option>
+										<% } %>				
+									</select>
+								</div>
+																	
+							</div>
+							</div>
+							<div class="modal-footer moveModal">
+								<button type="submit" class="btn btn-info">Assign</button>
+								</div>
+						</form>
+						</div>
+						
+					</div>
+					</div>
+			</div>
+
+
+			<!--Contact Update Model-->
+			<div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div  style="">
+					<div class="modal-dialog " >
+					<div class="modal-content ">
+						<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">Update Contact</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+						<form method="post" action="/track/addContact/<%= Tracker._id%>">
+							<div class="form-group row ">
+								<div class="col">
+									<label>Platform:</label>
+									<input  class="form-control mb-4 mb-md-0" name="platform">
+								</div>
+								<div class="col-md-6">
+									<label>Contact Link <span>(Chat Room)</span>: </label>
+									<input class="form-control" name="contact_link">
+								</div>
+							</div>
+							<div class="modal-footer moveModal">
+								<button type="submit" class="btn btn-info">Update Contact</button>
+								</div>
+						</form>
+						</div>
+						
+					</div>
+					</div>
+				</div>
+			</div>
+
+
+			<!--Contact Update Model-->
+			<div class="modal fade " id="customer_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div >
+					<div class="modal-dialog " >
+					<div class="modal-content ">
+						<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">Update Customer Address</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+						<form action="/track/updateAddress/<%= Tracker._id%>" method="post">
+							
+							<div class="form-group row ml-3 mr-3" >
+								
+									<label>Company Name:</label>
+									<input disabled value="M-kel Networks Limited" class="form-control mb-4 mb-md-0" >
+									<div class="row mt-3">
+										<div class="col">
+											<label>Stage:</label>
+											<input disabled value="M-kel Networks Limited" class="form-control mb-4 mb-md-0" >
+										</div>
+										<div class="col">
+											<label>Status:</label>
+											<input disabled value="Initiated" class="form-control mb-4 mb-md-0" >
+										</div>
+									</div>
+								
+								
+									<div class="row mt-2">
+										<div class= "col-md-4">
+											<label>Building No:</label>
+											<input value="<%= Tracker.address.building_number %>" class="form-control" name="building_number" >
+										</div>
+										<div class= "col-md-4">
+											<label>Street:</label>
+											<input value="<%= Tracker.address.street%>" class="form-control" name="street">
+										</div>
+										<div class= "col-md-4">
+											<label>City:</label>
+											<input value="<%= Tracker.address.city%>" class="form-control" name="city" >
+										</div>
+										
+									</div>
+									<div class="row mt-4">
+										<div class= "col-md-5">
+											<label>Zip:</label>
+											<input value="<%= Tracker.address.zip%>" class="form-control" name="platform">
+										</div>
+										<div class= "col-md-6">
+											<label>Country: </label>
+											<input value="<%= Tracker.address.country%>" class="form-control" name="contact_link">
+										</div>
+									</div>
+								</div>
+                                <div class="modal-footer moveModal">
+                                    <button type="submit" class="btn btn-info">Update Info</button>
+                                </div>
+						</form>
+						</div>
+						
+					</div>
+					</div>
+				</div>
+			</div>
+
+			
+			<!--Service Modal-->
+			<div class="modal fade " id="services" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div  >
+					<div class="modal-dialog " >
+					<div class="modal-content ">
+						<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">Update Service Changes</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+						<form action="/track/updateService/<%= Tracker._id%>" method="post">
+							<div class="form-group row ">
+								<div class="col-md-6">
+									<label>Service Type:</label>
+									<input class="form-control mb-4 mb-md-0" name="service_name" value="<%= Tracker.service_interest.service_name%>">
+								</div>
+								<div class="col-md-6">
+									<label>Interested Routes: </label>
+									<input class="form-control" name="routes" value="<%= Tracker.service_interest.routes%>">
+								</div>
+								<div class="col-md-6">
+									<label>Rates Offered: </label>
+									<input class="form-control" name="rates_offered" value="<%= Tracker.service_interest.rates_offered%>">
+								</div>
+								<div class="col-md-6">
+									<label>Currency: </label>
+									<input class="form-control" name="currency" value="<%= Tracker.service_interest.currency%>">
+								</div>
+								<div class="col-md-6 mt-3 ">
+									<div class="justify-content-center">
+										<label>Status: </label>
+										<select name="status" class="form-control form-control-sm mb-3">
+											<option  selected=""><%= Tracker.service_interest.status%></option>
+											<option  value="NA">NA</option>
+											<option  value="Incomplete">Incomplete</option>
+											<option  value="Complete">Complete</option>
+										</select>
+									<!-- <input class="form-control"  value="<%= Tracker.service_interest.isAvailable%>"> -->
+									</div>
+									
+								</div>
+							</div>
+							<div class="modal-footer moveModal">
+								<button type="submit" class="btn btn-info">Update Service</button>
+								</div>
+						</form>
+						</div>
+						
+					</div>
+					</div>
+				</div>
+			</div>
+
+			<!--Technical Update Modal-->
+			<div class="modal fade " id="technical" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div  >
+					<div class="modal-dialog " >
+					<div class="modal-content ">
+						<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">Update Technical Information</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+						<form action="/track/updateTechnical/<%= Tracker._id%>" method="post">
+							<div class="form-group row ">
+								<div class="col-md-6">
+									<label>Service Type:</label>
+									<input class="form-control mb-4 mb-md-0" value="<%= Tracker.Tech_info.TI_service_name%>" name="TI_service_name">
+								</div>
+								<div class="col-md-6">
+									<label>Signalling IP(s): </label>
+									<input class="form-control" value="<%= Tracker.Tech_info.signalling_Ip%>" name="signalling_Ip">
+								</div>
+								<div class="col-md-6 mt-3">
+									<label>Media IP(s): </label>
+									<input class="form-control" value="<%= Tracker.Tech_info.media_Ip%>" name="media_Ip">
+								</div>
+								<div class="col-md-6 mt-3">
+									<label>Prefix: </label>
+									<input class="form-control" value="<%= Tracker.Tech_info.prefix%>" name="prefix">
+								</div>
+								<div class="col-md-6 mt-3">
+									<label>Port: </label>
+									<input class="form-control" value="<%= Tracker.Tech_info.port%>" name="port">
+								</div>
+								<div class="col-md-6 mt-3">
+									<label>Codices: </label>
+									<input class="form-control" value="<%= Tracker.Tech_info.codices%>" name="codices">
+								</div>
+								<div class="col-md-6 mt-3">
+									<div class="justify-content-center">
+										<label>Status: </label>
+										<select name="status" class="form-control form-control-sm mb-3">
+											<option  selected=""><%= Tracker.Tech_info.status%></option>
+											<option  value="NA">NA</option>
+											<option  value="Incomplete">Incomplete</option>
+											<option  value="Complete">Complete</option>
+										</select>
+									<!-- <input class="form-control"  value="<%= Tracker.service_interest.isAvailable%>"> -->
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer moveModal">
+								<button type="submit" class="btn btn-info">Update Technical Info</button>
+							</div>
+						</form>
+						</div>
+						
+					</div>
+					</div>
+				</div>
+			</div>
+
+
+			<!--TESTING Update Modal-->
+			<div class="modal fade " id="testing" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div  >
+					<div class="modal-dialog " >
+					<div class="modal-content ">
+						<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">Update Testing</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+						<form action="/track/updateTesting/<%= Tracker._id%>" method="post">
+							<div class="form-group row ">
+								<div class="col-md-4">
+									<label>Routes To Test:</label>
+									<input class="form-control mb-4 mb-md-0" value="<%= Tracker.testing.routes_to_test%>" name="routes_to_test">
+								</div>
+								<div class="col-md-4">
+									<label>Trunk: </label>
+									<input class="form-control" value="<%= Tracker.testing.trunk%>" name="trunk">
+								</div>
+								<div class="col-md-4">
+									<label>Date Initiated: </label>
+									<input class="form-control" value="<%= Tracker.testing.date_started%>" name="date_started">
+								</div>
+								<div class="col-md-6 mt-3">
+									<label>Date Concluded: </label>
+									<input class="form-control" value="<%= Tracker.testing.date_finished%>" name="date_finished">
+								</div>
+								<div class="col-md-6 mt-3">
+									<label>Status: </label>
+									<input class="form-control" value="<%= Tracker.testing.testing_status%>" name="testing_status">
+								</div>
+								<div class="col-md-12 mt-3">
+									<label>Notes: </label>
+									<textarea name="notes" value="<%= Tracker.testing.notes%>" id="maxlength-textarea" class="form-control" maxlength="100" rows="8" placeholder="This textarea has a limit of 100 chars."></textarea>
+								</div>
+							</div>
+							<div class="modal-footer moveModal">
+								<button type="submit" class="btn btn-info">Update Testing</button>
+								</div>
+						</form>
+						</div>
+						
+					</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Documents Upload Modal -->
+			<div class="modal fade " id="docs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div  >
+					<div class="modal-dialog " >
+					<div class="modal-content ">
+						<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">Upload Document for <code><%= Tracker.Customer_Name %> </code></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+						<form method="post" action="/track/upload/<%= Tracker._id%>" enctype="multipart/form-data">
+							<div class="form-group row ">
+								<div class="col">
+									<label>Title:</label>
+									<input  class="form-control mb-4 mb-md-0" name="documentTitle">
+								</div>
+								<div class="col-md-6">
+									<label>Document: </label>
+									<input type="file" name="document" id="myDropify" class="border">								</div>
+							</div>
+							<div class="modal-footer moveModal">
+								<button type="submit" class="btn btn-info">Upload Document</button>
+								</div>
+						</form>
+						</div>
+						
+					</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Grant Access Modal -->
+			<div class="modal fade " id="grantAccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div  style="">
+					<div class="modal-dialog " >
+					<div class="modal-content ">
+						<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">Grant Access to Client's Documents <code><%= Tracker.Customer_Name %> </code></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+						<form method="post" action="/track/document/grant-access/" >
+							<div class="form-group row ">
+								<div class="col">
+									<label>Document:</label>
+									<select name="document" class="form-control form-control-sm mb-3">
+										<option  selected=""></option>
+										<% for (i in documents) {%>
+											<option  value="<%= documents[i].documentId%>"><%= documents[i].documentTitle%></option>
+										<% } %>
+																		
+									</select>
+								</div>
+								<div class="col-md-3">
+									<label>Select User: </label>
+									<select name="userId" class="form-control form-control-sm mb-3">
+										<option  selected=""></option>
+										<% for (i in users) {%>
+											<option  value="<%= users[i]._id%>"><%= users[i].name%></option>
+										<% } %>
+																		
+									</select>
+								</div>
+								<div class="col-md-3">
+									<label>Permission: </label>
+									<select name="permission" class="form-control form-control-sm mb-3">
+										<option  selected=""></option>
+										<option  value="Read_Only">Read only</option>
+										<option  value="Read_Update">Read and Update</option>
+																		
+									</select>
+								</div>											
+							</div>
+							</div>
+							<div class="modal-footer moveModal">
+								<button type="submit" class="btn btn-info">Permit Access</button>
+								</div>
+						</form>
+						</div>
+						
+					</div>
+					</div>
+				</div>
+			
+			<!-- DOCUMENTS CONTROL MODALS  -->
+			
+			<!-- POST NOTES MODAL -->
+			<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open modal for @fat</button>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button> -->
+			<!--  Send Notes -->
+			<div class="modal fade" id="sendNote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">New Note</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="/track/addNote" method="post">
+					<div class="form-group">
+						<div class="row">
+							<div class="col">
+								<label for="recipient-name" class="col-form-label">Client:</label>
+								<input disabled name="client" value="<%= Tracker.Customer_Name%>" type="text" class="form-control" id="recipient-name">
+								<input name="clientId" value="<%= Tracker._id%>" type="hidden" class="form-control" >
+							</div>
+							<div class="col">
+								
+								<label for="recipient-name" class="col-form-label">User:</label>
+								<select name="userId" class="form-control form-control-sm mb-3">
+									<option  selected=""></option>
+									<% for (i in users) {%>
+									<option name="userId"  value="<%= users[i]._id%>"><%= users[i].name%></option>
+									<% } %>
+																	
+								</select>							
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="message-text" class="col-form-label">Note:</label>
+						<textarea class="form-control" name="note" rows="8" id="message-text"></textarea>
+					</div>
+					<div class="modal-footer d-flex page-content justify-content-center align-items-center">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-success">Post Note</button>
+					</div>
+					</form>
+				</div>
+				
+				</div>
+			</div>
+			</div>
+
+			
+			<!--NAVIGATION-->
+			<!-- Nav Includes -->
+			<%- include('partials/nav') %>
+		</div>
+		
+	</div>
+
+<!-- Nav Includes -->
+
+<%- include('partials/end') %>

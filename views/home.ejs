@@ -1,0 +1,665 @@
+<%- include('partials/head') %>
+
+<body class="sidebar-dark"> 
+	<div class="main-wrapper">
+		<div class="page-wrapper full-page ">
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				<div class="card " style=" width: 90% ">
+					<div class="card-body card-body-alt px-5" >
+					<div class="row">
+						<div class="col-md-8">
+							
+								<h5 class="card-title mb-3">OnBoarding Tracker</h5>
+								<p class="card-description">Monitor on-boarding processes of every customer</p>
+								<h5 class="card-title mb-3">VoIP SERVICE</h5>
+		
+									<section class="mt-3 mb-5">
+										<div class="table-responsive ">
+											<table class="table table-striped " id="voipTable">
+												<thead class="border-info">
+													<tr>
+														<th>
+															Company
+														</th>
+														<th>
+															Stage
+														</th>
+														<th>
+															
+														</th>
+														<th>
+															Status
+														</th>
+														<th>
+															Service
+														</th>
+														<th>
+
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<% for (i in voip) {%>
+		
+														<tr>
+															<td class="py-1">
+																<a href="/track/tracker/<%= voip[i]._id%>"><%= voip[i].Customer_Name%></a>
+															</td>
+															<td>
+																<div class="dropdown">
+																	
+																	<button class="btn btn-dark bg-transparent dropdown-toggle" type="button" id="dropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																		<%= voip[i].stage.process_stage%>
+																	</button>
+																	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
+																		<%for (j in stages) {%>
+																			
+																			<form action="/track/updateStage/<%= voip[i]._id%>" method="post">
+																				<button type="submit"  class="dropdown-item" style="border:none;">
+																					<%= stages[j]%>
+																				</button>
+																				<input type="hidden" name="stage" value="<%= stages[j]%>">
+																			</form>
+																		<% } %>
+																		<div class="dropdown-divider"></div>
+																		
+																	</div>
+																</div>
+																
+		
+															</td>
+															<td>
+																<%if (voip[i].stage.process_stage === "Overall Completion") {%>
+																	<h6 class="
+																	<%if (voip[i].completionPercentage <40 ){%> text-danger  %>
+																	<%}else if (voip[i].completionPercentage > 30 && voip[i].completionPercentage <= 60) {%>
+																		 text-warning																
+																	<%}else %> text-success ">
+																			
+																		<i data-feather="percent"></i> 
+																		<%= voip[i].completionPercentage%></h6>
+																<% }else {%>
+																	<h6 class="
+																	<%if (voip[i].stage.status == 'NA' || voip[i].stage.status == '' ){%> text-danger  %>
+																	<%}else if (voip[i].stage.status == 'Incomplete' || voip[i].stage.status == 'Initiated') {%>
+																		 text-warning
+																	<%}else if (voip[i].stage.status == 'Ongoing' ) {%>	
+																		text-warning															
+																	<%}else %> text-success ">
+																			<%if (voip[i].stage.status == "Complete" || voip[i].stage.status == "Completed") { %>
+																				<i data-feather="check"></i>
+																				<%= voip[i].stage.status%>
+																			<%} else if(voip[i].stage.status == "Incomplete" || voip[i].stage.status == "Ongoing" || voip[i].stage.status == "Initiated"){%>
+																				<i data-feather="minus"></i> 
+																				<%= voip[i].stage.status%>
+																			<%} else {%>
+																				<i data-feather="percent"></i> 
+																				<%= voip[i].stage.status%>
+																			</h6>
+																			<% } %>
+																<%}%>
+															</td>
+															<td>
+																<div class="progress">
+																	<% if (voip[i].stage.status === '' || voip[i].stage.status === 'NA'){%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 5%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+																			<%= voip[i].stage.status%>
+																		
+																		</div>
+																	<%} else if (voip[i].stage.status === 'Initiated') {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
+																			<%= voip[i].stage.status%>
+																		
+																		</div>
+																	<% } else if (voip[i].stage.status === 'Ongoing' || voip[i].stage.status === 'Incomplete'  ) {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 60%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+																			<%= voip[i].stage.status%>
+																		
+																		</div>
+																	<% } else if (voip[i].stage.status === 'Complete' || voip[i].stage.status === 'Completed'  ) {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+																			<%= voip[i].stage.status%>
+																		
+																		</div>
+																	<% } else { %>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated
+																		<%if (voip[i].completionPercentage <40 ){%> bg-danger  %>
+																		<%}else if (voip[i].completionPercentage > 30 && voip[i].completionPercentage <= 60) {%>
+																			 bg-warning																
+																		<%}else %> bg-success " role="progressbar"  aria-valuenow="<%= voip[i].completionPercentage%>" aria-valuemin="0" aria-valuemax="100">
+																			<%= voip[i].completionPercentage%>
+																		
+																		</div>
+																	<% } %>
+																</div>
+															</td>
+															<td>
+																<%= voip[i].service_interest.service_name%>
+		
+															</td>
+															<td>
+																<a href="" data-toggle="modal" data-target="#assign<%= voip[i]._id%>" data-whatever="">
+																	<i data-feather="share-2"></i>
+																</a>
+																<!-- Assign account manager  -->
+															<div class="modal fade " id="assign<%= voip[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+																<div  style="">
+																	<div class="modal-dialog " >
+																	<div class="modal-content ">
+																		<div class="modal-header">
+																		<h4 class="modal-title" id="exampleModalLabel">Assign Client to Account Manager <code><%=voip[i]._Customer_Name %> </code></h4>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<span aria-hidden="true">&times;</span>
+																		</button>
+																		</div>
+																		<div class="modal-body">
+																		<form method="post" action="/track/assign/account-manager/<%= voip[i]._id%>" >
+																			<div class="form-group row ">
+																				<div class="col">
+																					<label>Title:</label>
+																					<input disabled value="<%=voip[i].Customer_Name %>" class="form-control mb-4 mb-md-0" name="documentTitle">
+																				</div>
+																				<div class="col">
+																					<label>Assign Account Manager: </label>
+																					<select name="userId" class="form-control form-control-sm mb-3">
+																						<option  selected=""></option>
+																						<%for (i in users) {%>
+																							<option value="<%= users[i].id%>"><%= users[i].name%></option>
+																						<% } %>				
+																					</select>
+																				</div>
+																													
+																			</div>
+																			</div>
+																			
+																			<div class="modal-footer moveModal">
+																				<button type="submit" class="btn btn-info">Assign</button>
+																				</div>
+																		</form>
+																		</div>
+																		
+																	</div>
+																	</div>
+																</div>
+															</td>
+														</tr>
+													<% } %>
+												</tbody>
+											</table>
+										</div>		
+									</section>
+									
+			
+			
+			
+									<div class="mb-2 mt-4 border-bottom ">
+												
+										
+										<div class="mt-2 border-top"></div>
+									</div>
+			
+									<!--SMS Section Table-->
+									<section class="mt-5 mb-2">
+										<h5 class="card-title MT-5 mb-3">SMS SERVICE</h5>
+		
+										<div class="table-responsive">
+											<table class="table table-striped" id="smsTable">
+												<thead>
+													<tr>
+														<th>
+															Company
+														</th>
+														<th>
+															Stage
+														</th>
+														<th>
+		
+														</th>
+														<th>
+															Status
+														</th>
+														<th>
+															Service
+														</th>
+														<th>
+
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<% for (i in sms) {%>
+		
+														<tr>
+															<td class="py-1">
+																<a href="/track/tracker/<%= sms[i]._id%>"><%= sms[i].Customer_Name%></a>
+															</td>
+															<td>
+																<div class="dropdown">
+																	
+																	<button class="btn btn-dark bg-transparent dropdown-toggle" type="button" id="dropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																		<%= sms[i].stage.process_stage%>
+																	</button>
+																	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
+																		<%for (j in stages) {%>
+																			
+																			<form action="/track/updateStage/<%= sms[i]._id%>" method="post">
+																				<button type="submit"  class="dropdown-item" style="border:none;">
+																					<%= stages[j]%>
+																				</button>
+																				<input type="hidden" name="stage" value="<%= stages[j]%>">
+																			</form>
+																		<% } %>
+																		<div class="dropdown-divider"></div>
+																		
+																	</div>
+																</div>
+																
+		
+															</td>
+															<td>
+																<%if (sms[i].stage.process_stage === "Overall Completion") {%>
+																	<h6 class="
+																	<%if (sms[i].completionPercentage <40 ){%> text-danger  %>
+																	<%}else if (sms[i].completionPercentage > 30 && sms[i].completionPercentage <= 60) {%>
+																		 text-warning																
+																	<%}else %> text-success ">
+																			
+																		<i data-feather="percent"></i> 
+																		<%= sms[i].completionPercentage%></h6>
+																<% }else {%>
+																	<h6 class="
+																		<%if (sms[i].stage.status == 'NA' || sms[i].stage.status == '' ){%> text-danger  %>
+																		<%}else if (sms[i].stage.status == 'Incomplete' || sms[i].stage.status == 'Initiated') {%>
+																			text-warning
+																		<%}else if (sms[i].stage.status == 'Ongoing' ) {%>	
+																			text-warning															
+																		<%}else %> text-success ">
+																		<%if (sms[i].stage.status == "Complete" || sms[i].stage.status == "Completed") { %>
+																			<i data-feather="check"></i>
+																			<%= sms[i].stage.status%>
+																		<%} else if(sms[i].stage.status == "Incomplete" || sms[i].stage.status == "Ongoing"|| sms[i].stage.status == "Initiated"){%>
+																			<i data-feather="minus"></i> 
+																			<%= sms[i].stage.status%>
+																		<%} else {%>
+																			<i data-feather="percent"></i> 
+																			<%= sms[i].stage.status%>
+																		</h6>
+																		<% } %>
+																<%}%>
+															</td>
+															<td>
+																<div class="progress">
+																	<% if (sms[i].stage.status === '' || sms[i].stage.status === 'NA'){%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 5%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+																			<%= sms[i].stage.status%>
+																		
+																		</div>
+																	<%} else if (sms[i].stage.status === 'Initiated') {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
+																			<%= sms[i].stage.status%>
+																		
+																		</div>
+																	<% } else if (sms[i].stage.status === 'Ongoing' || sms[i].stage.status === 'Incomplete'  ) {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 60%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+																			<%= sms[i].stage.status%>
+																		
+																		</div>
+																	<% } else if (sms[i].stage.status === 'Complete' || sms[i].stage.status === 'Completed'  ) {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+																			<%= sms[i].stage.status%>
+																		
+																		</div>
+																	<% } else { %>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated
+																		<%if (sms[i].completionPercentage <40 ){%> bg-danger  %>
+																		<%}else if (sms[i].completionPercentage > 30 && sms[i].completionPercentage <= 60) {%>
+																			 bg-warning																
+																		<%}else %> bg-success " role="progressbar"  aria-valuenow="<%= sms[i].completionPercentage%>" aria-valuemin="0" aria-valuemax="100">
+																			<%= sms[i].completionPercentage%>
+																		
+																		</div>
+																	<% } %>
+																</div>
+															</td>
+															<td>
+																<%= sms[i].service_interest.service_name%>
+		
+															</td>
+															<td>
+																<a href="" data-toggle="modal" data-target="#assign<%=[i]%>" data-whatever="">
+																	<i data-feather="share-2"></i>
+																</a>
+															</td>
+														</tr>
+													<% } %>
+												</tbody>
+											</table>
+										</div>					
+									</section>			
+								
+							</div>
+							<!-- END OF THE FIRST SECTION -->
+							<style>
+								.appIcons{
+									width: 15px;
+									height: 15px;
+								}
+							</style>
+						<div class="col-md-4">
+							<div class="card bg-transparent"  style="height: 10rem;">
+								<ul class="list-group list-group-flush card-body-hor py-2">
+									<li class="list-group-item">
+										<div class="row">
+											<div class="col-md-6 ">
+												<label class="text-muted">Assigned:
+												</label>
+												<span class="float-right">
+													<i class="appIcons text-muted" data-feather="external-link" ></i>
+												</span>
+												<a href="#" data-toggle="modal" data-target=".assigned">
+													<h5 class="text-info"><%= assignedClients%></h5>
+												</a>
+											</div>
+											<div class="col-md-6 ">
+												<label class="text-muted">Un-Assigned:
+												</label>
+												<span class="float-right">
+													<i class="appIcons text-muted" data-feather="external-link" ></i>
+												</span>
+												
+												<a href="#" data-toggle="modal" data-target=".assigned">
+													<a><h5 class="text-warning"><%= unassignedClients%></h5></a>
+												</a>
+											</div>
+										</div>						
+									</li>
+									
+									<li class="list-group-item">
+										<div class="row">
+											<div class="col-md-6">
+												<label class="text-muted">Completed:
+												</label>
+												<span class="float-right">
+													<i class="appIcons text-muted" data-feather="external-link" ></i>
+												</span>
+												<a><h5 class="text-success"><%= completedPercentile%>%</h5></a>
+											</div>
+											<div class="col-md-6">
+												<label class="text-muted">Incompleted:
+												</label>
+												<span class="float-right">
+													<i class="appIcons text-muted" data-feather="external-link" ></i>
+												</span>
+												<a><h5 class="text-danger"><%= incompletePercentile%>%</h5></a>
+												
+											</div>
+										</div>	
+									</li>
+									
+								</ul>
+							</div>
+							<!-- END OF COL 2 TOP CARD -->
+							<!-- User tables -->
+							<!-- USER TABLE -->
+							<section class="mt-3 mb-5">
+								<h4 class="card-title">
+									USERS
+									<a href="#" class="float-right mx-3" data-toggle="modal" data-target=".bd-example-modal-sm">
+										<i data-feather="user-plus"></i>
+									</a>
+								</h4>
+								<div class="table-responsive card-body-hor">
+									<table class="table table-striped " > 
+										<thead class="border-info">
+											<tr>
+												<th>
+													User
+												</th>
+												<th>
+													Role
+												</th>
+												<th>
+													Assigned
+												</th>
+												
+												
+												
+											</tr>
+										</thead>
+										<tbody>
+											<% for (i in users) {%>
+												<tr>
+													<td>
+														<%= users[i].name%>
+													</td>
+
+													<td>
+														<%= users[i].role%>
+													</td>
+
+													<td>
+														<%= users[i].assignedTasks%>
+													</td>
+												</tr>
+											<% } %>
+											
+										</tbody>
+									</table>
+								</div>		
+							</section>
+
+							<!-- User Logs Section -->
+							<section class="mt-3 mb-5 border-light">
+								<h4 class="card-title">
+									LOGS
+									<a href="#" class="float-right mx-3" data-toggle="modal" data-target=".bd-example-modal-lg">
+										<i data-feather="external-link"></i>
+									</a>
+								</h4>
+								<div class="table-responsive card-body-hor ">
+									
+
+									<table class="table table-striped " >
+										<thead class="border-info">
+											<tr>
+												<th>
+													Date
+												</th>
+												<th>
+													User
+												</th>
+												<th>
+													Route
+												</th>
+												
+												
+											</tr>
+										</thead>
+										<tbody>
+											<% for (let i =0; i < 10; i++) {%>
+												<tr>
+													<td>
+														<%= logs[i].timestamp%>
+													</td>
+
+													<td>
+														<%= logs[i].userName%>
+													</td>
+
+													<td>
+														<%= logs[i].route%>
+													</td>
+													
+												</tr>
+											<% } %>
+											
+										</tbody>
+									</table>
+								</div>		
+							</section>
+
+							
+						</div>
+						</div>
+
+						
+					</div>
+				</div>
+				
+				
+				
+
+			</div>
+			
+			<!-- Nav Includes -->
+			<%- include('partials/nav') %>
+			
+		</div>
+		
+	</div>
+
+	<!-- End Includes -->
+	<%- include('partials/end') %>
+
+
+	<!-- Full Logs expand -->
+			<!--Contact Update Model-->
+			<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+				  <div class="modal-content card-body-alt">
+					<table class="table table-striped " >
+						<thead class="border-info">
+							<tr>
+								<th>
+									Date
+								</th>
+								<th>
+									User
+								</th>
+								<th>
+									Route
+								</th>
+								
+								
+							</tr>
+						</thead>
+						<tbody>
+							<% for (i in logs) {%>
+								<tr>
+									<td>
+										<%= logs[i].timestamp%>
+									</td>
+
+									<td>
+										<%= logs[i].userName%>
+									</td>
+
+									<td>
+										<%= logs[i].route%>
+									</td>
+								</tr>
+							<% } %>
+							
+						</tbody>
+					</table>
+				  </div>
+				</div>
+			  </div>
+
+
+<!-- Modal for Assigned Clients -->
+<div class="modal fade assigned" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content card-body-alt">
+		<table class="table table-striped " >
+			<thead class="border-info">
+				<tr>
+					<th>
+						Client
+					</th>
+					<th>
+						Account Manager
+					</th>
+					<th>
+
+					</th>			
+					
+				</tr>
+			</thead>
+			<tbody>
+				<% for (i in voip) {%>
+					<tr>
+						<td>
+							<%= voip[i].Customer_Name%>
+						</td>
+
+						<td>
+							Un-Assigned
+						</td>
+
+						<td>
+							<i data-feather="file-plus"></i>
+						</td>
+					</tr>
+				<% } %>
+				
+			</tbody>
+		</table>
+	  </div>
+	</div>
+  </div>
+
+
+<!-- Add User Modal -->
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm h-90">
+	  <div class="modal-content card-body-alt">
+		<div class="d-flex align-items-center justify-content-center">
+			<div class="auth-form-wrapper px-4 py-5">
+			<h5 class="text-muted font-weight-normal mb-4">Create a user account.</h5>
+			<form class="forms-sample" action="/auth/register" method="post">
+				<div class="form-group">
+					<label for="exampleInputUsername1">FUll Name</label>
+					<input type="text" class="form-control" name="name" id="exampleInputUsername1" placeholder="Full Name">
+					</div>
+				<div class="form-group">
+				<label for="exampleInputUsername1">Username</label>
+				<input type="text" class="form-control" name="username" id="exampleInputUsername1" autocomplete="Username" placeholder="Username">
+				</div>
+				<div class="form-group">
+					<div class="justify-content-center">
+						<label>Role: </label>
+						<select name="role" class="form-control form-control-sm mb-3">
+							<option  selected=""></option>
+							<option  value="Account Manager">Account Manager</option>
+							<option  value="Technical">Technical</option>
+							<option  value="Legal">Legal</option>
+							<option  value="Admin">Admin</option>
+
+						</select>
+					</div>	
+				</div>
+				<div class="form-group">
+				<label for="exampleInputEmail1">Designation:</label>
+				<select name="designation" class="form-control form-control-sm mb-3">
+					<option  selected=""></option>
+					<option  value="Technical">Technical</option>
+					<option  value="Legal">Legal</option>
+					<option  value="Support">Support</option>
+
+				</select>				</div>
+				
+				<div class="form-check form-check-flat form-check-primary">
+				</div>
+				<div class="d-flex  justify-content-center">
+				<button type="submit" class="btn btn-secondary text-white mt-4 mr-2 mb-md-0">
+					<i data-feather="user-check"></i>
+					Register User</button>
+				</div>
+			</form>
+			</div>
+		</div>
+	  </div>
+	</div>
+</div>
