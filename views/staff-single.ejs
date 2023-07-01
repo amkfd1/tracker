@@ -263,6 +263,15 @@
 
 			</div>
 
+
+			<!--NAVIGATION-->
+			<!-- Nav Includes -->
+			<%- include('includes/nav') %>
+		</div>
+		
+	</div>
+
+	
 			<!--MODALS-->
 			
 			<!-- Documents Upload Modal -->
@@ -298,40 +307,7 @@
 				</div>
 			</div>
 
-			<!--Contact Update Model-->
-			<div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"npm start
-				<div>
-					<div class="modal-dialog " >
-					<div class="modal-content ">
-						<div class="modal-header">
-						<h4 class="modal-title" id="exampleModalLabel">Update Contact</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						</div>
-						<div class="modal-body">
-						<form method="post" action="/track/addContact/<%= Tracker._id%>">
-							<div class="form-group row ">
-								<div class="col">
-									<label>Platform:</label>
-									<input  class="form-control mb-4 mb-md-0" name="platform">
-								</div>
-								<div class="col-md-6">
-									<label>Contact Link <span>(Chat Room)</span>: </label>
-									<input class="form-control" name="contact_link">
-								</div>
-							</div>
-							<div class="modal-footer moveModal">
-								<button type="submit" class="btn btn-info">Update Contact</button>
-								</div>
-						</form>
-						</div>
-						
-					</div>
-					</div>
-				</div>
-			</div>
-
+			
 
 			<!--Contact Update Model-->
 			<div class="modal fade " id="customer_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"npm start
@@ -521,7 +497,7 @@
 
 			<!--TESTING Update Modal-->
 			<div class="modal fade " id="testing" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"npm start
-				<div  >
+				<div  class="">
 					<div class="modal-dialog " >
 					<div class="modal-content ">
 						<div class="modal-header">
@@ -571,7 +547,7 @@
 
 			<!-- Documents Upload Modal -->
 			<div class="modal fade " id="docs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"npm start
-				<div  >
+				<div class="" >
 					<div class="modal-dialog " >
 					<div class="modal-content ">
 						<div class="modal-header">
@@ -603,13 +579,40 @@
 			</div>
 
 		
+			<!--Contact Update Model-->
+			<div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"npm start
+				<div class="modal-dialog ">
+					<div class="modal-content ">
+						<div class="modal-header">
+							<h4 class="modal-title" id="exampleModalLabel">Update Contact</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form method="post" action="/track/addContact/<%= Tracker._id%>">
+								<div class="form-group row ">
+									<div class="col">
+										<label>Platform:</label>
+										<input  class="form-control mb-4 mb-md-0" name="platform">
+									</div>
+									<div class="col-md-6">
+										<label>Contact Link <span>(Chat Room)</span>: </label>
+										<input class="form-control" name="contact_link">
+									</div>
+								</div>
+								<div class="modal-footer moveModal">
+									<button type="submit" class="btn btn-info">Update Contact</button>
+									</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 			
-			<!--NAVIGATION-->
-			<!-- Nav Includes -->
-			<%- include('includes/nav') %>
-		</div>
 		
-	</div>
+			
+			
 <!-- UPDATE CLIENT ACCOUNT MANAGER -->
 <%- include('includes/update_client') %>
 <!-- Nav Includes -->

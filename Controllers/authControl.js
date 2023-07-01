@@ -88,7 +88,8 @@ router.post('/login', async (req, res) => {
  
 router.get('/password-reset', async (req, res) => {
   res.render('Auth/reset-password',{
-    isAuthenticated: false
+    isAuthenticated: false,
+    pageTitle: "Reset Password"
   })
 })
 
@@ -141,7 +142,7 @@ router.get('/change-password', async (req, res) => {
     // Proceed with the password reset process
     // For example, you can render a password reset form and pass the token to it
 
-    res.render('Auth/change-password', { token, isAuthenticated:false});
+    res.render('Auth/change-password', { token, isAuthenticated:false, pageTitle:'Forget Password'});
   } catch (error) {
     console.error('Error generating password reset link:', error);
     res.status(500).json({ error: 'Failed to generate password reset link' });
