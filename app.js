@@ -50,13 +50,15 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
 app.use('/auth', authControl);
-app.get('404', async (req, res) => {
-  // res.render('')
-  res.send({Message: '404 Page not found' })
+app.get('/404', async (req, res) => {
+  res.render('errors/404', {
+    pageTitle: "Not Found"
+  })
+  // res.send({Message: '404 Page not found' })
 });
-app.get('500', async (req, res) => {
-  // res.render('')
-  res.send({Message: ' Server Error' })
+app.get('/500', async (req, res) => {
+  res.render('errors/500', {
+  pageTitle: "Not Found" });
 });
 
 // Global middleware for logging
