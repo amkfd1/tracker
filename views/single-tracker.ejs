@@ -707,7 +707,7 @@
 									<select name="userId" class="form-control form-control-sm mb-3">
 										<option  selected=""></option>
 										<% for (i in users) {%>
-											<option  value="<%= users[i].id%>"><%= users[i].name%></option>
+											<option  value="<%= users[i]._id%>"><%= users[i].name%></option>
 										<% } %>
 																		
 									</select>

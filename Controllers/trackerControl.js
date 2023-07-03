@@ -64,9 +64,9 @@ const uploadDocument = async (req, res) => {
 
 // Controller function to update date and document path
 async function updateDocument(req, res) {
-  const {  path, originalname,  } = req.body;
+  const {  path, originalname, customerRefId } = req.body;
   const {id} = req.params
-print("UPDATING FUNCTION HERE: ", req.body)
+print("UPDATING FUNCTION HERE: ", id)
 print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
 
   try {
@@ -97,18 +97,19 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
     const oldDocument = document.documentPath;
     document.documentPath = req.file.path;
     document.dateUploaded = Date.now();
-    fs.unlink(oldDocument, (err) => {
+    fs.unlink(oldDocument, async (err) => {
   if (err) {
       throw err;
   }
 
   console.log("Delete File successfully.");
-});
+
     // Save the updated document
-    print('NEW DOCUMENT: ', document)
+    print('NEW RefId: ', document.customerRefId)
     await document.save();
     req.flash('update_success', "Document has been updated sucessfully.")
-    res.status(200).redirect('/track/tracker/' + document.customerRefId);
+    return res.status(200).redirect('/track/tracker/'+ customerRefId);
+  });
   } catch (error) {
     console.error(error);
     // req.flash('server-error', 'Your document has not been updated. Please Try Again.')
@@ -116,6 +117,7 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
     req.flash('server_error','A server error occured. Try Again')
     res.status(500).redirect('/500')  
   }
+  
 }
 
 

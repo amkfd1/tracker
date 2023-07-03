@@ -43,7 +43,7 @@
                                                     <label class="text-muted">My Clients:
                                                     </label>
                                                     <span class="float-right">
-                                                        <a href="#" data-toggle="modal" data-target=".assigned">
+                                                        <a href="#" data-toggle="modal" data-target=".myClients">
                                                             <i class="appIcons text-muted" data-feather="external-link" ></i>
                                                     
                                                         </a>
@@ -321,6 +321,47 @@
 				</div>
 			  </div>
 		
+              <div class="modal fade myClients" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+				  <div class="modal-content card-body-alt">
+					<table class="table table-striped " >
+						<thead class="border-info">
+							<tr>
+								<th>
+									Client
+								</th>
+								<th>
+									Stage
+								</th>
+								<th>
+									Status
+								</th>
+								
+								
+							</tr>
+						</thead>
+						<tbody>
+							<% for (i in userNotes) {%>
+								<tr>
+									<td>
+										<%= userNotes[i].tracker.Customer_Name%>
+									</td>
+
+									<td>
+										<%= userNotes[i].note%>
+									</td>
+
+									<td>
+										<%= userNotes[i].createdAt%>
+									</td>
+								</tr>
+							<% } %>
+							
+						</tbody>
+					</table>
+				  </div>
+				</div>
+			  </div>
 			<!-- Nav Includes -->
 			<%- include('includes/nav') %>
 		</div>

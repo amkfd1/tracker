@@ -3,6 +3,7 @@ const Document = require('../Models/document');
 const Contact = require('../Models/contact');
 const Log = require('../Models/log');
 const Note = require('../Models/note');
+const fs = require('fs');
 
 const path = require('path');
 const print = console.log
@@ -112,7 +113,7 @@ const updateTesting = async (req, res) => {
       // Save the updated Tracker document
       await tracker.save();
       req.flash('update_success','New contact has been added successfully')
-      res.status(200).redirect('/track/tracker/'+customerRefId);
+      res.status(200).redirect('/client/'+customerRefId);
     } catch (error) {
       console.error('Error uploading document:', error);
       // res.status(500).json({ error: 'Failed to upload document' });
@@ -179,16 +180,16 @@ const updateTesting = async (req, res) => {
   
         if (tracker.account_manager === req.user._id) {
           mytasks.push(tracker);
-          console.log("MY TASKS: ", mytasks);
+          
         }
       }
   
       // Retrieve all notes associated with the user ID
       const userId = req.user._id;
+      
       let userNotes = await Note.find({ user: userId }).populate('tracker').populate('user');
       let myNotes = []
-      console.log('This is logging Notes: ', userNotes.tracker)
-      console.log('This is logging into an Array: ', myNotes)
+      console.log("MY TASKS: ", mytasks);
       res.status(200).render('staff-home', {
         stages,
         pageTitle: "Home",
@@ -212,75 +213,102 @@ const updateTesting = async (req, res) => {
   
   
 
-const getSingleTracker = async (req, res) => {
-  const { id } = req.params; // Assuming the tracker ID is passed as a parameter in the request
-
-  try {
-    const tracker = await Tracker.findById(id)
-    .populate('documents').populate('alternative_contact').populate('notes');
-
-    if (!tracker) {
-      return res.status(404).json({ error: 'Tracker not found' });
+  const getSingleTracker = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const tracker = await Tracker.findById(id)
+        .populate('documents')
+        .populate('alternative_contact')
+        .populate('notes');
+  
+      if (!tracker) {
+        return res.status(404).json({ error: 'Tracker not found' });
+      }
+  
+      const documentTypes = {
+        pdf: 'pdf',
+        xls: 'excel',
+        doc: 'docs',
+        png: 'png',
+        jpg: 'jpg',
+      };
+  
+      const documents = tracker.documents.map((doc) => {
+        const documentPath = doc.documentPath;
+        const documentId = doc._id;
+        const documentTitle = doc.documentTitle;
+        const extension = documentPath.split('.').pop().toLowerCase();
+        const documentType = documentTypes[extension] || 'none';
+  
+        return { documentId, documentPath, documentType, documentTitle };
+      });
+  
+      let isPermitted = false;
+  
+      if (
+        req.user &&
+        req.user._id &&
+        tracker.userId &&
+        (tracker.userId.equals(req.user._id) ||
+          tracker.tags.some(
+            (tag) =>
+              tag.user &&
+              tag.user.equals &&
+              tag.user.equals(req.user._id) &&
+              tag.permission === 'Read_Update'
+          ))
+      ) {
+        isPermitted = true;
+      }
+  
+      let isLegal = false;
+      if (req.user && req.user.role && req.user.role == 'Legal') {
+        isLegal = true;
+      }
+  
+      let isAccountManager = false;
+      if (req.user && req.user._id && tracker.account_manager == req.user._id.toString()) {
+        isAccountManager = true;
+      }
+  
+      let mytasks = [];
+      if (req.user && req.user._id && tracker.account_manager == req.user._id) {
+        mytasks.push(tracker);
+      }
+  
+      let role = req.user && req.user.role;
+      const notes = tracker.notes;
+  
+      let flash =
+        (await req.flash('update_success')) ||
+        req.flash('unauthorized') ||
+        req.flash('permission');
+  
+      console.log("User is Permitted: ", isPermitted)
+      res.render('staff-single', {
+        pageTitle: tracker.Customer_Name,
+        Tracker: tracker,
+        documents: documents,
+        more_contacts: tracker.alternative_contact,
+        user: req.user,
+        isAuthenticated: req.user && req.user.isLoggedIn,
+        isLegal: isLegal,
+        isAccountManager: isAccountManager,
+        mytasks: mytasks,
+        role: role,
+        isStaff: false,
+        flash,
+        notes,
+        isPermitted,
+      });
+    } catch (error) {
+      console.log(error)
+      res.status(500).redirect('/500');
     }
-
-    const documentTypes = {
-      pdf: 'pdf',
-      xls: 'excel',
-      doc: 'docs',
-      png: 'png',
-      jpg: 'jpg',
-      // Add more extensions and their corresponding types as needed
-    };
-
-    const documents = tracker.documents.map((doc) => {
-      const documentPath = doc.documentPath;
-      const documentId = doc._id;
-      const documentTitle = doc.documentTitle;
-      const extension = documentPath.split('.').pop().toLowerCase();
-      const documentType = documentTypes[extension] || 'none';
-
-      return { documentId, documentPath, documentType, documentTitle };
-    });
-
-    let isLegal = false;
-    if (req.user.role == 'Legal') {
-      isLegal = true;
-    }
-
-    isAccountManager = false;
-    if(tracker.account_manager == req.user._id.toString()){
-      isAccountManager = true;
-    }
-
-    let mytasks = [];
-
-    // Check if the tracker is assigned to the current user
-    if (tracker.account_manager == req.user._id) {
-      mytasks.push(tracker);
-    }
-    let role = req.user.role;
-    const notes = tracker.notes;
-    console.log("User Role: ", notes)
-    let flash = await req.flash('update_success') || req.flash('unauthorized') || req.flash('permission')
-    res.render('staff-single', {
-      pageTitle: tracker.Customer_Name,
-      Tracker: tracker,
-      documents: documents,
-      more_contacts: tracker.alternative_contact,
-      user: req.user,
-      isAuthenticated: req.user.isLoggedIn,
-      isLegal: isLegal,
-      isAccountManager: isAccountManager,
-      mytasks: mytasks,
-      role: role,
-      isStaff: false,
-      flash,
-      notes
-    });
-  } catch (error) {
-    res.status(500).redirect('/500');
-  }
-};
+  };
+  
+  
 
 const addNote = async (req, res) => {
   const { clientId, userId, note } = req.body;
@@ -317,6 +345,67 @@ const addNote = async (req, res) => {
   }
 };
 
+// Update Document
+
+// Controller function to update date and document path
+async function updateDocument(req, res) {
+  const {  path, originalname, customerRefId } = req.body;
+  const {id} = req.params
+print("UPDATING FUNCTION HERE: ", id)
+print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
+
+  try {
+    // Find the document by ID
+    const document = await Document.findById(id);
+
+    if (!document) {
+      // req.flash('not-found', 'Document Not Found')
+      // return res.status(404).redirect('/track/tracker/' + document.customerRefId);
+      req.flash('tracker_404','Client not found');
+      return res.status(404).redirect('/client/'+customerRefId);
+    }
+
+    // Check if the user is the uploader or has "Read_Update" permission in the tags
+    const isUploader = document.userId.equals(req.user._id);
+    const hasPermission = document.tags.some(tag => tag.user.equals(req.user._id) && tag.permission === 'Read_Update');
+
+    if (!isUploader && !hasPermission) {
+      console.log("YOU DON'T HAVE PERMISSION")
+      req.flash('unauthorized', 'You\'re not authorized to perform this action. Contact Admin.')
+      return res.status(402).redirect('/client/' + customerRefId);
+      // return res.status(404).redirect('/client/' + document.customerRefId);
+
+      // throw new Error('t');
+    }
+    // 649181d06c54fadcfd174783
+    // Update the document fields
+    
+    const oldDocument = document.documentPath;
+    document.documentPath = req.file.path;
+    document.dateUploaded = Date.now();
+    fs.unlink(oldDocument, async (err) => {
+  if (err) {
+      throw err;
+  }
+
+  console.log("Delete File successfully.");
+
+    // Save the updated document
+    print('NEW RefId: ', document.customerRefId)
+    await document.save();
+    req.flash('update_success', "Document has been updated sucessfully.")
+    return res.status(200).redirect('/client/'+ customerRefId);
+  });
+  } catch (error) {
+    console.error(error);
+    // req.flash('server-error', 'Your document has not been updated. Please Try Again.')
+    // return res.status(500).json({ error: 'Internal server error' });
+    req.flash('server_error','A server error occured. Try Again')
+    res.status(500).redirect('/500')  
+  }
+  
+}
+
   module.exports = 
 { 
     updateTesting,
@@ -324,7 +413,8 @@ const addNote = async (req, res) => {
     updateTech,
     getAllCustomerTrackers,
     getSingleTracker,
-    addNote
+    addNote,
+    updateDocument
     
     
 };

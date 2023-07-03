@@ -217,15 +217,17 @@
 												<img class="mr-3" src="../../../assets/images/<%= documents[i].documentType %>.png%>" width="35px" height="40px">
 												<a href="/track/<%= documents[i].documentId %>?doc=<%= documents[i].documentPath %>" target="_blank"><%= documents[i].documentTitle %></a>
 											
-												<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#sendDoc<%=[i]%>" data-whatever="">
-													<i class="smallIcons" data-feather="send" aria-hidden="true"></i>
-												</a>
-												<a href="#" class="float-right text-secondary" >
-													<i class="smallIcons" data-feather="download-cloud" aria-hidden="true"></i>
-												</a>
-												<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#updateDocs<%=[i]%>" data-whatever="" aria-hidden="false">
-													<i class="smallIcons" data-feather="edit-2" aria-hidden="true"></i>
-												</a>
+												<%if (isPermitted) {%>
+													<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#sendDoc<%=[i]%>" data-whatever="">
+														<i class="smallIcons" data-feather="send" aria-hidden="true"></i>
+													</a>
+													<a href="#" class="float-right text-secondary" >
+														<i class="smallIcons" data-feather="download-cloud" aria-hidden="true"></i>
+													</a>
+													<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#updateDocs<%=[i]%>" data-whatever="" aria-hidden="false">
+														<i class="smallIcons" data-feather="edit-2" aria-hidden="true"></i>
+													</a>
+												<% } %>
 										
 										</li> 
                                 </ul>
@@ -242,7 +244,7 @@
 											</button>
 											</div>
 											<div class="modal-body">
-											<form method="post" action="/track/upload/update/<%= documents[i]._id%>" enctype="multipart/form-data">
+											<form method="post" action="/upload/update/<%= documents[i].documentId%>" enctype="multipart/form-data">
 												<div class="form-group row ">
 													<div class="col">
 														<label>Title:</label>
@@ -255,6 +257,7 @@
 												<div class="modal-footer moveModal">
 													<button type="submit" class="btn btn-info">Upload Document</button>
 													</div>
+												<input type="hidden" name="customerRefId" value="<%=Tracker._id%>">
 											</form>
 											</div>
 											

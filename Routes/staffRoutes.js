@@ -5,6 +5,21 @@ const fs = require('fs');
 const isAuth = require('../middleware/verifyAuth');
 const customerTrackerController = require('../Controllers/trackerControl');
 
+const multer = require('multer');
+
+// Set up Multer storage and file upload configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads'); // Specify the destination folder for storing uploaded files
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix+ '-' + file.originalname ); // Set the filename for the uploaded file
+  },
+});
+
+const upload = multer({ storage: storage });
+
 
 router.get('/', isAuth, staffController.getAllCustomerTrackers);
 
@@ -12,6 +27,7 @@ router.get('/', isAuth, staffController.getAllCustomerTrackers);
 router.post('/updateTracker/:id', customerTrackerController.updateTracker); 
 
 router.get('/client/:id',isAuth, staffController.getSingleTracker);
+router.post('/upload/update/:id', isAuth, upload.single('document'), staffController.updateDocument);
 
 const Document = require('../Models/document');
 router.post('/addNote', isAuth, staffController.addNote);

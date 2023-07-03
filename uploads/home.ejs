@@ -12,13 +12,6 @@
 							
 								<h5 class="card-title mb-3">OnBoarding Tracker</h5>
 								<p class="card-description">Monitor on-boarding processes of every customer</p>
-								<% if (message) {%>
-									<div id="alert-message" class="alert alert-success alert-dismissible fade show" role="alert">
-									  <i data-feather="check"></i> <strong>  <%= message%></strong>
-					
-									</div>
-									  
-								<%}%>
 								<h5 class="card-title mb-3">VoIP SERVICE</h5>
 		
 									<section class="mt-3 mb-5">
@@ -361,11 +354,8 @@
 											<div class="col-md-6 ">
 												<label class="text-muted">Assigned:
 												</label>
-												
 												<span class="float-right">
-													<a href="#" data-toggle="modal" data-target=".assigned">
-														<i class="appIcons text-muted" data-feather="external-link" ></i>
-													</a>
+													<i class="appIcons text-muted" data-feather="external-link" ></i>
 												</span>
 												<a href="#" data-toggle="modal" data-target=".assigned">
 													<h5 class="text-info"><%= assignedClients%></h5>
@@ -375,9 +365,7 @@
 												<label class="text-muted">Un-Assigned:
 												</label>
 												<span class="float-right">
-													<a href="#" data-toggle="modal" data-target=".unassigned">
-														<i class="appIcons text-muted" data-feather="external-link" ></i>
-													</a>
+													<i class="appIcons text-muted" data-feather="external-link" ></i>
 												</span>
 												
 												<a href="#" data-toggle="modal" data-target=".assigned">
@@ -390,7 +378,7 @@
 									<li class="list-group-item">
 										<div class="row">
 											<div class="col-md-6">
-												<label class="text-muted">Complete:
+												<label class="text-muted">Completed:
 												</label>
 												<span class="float-right">
 													<i class="appIcons text-muted" data-feather="external-link" ></i>
@@ -398,7 +386,7 @@
 												<a><h5 class="text-success"><%= completedPercentile%>%</h5></a>
 											</div>
 											<div class="col-md-6">
-												<label class="text-muted">Incomplete:
+												<label class="text-muted">Incompleted:
 												</label>
 												<span class="float-right">
 													<i class="appIcons text-muted" data-feather="external-link" ></i>
@@ -581,7 +569,7 @@
 
 
 <!-- Modal for Assigned Clients -->
-<div class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade assigned" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 	  <div class="modal-content card-body-alt">
 		<table class="table table-striped " >
@@ -675,79 +663,3 @@
 	  </div>
 	</div>
 </div>
-
-<!-- Expand Assigned -->
-<div class="modal fade assigned" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-	  <div class="modal-content card-body-alt">
-		<table class="table table-striped " >
-			<thead class="border-info">
-				<tr>
-					<th>
-						Client
-					</th>
-					<th>
-						Account Manager
-					</th>
-					
-					
-				</tr>
-			</thead>
-			<tbody>
-				<% for (i in assignedTrackers) {%>
-					<tr>
-						<td>
-							<%= assignedTrackers[i].Customer_Name%>
-						</td>
-
-						<td>
-							<%= assignedTrackers[i].account_manager%>
-						</td>
-
-						
-					</tr>
-				<% } %>
-				
-			</tbody>
-		</table>
-	  </div>
-	</div>
-  </div>
-
-  <!-- Expand unAssigned -->
-<div class="modal fade unassigned" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-	  <div class="modal-content card-body-alt">
-		<table class="table table-striped " >
-			<thead class="border-info">
-				<tr>
-					<th>
-						Client
-					</th>
-					<th>
-						Account Manager
-					</th>
-					
-					
-				</tr>
-			</thead>
-			<tbody>
-				<% for (i in unassignedTrackers) {%>
-					<tr>
-						<td>
-							<%= unassignedTrackers[i].Customer_Name%>
-						</td>
-
-						<td>
-							<%= unassignedTrackers[i].account_manager%>
-						</td>
-
-						
-					</tr>
-				<% } %>
-				
-			</tbody>
-		</table>
-	  </div>
-	</div>
-  </div>
