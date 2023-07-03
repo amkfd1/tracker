@@ -681,6 +681,7 @@ const getAllCustomerTrackers = async (req, res) => {
       unassignedClients,
       completedPercentile: completedPercentile.toFixed(2),
       incompletePercentile: incompletePercentile.toFixed(2),
+      message: await req.flash('Login-success')[0],
     });
   } catch (error) {
     console.error('Error retrieving trackers:', error);

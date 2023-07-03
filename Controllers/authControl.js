@@ -76,8 +76,16 @@ router.post('/login', async (req, res) => {
     
 
     // print("User: ", await req.user)
-    req.flash('Login-success', 'You are succesfully logged in!');
-    res.status(200).redirect('/');
+    // const { role } = req.user;
+    // console.log('YOUR ROLE IS LOGGED: ', role)
+    // if (role == 'Admin') {
+    //   req.flash('Login-success', 'You are succesfully logged in!');
+    //   return res.redirect('/track/home');
+    // }else {
+      req.flash('Login-success', 'You are succesfully logged in!');
+      res.status(200).redirect('/track/home');
+    // }
+    
   } catch (error) {
     console.error('Error logging in:', error);
     req.flash('server_error','A server error occured. Try Again')

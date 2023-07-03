@@ -38,8 +38,9 @@ const authenticateUser = async (req, res, next) => {
 
     const { role } = req.user; // Assuming the user object is available in the request
   
+    console.log('YOUR ROLE IS LOGGED: ', role)
     if (role !== 'Admin') {
-      return res.redirect('/track/home');
+      return res.redirect('/');
     }
   
     // console
@@ -47,6 +48,7 @@ const authenticateUser = async (req, res, next) => {
     next();
   } catch (error) {
     console.error('Error authenticating user:', error);
+    req.flash('server_error', 'Please make sure your username and password are correct.')
     res.redirect('/auth/login');
   }
 

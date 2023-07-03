@@ -36,6 +36,12 @@ const authenticateUser = async (req, res, next) => {
     };
 
     req.user.isLoggedIn = true;
+    // const { role } = req.user;
+    // console.log('YOUR ROLE IS LOGGED: ', role)
+    // if (role == 'Admin') {
+    //   return res.redirect('/track/home');
+    // }
+  
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {
