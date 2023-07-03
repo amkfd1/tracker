@@ -213,37 +213,25 @@
                                 <ul class="list-group list-group-flush">
                                     
                                     <li class="list-group-item"> 
-											<% if (!isLegal) {%>
-												<img class="mr-3" src="../../../assets/images/<%= documents[i].documentType %>.png%>" width="35px" height="40px">
-												<a href="/client/doc/<%= documents[i].documentId %>?doc=<%= documents[i].documentPath %>" target="_blank"><%= documents[i].documentTitle %></a>
-												<a disabled href="#" class="float-right text-secondary mx-2 " data-toggle="modal" data-target="#sendDoc<%=[i]%>" data-whatever="">
-													<i class="smallIcons" data-feather="send" aria-hidden="true"></i>
-												</a>
-												<a disabled href="#" class="float-right " >
-													<i class="smallIcons" data-feather="download-cloud" aria-hidden="true"></i>
-												</a>
-												<a disabled href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#updateDoc<%=[i]%>" data-whatever="">
-													<i class="smallIcons" data-feather="edit-2" aria-hidden="true"></i>
-												</a>
-											<%} else {%>
+										
 												<img class="mr-3" src="../../../assets/images/<%= documents[i].documentType %>.png%>" width="35px" height="40px">
 												<a href="/track/<%= documents[i].documentId %>?doc=<%= documents[i].documentPath %>" target="_blank"><%= documents[i].documentTitle %></a>
 											
-												<a href="#" class="float-right mx-2 " data-toggle="modal" data-target="#sendDoc<%=[i]%>" data-whatever="">
+												<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#sendDoc<%=[i]%>" data-whatever="">
 													<i class="smallIcons" data-feather="send" aria-hidden="true"></i>
 												</a>
 												<a href="#" class="float-right text-secondary" >
 													<i class="smallIcons" data-feather="download-cloud" aria-hidden="true"></i>
 												</a>
-												<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#updateDoc<%=[i]%>" data-whatever="">
+												<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#updateDocs<%=[i]%>" data-whatever="" aria-hidden="false">
 													<i class="smallIcons" data-feather="edit-2" aria-hidden="true"></i>
 												</a>
-											<% } %>
+										
 										</li> 
                                 </ul>
 
 								<!-- Documents Upload update Modal -->
-								<div class="modal fade " id="updateDocs[i]" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal fade " id="updateDocs<%=[i]%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div npm start>
 										<div class="modal-dialog " >
 										<div class="modal-content ">
