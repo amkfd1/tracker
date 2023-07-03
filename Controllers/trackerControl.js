@@ -555,7 +555,6 @@ const updateTesting = async (req, res) => {
 // Get all customer trackers
 const getAllCustomerTrackers = async (req, res) => {
   try {
-    // Retrieve all trackers
     let totalStages = 0;
     let completedStages = 0;
     let completionPercentage = 0;
@@ -566,9 +565,7 @@ const getAllCustomerTrackers = async (req, res) => {
 
     const trackers = await Tracker.find();
 
-    // Loop through each tracker
     for (const tracker of trackers) {
-      // Convert the service name and target values to lowercase
       const serviceName = tracker.service_interest.service_name.toLowerCase();
 
       if (tracker.service_interest && tracker.service_interest.status === 'Complete') {
@@ -609,52 +606,54 @@ const getAllCustomerTrackers = async (req, res) => {
     console.log("Completed Percentile: ", completedPercentile.toFixed(2));
     console.log("Incomplete Percentile: ", incompletePercentile.toFixed(2));
 
-    // Define arrays to store categorized trackers
     const voip = [];
     const sms = [];
     const stages = ['Overall Completion', 'Service Subscription', 'Technical Info', 'Registration & Testing'];
 
-    // Loop through each tracker
     for (const tracker of trackers) {
-      // Convert the service name and target values to lowercase
       const serviceName = tracker.service_interest.service_name.toLowerCase();
-
-      // Calculate completion percentage for individual tracker
       const trackerCompletedStages = (tracker.service_interest?.status === 'Complete' ? 1 : 0) +
         (tracker.Tech_info?.status === 'Complete' ? 1 : 0) +
         (tracker.testing?.testing_status === 'Completed' ? 1 : 0);
-      const trackerTotalStages = 3; // Total number of stages for each tracker
+      const trackerTotalStages = 3;
       const trackerCompletionPercentage = (trackerCompletedStages / trackerTotalStages) * 100;
 
-      // Add completionPercentage to the tracker
       tracker.completionPercentage = trackerCompletionPercentage.toFixed(2);
 
-      // Check the service_name value (case insensitive)
       if (serviceName === 'voip') {
-        // If service_name is 'voip', push the tracker to voip array
         voip.push(tracker);
       } else if (serviceName === 'sms') {
-        // If service_name is 'sms', push the tracker to sms array
         sms.push(tracker);
+      }
+    }
+
+    let assignedTrackers = [];
+    let unassignedTrackers = [];
+
+    for (const tracker of trackers) {
+      if (tracker.account_manager) {
+        assignedTrackers.push(tracker);
+      } else {
+        unassignedTrackers.push(tracker);
       }
     }
 
     let users = [];
     const reqUsers = await User.find();
-    for (i in reqUsers) {
+
+    for (const reqUser of reqUsers) {
       let user = {
-        name: reqUsers[i].name,
-        id: reqUsers[i]._id,
-        designation: reqUsers[i].designation,
-        role: reqUsers[i].role,
-        assignedTasks: reqUsers[i].assignedTasks.length,
+        name: reqUser.name,
+        id: reqUser._id,
+        designation: reqUser.designation,
+        role: reqUser.role,
+        assignedTasks: reqUser.assignedTasks.length,
       };
       users.push(user);
     }
 
     const logs = await Log.aggregate([
-      { $sort: { timestamp: -1 } }, // Sort by createdAt field in descending order
-      // { $limit: 10 },
+      { $sort: { timestamp: -1 } },
       {
         $project: {
           _id: 0,
@@ -667,7 +666,6 @@ const getAllCustomerTrackers = async (req, res) => {
       },
     ]);
 
-    // Send a response if needed
     res.status(200).render('home', {
       voip,
       sms,
@@ -681,6 +679,8 @@ const getAllCustomerTrackers = async (req, res) => {
       unassignedClients,
       completedPercentile: completedPercentile.toFixed(2),
       incompletePercentile: incompletePercentile.toFixed(2),
+      assignedTrackers,
+      unassignedTrackers,
       message: await req.flash('Login-success')[0],
       isAuthenticated: req.user.isLoggedIn
     });
@@ -689,6 +689,7 @@ const getAllCustomerTrackers = async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve trackers' });
   }
 };
+
 
 
 

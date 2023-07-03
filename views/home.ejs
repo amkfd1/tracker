@@ -361,8 +361,11 @@
 											<div class="col-md-6 ">
 												<label class="text-muted">Assigned:
 												</label>
+												
 												<span class="float-right">
-													<i class="appIcons text-muted" data-feather="external-link" ></i>
+													<a href="#" data-toggle="modal" data-target=".assigned">
+														<i class="appIcons text-muted" data-feather="external-link" ></i>
+													</a>
 												</span>
 												<a href="#" data-toggle="modal" data-target=".assigned">
 													<h5 class="text-info"><%= assignedClients%></h5>
@@ -372,7 +375,9 @@
 												<label class="text-muted">Un-Assigned:
 												</label>
 												<span class="float-right">
-													<i class="appIcons text-muted" data-feather="external-link" ></i>
+													<a href="#" data-toggle="modal" data-target=".unassigned">
+														<i class="appIcons text-muted" data-feather="external-link" ></i>
+													</a>
 												</span>
 												
 												<a href="#" data-toggle="modal" data-target=".assigned">
@@ -670,3 +675,79 @@
 	  </div>
 	</div>
 </div>
+
+<!-- Expand Notes -->
+<div class="modal fade assigned" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content card-body-alt">
+		<table class="table table-striped " >
+			<thead class="border-info">
+				<tr>
+					<th>
+						Client
+					</th>
+					<th>
+						Account Manager
+					</th>
+					
+					
+				</tr>
+			</thead>
+			<tbody>
+				<% for (i in assignedTrackers) {%>
+					<tr>
+						<td>
+							<%= assignedTrackers[i].Customer_Name%>
+						</td>
+
+						<td>
+							<%= assignedTrackers[i].account_manager%>
+						</td>
+
+						
+					</tr>
+				<% } %>
+				
+			</tbody>
+		</table>
+	  </div>
+	</div>
+  </div>
+
+  <!-- Expand unAssigned -->
+<div class="modal fade unassigned" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content card-body-alt">
+		<table class="table table-striped " >
+			<thead class="border-info">
+				<tr>
+					<th>
+						Client
+					</th>
+					<th>
+						Account Manager
+					</th>
+					
+					
+				</tr>
+			</thead>
+			<tbody>
+				<% for (i in unassignedTrackers) {%>
+					<tr>
+						<td>
+							<%= unassignedTrackers[i].Customer_Name%>
+						</td>
+
+						<td>
+							<%= unassignedTrackers[i].account_manager%>
+						</td>
+
+						
+					</tr>
+				<% } %>
+				
+			</tbody>
+		</table>
+	  </div>
+	</div>
+  </div>
