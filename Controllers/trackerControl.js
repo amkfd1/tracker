@@ -8,6 +8,7 @@ const multer = require('multer');
 const path = require('path');
 const { Types } = require('mongoose');
 const Note = require('../Models/note');
+const mongoose = require('mongoose');
 
 const print = console.log
 
@@ -119,46 +120,55 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
 
 
 // Grant Document Permission
+ 
+// const mongoose = require('mongoose');
+
 const grantDocumentPermission = async (req, res) => {
   try {
-    const  id  = req.params.id || req.body.document;
+    const id = req.params.id || req.body.document;
     const { userId, permission } = req.body;
-    print("This Is body: ", req.body)
-    const document = await Document.findById({ _id: id });
+
+    const document = await Document.findById(id);
 
     if (!document) {
-      req.flash('tracker_404','Client not found');
-      return res.status(404).redirect('/track/tracker/'+id);
+      req.flash('tracker_404', 'Client not found');
+      return res.status(404).redirect('/track/tracker/' + id);
     }
 
     // Check if the user has permission to grant document permission
     const loggedInUserId = req.user._id;
-    print("Document Uploader: ", document.userId, "\nLoggedIn User: ", loggedInUserId )
-    print("Comparison: ", (document.userId.toString() !== loggedInUserId.toString()))
-    if (document.userId.toString() !== loggedInUserId.toString() || req.user.role !== 'Admin') {
-      req.flash('unauthorized', "Not Authorized!")
-      return res.status(403).redirect('/track/tracker/'+document.customerRefId);
+
+    if (
+      document.userId.toString() !== loggedInUserId.toString() ||
+      req.user.role !== 'Admin'
+    ) {
+      req.flash('unauthorized', 'Not Authorized!');
+      return res
+        .status(403)
+        .redirect('/track/tracker/' + document.customerRefId);
     }
 
     // Grant permission to the user
     const tag = {
       user: userId,
-      permission: permission
+      permission: permission,
     };
 
     document.tags.push(tag);
     await document.save();
 
-    req.flash('permission', "Access to document is granted!")
-    res.status(200).redirect('/track/tracker/'+document.customerRefId);
+    req.flash('permission', 'Access to document is granted!');
+    res.status(200).redirect('/track/tracker/' + document.customerRefId);
   } catch (error) {
     console.error('Error granting document permission:', error);
-    // req.flash('server error', "A server error occured. please navigate back and try again.")
-    // res.status(500).json({ error: 'Failed to grant document permission' });
-    req.flash('server_error','A server error occured. Try Again')
-    res.status(500).redirect('/500')  
+    req.flash('server_error', 'A server error occurred. Try again');
+    res.status(500).redirect('/500');
   }
 };
+
+
+
+
 
 // Assign Account manager
 const assignTaskToUser = async (req, res) => {

@@ -50,10 +50,11 @@ router.post('/updateStage/:id', isAdmin, customerTrackerController.updateTracker
 
 
 
-router.get('/newClient/', async function (req, res) {
+router.get('/newClient/', isAdmin, async function (req, res) {
     res.render('edit-add', {
         pageTitle: "Add New Tracker",
         new: true,
+        isAuthenticated: req.user.isLoggedIn
     });
 });
 
