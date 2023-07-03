@@ -682,6 +682,7 @@ const getAllCustomerTrackers = async (req, res) => {
       completedPercentile: completedPercentile.toFixed(2),
       incompletePercentile: incompletePercentile.toFixed(2),
       message: await req.flash('Login-success')[0],
+      isAuthenticated: req.user.isLoggedIn
     });
   } catch (error) {
     console.error('Error retrieving trackers:', error);
@@ -811,7 +812,8 @@ const getSingleTracker = async (req, res) => {
       more_contacts: tracker.alternative_contact,
       users: users,
       notes,
-      flash
+      flash,
+      isAuthenticated: req.user.isLoggedIn
     });
   } catch (error) {
     req.flash('server_error','A server error occured. Try Again')
