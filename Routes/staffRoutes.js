@@ -14,7 +14,7 @@ router.post('/updateTracker/:id', customerTrackerController.updateTracker);
 router.get('/client/:id',isAuth, staffController.getSingleTracker);
 
 const Document = require('../Models/document');
-
+router.post('/addNote', isAuth, staffController.addNote);
 // router.post('/updateAddress/:id', isAuth, customerTrackerController.updateAddress);
 // router.post('/updateService/:id', isAuth, customerTrackerController.updateService);
 router.post('/updateTechnical/:id', isAuth, staffController.updateTech);

@@ -21,7 +21,8 @@ const authenticateUser = async (req, res, next) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(401).json({ error: 'User not found' });
+      req.flash('not_found', "User not found")
+      return res.status(401).redirect('/auth/login');
     }
 
     // Set req.user as the authenticated user object
@@ -35,8 +36,6 @@ const authenticateUser = async (req, res, next) => {
     };
 
     req.user.isLoggedIn = true;
-
-    
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {

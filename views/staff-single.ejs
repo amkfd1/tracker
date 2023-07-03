@@ -41,8 +41,35 @@
 										</div>
 									</p>
 									  <div class="collapse" id="notes">
-										<div class="card card-body">
-											<%= Tracker.notes%>
+										<div class="card mt-2 card-body-alt" style="max-height: 6rem;">
+											<div class="card-header ">
+												<a href="#" data-toggle="modal" data-target="#sendNote" data-whatever="">
+													<i class=" px-2 py-2 " data-feather="plus-circle"></i> Add Notes</h6>
+												</a>
+											</div>
+											<div class="card-body">
+												<% for (i in notes) {%>
+													<button type="button" class="btn btn-outline-primary my-1" data-toggle="modal" href="#" data-target="#viewNotes<%[i]%>" data-whatever="">
+														<%= notes[i].createdAt %>
+													</button>
+													<!-- view Notes  -->
+													<div class="modal fade "  id="viewNotes<%[i]%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+														
+															<div class="modal-dialog " >
+															<div class="modal-content ">
+																<div class="modal-header">
+																	<label for="">Posted: <%= notes[i].userId%> - <%= notes[i].createdAt%></label>
+																</div>
+																<div class="modal-body">
+																	<p><%= notes[i].note%></p>
+																</div>
+																
+															</div>
+															</div>
+													</div>
+												<% } %>
+											</div>
+											
 										</div>
 									  </div>
 									  <div class="collapse" id="collapseExample2">
@@ -54,6 +81,25 @@
 												<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#docs" data-whatever="">
 													Upload Document
 												</button>
+												<button type="button" class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+													Additional Contacts
+												</button>
+												<div class="collapse" id="collapseExample">
+													<div class="card card-body card-body-alt" style="max-height:9rem;">
+														<ul class="list-group list-group-flush">
+															<%for (i in more_contacts) {%>
+																<li class="list-group-item">
+																	<label class="text-muted mr-5">Platform: </label>
+																	<%= more_contacts[i].platform%>
+																</li>
+																<li class="list-group-item">
+																	<label class="text-muted mr-5">Handle / Link: </label>
+																	<%= more_contacts[i].contact_link%>
+																</li>
+															<% } %>
+														</ul>
+													</div>
+												  </div>
 											</div>
 											
 										</div>
@@ -69,9 +115,7 @@
                         <div class="row mb-5">
                             <div class="col-md-4 mt-3 border-right border-warning">
                                 <label><h4 class="text-muted">Address:</h4>  </label>
-                                <!-- <a href="#" class="float-right text-secondary" data-toggle="modal" data-target="#customer_info" data-whatever="@fat">
-                                    <i class="" data-feather="edit" aria-hidden="true"></i>
-                                </a> -->
+                               
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><label class="text-muted mr-5">Building No: </label> <%= Tracker.address.building_number %></li>
                                     <li class="list-group-item"><label class="text-muted mr-5">Street: </label><%= Tracker.address.street%></li>
@@ -83,32 +127,12 @@
 
                             <div class="col-md-4 mt-3 border-right border-warning">
                                 <label><h4 class="text-muted">Contact Point:</h4>  </label>
-                                <!-- <a href="#" class="float-right text-secondary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">
-                                    <i class="" data-feather="plus" aria-hidden="true"></i>
-                                </a> -->
+                               
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><label class="text-muted mr-5">Platform: </label><%= Tracker.contact_point.platform%></li>
                                     <li class="list-group-item"><label class="text-muted mr-5">Contact Link (Chat Room): </label> <%= Tracker.contact_point.contact_link%></li>
                                 </ul>
-								<!-- <a class="text-decondary ml-3 mb-1" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-									Additional Contacts
-								</a> -->
-								<div class="collapse" id="collapseExample">
-									<div class="card card-body card-body-alt" style="max-height:9rem;">
-										<ul class="list-group list-group-flush">
-											<%for (i in more_contacts) {%>
-												<li class="list-group-item">
-													<label class="text-muted mr-5">Platform: </label>
-													<%= more_contacts[i].platform%>
-												</li>
-												<li class="list-group-item">
-													<label class="text-muted mr-5">Handle / Link: </label>
-													<%= more_contacts[i].contact_link%>
-												</li>
-											<% } %>
-										</ul>
-									</div>
-								  </div>
+								
                             </div>
 
                             <div class="col-md-4 mt-3">
@@ -273,6 +297,43 @@
 
 	
 			<!--MODALS-->
+				<!--  Send Notes -->
+				<div class="modal fade" id="sendNote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">New Note</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form action="/addNote" method="post">
+							<div class="form-group">
+								<div class="row">
+									<div class="col">
+										<label for="recipient-name" class="col-form-label">Client:</label>
+										<input disabled name="client" value="<%= Tracker.Customer_Name%>" type="text" class="form-control" id="recipient-name">
+										<input name="clientId" value="<%= Tracker._id%>" type="hidden" class="form-control" >
+									</div>
+									
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Note:</label>
+								<textarea class="form-control" name="note" rows="8" id="message-text"></textarea>
+							</div>
+							<div class="modal-footer d-flex page-content justify-content-center align-items-center">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-success">Post Note</button>
+							</div>
+							</form>
+						</div>
+						
+						</div>
+					</div>
+					</div>
+		
 			
 			<!-- Documents Upload Modal -->
 			<div class="modal fade " id="docs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -788,7 +788,7 @@ const getSingleTracker = async (req, res) => {
     });
 
     const notes = tracker.notes;
-    let users = []
+    let users = [] 
     const reqUsers = await User.find();
     for (i in reqUsers){
         let user = {

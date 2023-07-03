@@ -39,7 +39,7 @@ const authenticateUser = async (req, res, next) => {
     const { role } = req.user; // Assuming the user object is available in the request
   
     if (role !== 'Admin') {
-      return res.redirect('/');
+      return res.redirect('/track/home');
     }
   
     // console

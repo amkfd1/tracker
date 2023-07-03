@@ -217,9 +217,7 @@ const getSingleTracker = async (req, res) => {
 
   try {
     const tracker = await Tracker.findById(id)
-      .populate('documents')
-      .populate('alternative_contact')
-      .populate('account_manager');
+    .populate('documents').populate('alternative_contact').populate('notes');
 
     if (!tracker) {
       return res.status(404).json({ error: 'Tracker not found' });
@@ -261,7 +259,8 @@ const getSingleTracker = async (req, res) => {
       mytasks.push(tracker);
     }
     let role = req.user.role;
-    // console.log("User Role: ", isLegal)
+    const notes = tracker.notes;
+    console.log("User Role: ", notes)
     let flash = await req.flash('update_success') || req.flash('unauthorized') || req.flash('permission')
     res.render('staff-single', {
       pageTitle: tracker.Customer_Name,
@@ -275,13 +274,48 @@ const getSingleTracker = async (req, res) => {
       mytasks: mytasks,
       role: role,
       isStaff: false,
-      flash
+      flash,
+      notes
     });
   } catch (error) {
     res.status(500).redirect('/500');
   }
 };
 
+const addNote = async (req, res) => {
+  const { clientId, userId, note } = req.body;
+  console.log("Adding notes to user: ", req.body);
+
+  try {
+    const trackerNote = new Note({
+      tracker: clientId,
+      user: userId || req.user._id,
+      note,
+    });
+
+    const savedNote = await trackerNote.save();
+
+    // Update the tracker's notes array
+    const tracker = await Tracker.findById(clientId);
+
+    if (!tracker) {
+      req.flash('tracker_404','Client not found');
+      return res.status(404).redirect('/track/tracker/'+id);
+
+    }
+
+    tracker.notes.push(savedNote._id); // Add the note ID to the tracker's notes array
+
+    await tracker.save(); // Save the updated tracker
+
+    req.flash('update_success','Note has been added successfully')
+    res.status(200).redirect('/client/' + clientId);
+  } catch (error) {
+    console.error('Error adding note to tracker:', error);
+    req.flash('server_error','A server error occured. Try Again')
+    res.status(500).redirect('/500')
+  }
+};
 
   module.exports = 
 { 
@@ -289,7 +323,8 @@ const getSingleTracker = async (req, res) => {
     addContact,
     updateTech,
     getAllCustomerTrackers,
-    getSingleTracker
+    getSingleTracker,
+    addNote
     
     
 };
