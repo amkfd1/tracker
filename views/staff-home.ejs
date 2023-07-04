@@ -341,18 +341,18 @@
 							</tr>
 						</thead>
 						<tbody>
-							<% for (i in userNotes) {%>
+							<% for (i in mytasks) {%>
 								<tr>
 									<td>
-										<%= userNotes[i].tracker.Customer_Name%>
+										<a href="/client/<%= mytasks[i]._id%>"><%= mytasks[i].Customer_Name%></a>
 									</td>
 
 									<td>
-										<%= userNotes[i].note%>
+										<%= mytasks[i].stage.process_stage%>
 									</td>
 
 									<td>
-										<%= userNotes[i].createdAt%>
+										<%= mytasks[i].stage.status%>
 									</td>
 								</tr>
 							<% } %>

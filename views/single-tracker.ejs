@@ -409,7 +409,7 @@
 			</div>
 
 
-			<!--Contact Update Model-->
+			<!--Address Update Model-->
 			<div class="modal fade " id="customer_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div >
 					<div class="modal-dialog " >
@@ -707,7 +707,7 @@
 									<select name="userId" class="form-control form-control-sm mb-3">
 										<option  selected=""></option>
 										<% for (i in users) {%>
-											<option  value="<%= users[i]._id%>"><%= users[i].name%></option>
+											<option  value="<%= users[i].id%>"><%= users[i].name%></option>
 										<% } %>
 																		
 									</select>
@@ -736,9 +736,7 @@
 			<!-- DOCUMENTS CONTROL MODALS  -->
 			
 			<!-- POST NOTES MODAL -->
-			<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open modal for @fat</button>
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button> -->
+			
 			<!--  Send Notes -->
 			<div class="modal fade" id="sendNote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">

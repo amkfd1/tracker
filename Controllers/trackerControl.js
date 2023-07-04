@@ -132,22 +132,24 @@ const grantDocumentPermission = async (req, res) => {
 
     const document = await Document.findById(id);
 
+    // console.log('This is the document ID: ', id);
+    // console.log('This is the BODY: ', req.body);
+    // console.log('This is the document : ', document);
+
+
     if (!document) {
       req.flash('tracker_404', 'Client not found');
+      print('NO SUCH DOCUMENT')
       return res.status(404).redirect('/track/tracker/' + id);
     }
 
     // Check if the user has permission to grant document permission
     const loggedInUserId = req.user._id;
 
-    if (
-      document.userId.toString() !== loggedInUserId.toString() ||
-      req.user.role !== 'Admin'
-    ) {
+    if (req.user.role !== 'Admin' && document.userId.toString() !== loggedInUserId.toString() ) {
       req.flash('unauthorized', 'Not Authorized!');
-      return res
-        .status(403)
-        .redirect('/track/tracker/' + document.customerRefId);
+      console.log('UNAUTHORIZED')
+      return res.status(403).redirect('/track/tracker/' + document.customerRefId);
     }
 
     // Grant permission to the user
@@ -158,7 +160,7 @@ const grantDocumentPermission = async (req, res) => {
 
     document.tags.push(tag);
     await document.save();
-
+    print('PRINTING DOCUMENT FROM GA: ', tag)
     req.flash('permission', 'Access to document is granted!');
     res.status(200).redirect('/track/tracker/' + document.customerRefId);
   } catch (error) {
@@ -678,12 +680,13 @@ const getAllCustomerTrackers = async (req, res) => {
       },
     ]);
 
+      console.log("This is Logs: ", logs)
     res.status(200).render('home', {
       voip,
       sms,
       stages,
       pageTitle: "Home",
-      logs,
+      logs: logs,
       users,
       flash: req.flash('Login-success'),
       completionPercentage: completionPercentage.toFixed(2),
@@ -772,7 +775,7 @@ const updateTrackerStage = async (req, res) => {
 
 const getSingleTracker = async (req, res) => {
   const { id } = req.params; // Assuming the tracker ID is passed as a parameter in the request
-  print('GET SOINGLE TRACKERiD ',id)
+  // print('GET SOINGLE TRACKERiD ',id)
   try {
     const tracker = await Tracker.findById(id).populate('documents').populate('alternative_contact').populate('notes');
     
@@ -813,11 +816,10 @@ const getSingleTracker = async (req, res) => {
       }
       users.push(user)
     }
-    console.log("Notes: ", notes)
+    // console.log("Notes: ", users)
     let flash = await req.flash('update_success') || req.flash('unauthorized') || req.flash('permission')
     // flash.push(req.flash('Login-success'))
    
-    console.log(req.flash('update_success'))
     res.render('single-tracker', {
       pageTitle: tracker.Customer_Name,
       Tracker: tracker,

@@ -81,6 +81,9 @@
 												<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#docs" data-whatever="">
 													Upload Document
 												</button>
+												<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#grantAccess" data-whatever="">
+													Grant Access
+												</button>
 												<button type="button" class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
 													Additional Contacts
 												</button>
@@ -217,13 +220,17 @@
 												<img class="mr-3" src="../../../assets/images/<%= documents[i].documentType %>.png%>" width="35px" height="40px">
 												<a href="/track/<%= documents[i].documentId %>?doc=<%= documents[i].documentPath %>" target="_blank"><%= documents[i].documentTitle %></a>
 											
-												<%if (isPermitted) {%>
+												<%if ( isLegal || isAccountManager) {%>
 													<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#sendDoc<%=[i]%>" data-whatever="">
 														<i class="smallIcons" data-feather="send" aria-hidden="true"></i>
 													</a>
 													<a href="#" class="float-right text-secondary" >
 														<i class="smallIcons" data-feather="download-cloud" aria-hidden="true"></i>
 													</a>
+													<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#updateDocs<%=[i]%>" data-whatever="" aria-hidden="false">
+														<i class="smallIcons" data-feather="edit-2" aria-hidden="true"></i>
+													</a>
+												<% } else if(documents[i].isPermitted) {%>
 													<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#updateDocs<%=[i]%>" data-whatever="" aria-hidden="false">
 														<i class="smallIcons" data-feather="edit-2" aria-hidden="true"></i>
 													</a>
@@ -288,6 +295,61 @@
 
 	
 			<!--MODALS-->
+
+			<div class="modal fade " id="grantAccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div  style="">
+					<div class="modal-dialog " >
+					<div class="modal-content ">
+						<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">Grant Access to Client's Documents <code><%= Tracker.Customer_Name %> </code></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+						<form method="post" action="/track/document/grant-access/" >
+							<div class="form-group row ">
+								<div class="col">
+									<label>Document:</label>
+									<select name="document" class="form-control form-control-sm mb-3">
+										<option  selected=""></option>
+										<% for (i in documents) {%>
+											<option  value="<%= documents[i].documentId%>"><%= documents[i].documentTitle%></option>
+										<% } %>
+																		
+									</select>
+								</div>
+								<div class="col-md-3">
+									<label>Select User: </label>
+									<select name="userId" class="form-control form-control-sm mb-3">
+										<option  selected=""></option>
+										<% for (i in users) {%>
+											<option  value="<%= users[i].id%>"><%= users[i].name%></option>
+										<% } %>
+																		
+									</select>
+								</div>
+								<div class="col-md-3">
+									<label>Permission: </label>
+									<select name="permission" class="form-control form-control-sm mb-3">
+										<option  selected=""></option>
+										<option  value="Read_Only">Read only</option>
+										<option  value="Read_Update">Read and Update</option>
+																		
+									</select>
+								</div>											
+							</div>
+							</div>
+							<div class="modal-footer moveModal">
+								<button type="submit" class="btn btn-info">Permit Access</button>
+								</div>
+						</form>
+						</div>
+						
+					</div>
+					</div>
+				</div>
+
 				<!--  Send Notes -->
 				<div class="modal fade" id="sendNote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document">

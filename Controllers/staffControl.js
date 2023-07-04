@@ -3,6 +3,7 @@ const Document = require('../Models/document');
 const Contact = require('../Models/contact');
 const Log = require('../Models/log');
 const Note = require('../Models/note');
+const User = require('../Models/user');
 const fs = require('fs');
 
 const path = require('path');
@@ -178,12 +179,16 @@ const updateTesting = async (req, res) => {
           sms.push(tracker);
         }
   
-        if (tracker.account_manager === req.user._id) {
+        if (tracker.account_manager === req.user._id.toString()) {
           mytasks.push(tracker);
           
         }
+        print('YOU ARE ACCOUNT MANAGER: ', tracker.account_manager === req.user._id.toString())
+        print('Clients Manager: ', tracker.account_manager);
+        print('Your ID: ', req.user._id)
       }
-  
+      
+
       // Retrieve all notes associated with the user ID
       const userId = req.user._id;
       
@@ -238,29 +243,24 @@ const updateTesting = async (req, res) => {
         const documentPath = doc.documentPath;
         const documentId = doc._id;
         const documentTitle = doc.documentTitle;
+        const tags = doc.tags;
         const extension = documentPath.split('.').pop().toLowerCase();
         const documentType = documentTypes[extension] || 'none';
   
-        return { documentId, documentPath, documentType, documentTitle };
+        let isPermitted = false;
+        for (const tag of tags) {
+          if (
+            tag.user &&
+            tag.user.equals(req.user._id) &&
+            tag.permission === 'Read_Update'
+          ) {
+            isPermitted = true;
+            break;
+          }
+        }
+  
+        return { documentId, documentPath, documentType, documentTitle, tags, isPermitted };
       });
-  
-      let isPermitted = false;
-  
-      if (
-        req.user &&
-        req.user._id &&
-        tracker.userId &&
-        (tracker.userId.equals(req.user._id) ||
-          tracker.tags.some(
-            (tag) =>
-              tag.user &&
-              tag.user.equals &&
-              tag.user.equals(req.user._id) &&
-              tag.permission === 'Read_Update'
-          ))
-      ) {
-        isPermitted = true;
-      }
   
       let isLegal = false;
       if (req.user && req.user.role && req.user.role == 'Legal') {
@@ -280,12 +280,21 @@ const updateTesting = async (req, res) => {
       let role = req.user && req.user.role;
       const notes = tracker.notes;
   
+      let users = [] 
+      const reqUsers = await User.find();
+      for (i in reqUsers){
+          let user = {
+          name: reqUsers[i].name,
+          id: reqUsers[i]._id,
+          designation: reqUsers[i].designation
+        }
+        users.push(user)
+      }
       let flash =
         (await req.flash('update_success')) ||
         req.flash('unauthorized') ||
         req.flash('permission');
   
-      console.log("User is Permitted: ", isPermitted)
       res.render('staff-single', {
         pageTitle: tracker.Customer_Name,
         Tracker: tracker,
@@ -300,13 +309,15 @@ const updateTesting = async (req, res) => {
         isStaff: false,
         flash,
         notes,
-        isPermitted,
+        users
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).redirect('/500');
     }
   };
+  
+  
   
   
 

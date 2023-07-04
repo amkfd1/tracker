@@ -53,12 +53,11 @@ app.use('/auth', authControl);
 app.get('/404', async (req, res) => {
   res.render('errors/404', {
     pageTitle: "Not Found"
-  })
-  // res.send({Message: '404 Page not found' })
+  });
 });
 app.get('/500', async (req, res) => {
   res.render('errors/500', {
-  pageTitle: "Not Found" });
+  pageTitle: "Server Error" });
 });
 
 // Global middleware for logging
