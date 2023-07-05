@@ -38,7 +38,7 @@ router.post('/register', async (req, res) => {
     // Save the user to the database
     await newUser.save();
 
-    req.flash('register-success', 'Username successfully registered');
+    req.flash('register-success', 'User successfully registered');
     res.status(200).redirect('/track/home');
   } catch (error) {
     console.error('Error registering user:', error);

@@ -183,7 +183,7 @@ const assignTaskToUser = async (req, res) => {
   try {
     // Find the user by userId
     const user = await User.findById(userId);
-    console.log("User: ", user)
+    // console.log("User: ", user)
     // Assign the tracker to the user's assignedTasks field
     user.assignedTasks.push(id);
     await user.save();
@@ -192,7 +192,7 @@ const assignTaskToUser = async (req, res) => {
     const tracker = await Tracker.findById(id);
     tracker.account_manager = user._id;
     await tracker.save();
-
+    console.log("CLIENT IS ASSIGNED AN ACCOUNT MANAGER: ", tracker.account_manager)
     req.flash('update_success', "Account Manager Successfully Assigned!")
     res.status(200).redirect('/track/home');
   } catch (error) {
@@ -614,12 +614,6 @@ const getAllCustomerTrackers = async (req, res) => {
     completedPercentile = (completedStages / trackers.length) * 100;
     incompletePercentile = 100 - completedPercentile;
 
-    console.log("Overall Completion: ", completionPercentage.toFixed(2));
-    console.log("Assigned Clients: ", assignedClients);
-    console.log("Unassigned Clients: ", unassignedClients);
-    console.log("Completed Percentile: ", completedPercentile.toFixed(2));
-    console.log("Incomplete Percentile: ", incompletePercentile.toFixed(2));
-
     const voip = [];
     const sms = [];
     const stages = ['Overall Completion', 'Service Subscription', 'Technical Info', 'Registration & Testing'];
@@ -647,7 +641,7 @@ const getAllCustomerTrackers = async (req, res) => {
     for (const tracker of trackers) {
       if (tracker.account_manager) {
         assignedTrackers.push(tracker);
-      } else {
+      } else if(!tracker.account_manager){
         unassignedTrackers.push(tracker);
       }
     }
@@ -679,8 +673,8 @@ const getAllCustomerTrackers = async (req, res) => {
         },
       },
     ]);
+    let flash = await req.flash('update_success') || req.flash('unauthorized') || req.flash('permission') || req.flash('register-success')
 
-      console.log("This is Logs: ", logs)
     res.status(200).render('home', {
       voip,
       sms,
@@ -696,7 +690,7 @@ const getAllCustomerTrackers = async (req, res) => {
       incompletePercentile: incompletePercentile.toFixed(2),
       assignedTrackers,
       unassignedTrackers,
-      message: await req.flash('Login-success')[0],
+      message: flash,
       isAuthenticated: req.user.isLoggedIn
     });
   } catch (error) {
@@ -806,15 +800,19 @@ const getSingleTracker = async (req, res) => {
     });
 
     const notes = tracker.notes;
-    let users = [] 
+     
+    let users = [];
     const reqUsers = await User.find();
-    for (i in reqUsers){
-        let user = {
-        name: reqUsers[i].name,
-        id: reqUsers[i]._id,
-        designation: reqUsers[i].designation
-      }
-      users.push(user)
+
+    for (const reqUser of reqUsers) {
+      let user = {
+        name: reqUser.name,
+        id: reqUser._id,
+        designation: reqUser.designation,
+        role: reqUser.role,
+        assignedTasks: reqUser.assignedTasks.length,
+      };
+      users.push(user);
     }
     // console.log("Notes: ", users)
     let flash = await req.flash('update_success') || req.flash('unauthorized') || req.flash('permission')

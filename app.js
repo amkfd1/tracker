@@ -70,7 +70,7 @@ app.use(isAuth, (req, res, next) => {
   const isPageRefreshed = req.get('Cache-Control') === 'max-age=0' || req.get('Pragma') === 'no-cache';
 
   // Log the accessed route and user name
-  console.log(`${timestamp} - User: ${userName} - Route: ${route}`);
+  // console.log(`${timestamp} - User: ${userName} - Route: ${route}`);
 
   // Save logs into the database if the page is not being refreshed
   if (!isPageRefreshed) {

@@ -14,7 +14,7 @@
 								<p class="card-description">Monitor on-boarding processes of every customer</p>
 								<% if (message) {%>
 									<div id="alert-message" class="alert alert-success alert-dismissible fade show" role="alert">
-									  <i data-feather="check"></i> <strong>  <%= message%></strong>
+									  <i data-feather="check"></i> <strong>  <%= message[0]%></strong>
 					
 									</div>
 									  
@@ -149,48 +149,49 @@
 																<a href="" data-toggle="modal" data-target="#assign<%= voip[i]._id%>" data-whatever="">
 																	<i data-feather="share-2"></i>
 																</a>
-																<!-- Assign account manager  -->
-															<div class="modal fade " id="assign<%= voip[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-																<div  style="">
-																	<div class="modal-dialog " >
-																	<div class="modal-content ">
-																		<div class="modal-header">
-																		<h4 class="modal-title" id="exampleModalLabel">Assign Client to Account Manager <code><%=voip[i]._Customer_Name %> </code></h4>
-																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																			<span aria-hidden="true">&times;</span>
-																		</button>
-																		</div>
-																		<div class="modal-body">
-																		<form method="post" action="/track/assign/account-manager/<%= voip[i]._id%>" >
-																			<div class="form-group row ">
-																				<div class="col">
-																					<label>Title:</label>
-																					<input disabled value="<%=voip[i].Customer_Name %>" class="form-control mb-4 mb-md-0" name="documentTitle">
-																				</div>
-																				<div class="col">
-																					<label>Assign Account Manager: </label>
-																					<select name="userId" class="form-control form-control-sm mb-3">
-																						<option  selected=""></option>
-																						<%for (i in users) {%>
-																							<option value="<%= users[i].id%>"><%= users[i].name%></option>
-																						<% } %>				
-																					</select>
-																				</div>
-																													
-																			</div>
-																			</div>
-																			
-																			<div class="modal-footer moveModal">
-																				<button type="submit" class="btn btn-info">Assign</button>
-																				</div>
-																		</form>
-																		</div>
-																		
-																	</div>
-																	</div>
-																</div>
+																
 															</td>
 														</tr>
+														<!-- Assign account manager  -->
+														<div class="modal fade " id="assign<%= voip[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+															<div  style="">
+																<div class="modal-dialog " >
+																<div class="modal-content ">
+																	<div class="modal-header">
+																	<h4 class="modal-title" id="exampleModalLabel">Assign Client to Account Manager <code><%=voip[i]._Customer_Name %> </code></h4>
+																	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																		<span aria-hidden="true">&times;</span>
+																	</button>
+																	</div>
+																	<div class="modal-body">
+																	<form method="post" action="/track/assign/account-manager/<%= voip[i]._id%>" >
+																		<div class="form-group row ">
+																			<div class="col">
+																				<label>Title:</label>
+																				<input disabled value="<%=voip[i].Customer_Name %>" class="form-control mb-4 mb-md-0" name="documentTitle">
+																			</div>
+																			<div class="col">
+																				<label>Assign Account Manager: </label>
+																				<select name="userId" class="form-control form-control-sm mb-3">
+																					<option  selected=""></option>
+																					<%for (i in users) {%>
+																						<option value="<%= users[i].id%>"><%= users[i].name%></option>
+																					<% } %>				
+																				</select>
+																			</div>
+																												
+																		</div>
+																		</div>
+																		
+																		<div class="modal-footer moveModal">
+																			<button type="submit" class="btn btn-info">Assign</button>
+																			</div>
+																	</form>
+																	</div>
+																	
+																</div>
+																</div>
+															</div>
 													<% } %>
 												</tbody>
 											</table>
@@ -334,11 +335,51 @@
 		
 															</td>
 															<td>
-																<a href="" data-toggle="modal" data-target="#assign<%=[i]%>" data-whatever="">
+																<a href="" data-toggle="modal" data-target="#assign<%= sms[i]._id%>" data-whatever="">
 																	<i data-feather="share-2"></i>
 																</a>
 															</td>
 														</tr>
+														<!-- Assign account manager  -->
+														<div class="modal fade " id="assign<%= sms[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+															<div  style="">
+																<div class="modal-dialog " >
+																<div class="modal-content ">
+																	<div class="modal-header">
+																	<h4 class="modal-title" id="exampleModalLabel">Assign Client to Account Manager <code><%=voip[i]._Customer_Name %> </code></h4>
+																	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																		<span aria-hidden="true">&times;</span>
+																	</button>
+																	</div>
+																	<div class="modal-body">
+																	<form method="post" action="/track/assign/account-manager/<%= voip[i]._id%>" >
+																		<div class="form-group row ">
+																			<div class="col">
+																				<label>Title:</label>
+																				<input disabled value="<%=voip[i].Customer_Name %>" class="form-control mb-4 mb-md-0" name="documentTitle">
+																			</div>
+																			<div class="col">
+																				<label>Assign Account Manager: </label>
+																				<select name="userId" class="form-control form-control-sm mb-3">
+																					<option  selected=""></option>
+																					<%for (i in users) {%>
+																						<option value="<%= users[i].id%>"><%= users[i].name%></option>
+																					<% } %>				
+																				</select>
+																			</div>
+																												
+																		</div>
+																		</div>
+																		
+																		<div class="modal-footer moveModal">
+																			<button type="submit" class="btn btn-info">Assign</button>
+																			</div>
+																	</form>
+																	</div>
+																	
+																</div>
+																</div>
+															</div>
 													<% } %>
 												</tbody>
 											</table>
