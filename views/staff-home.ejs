@@ -23,14 +23,17 @@
                                     <p class="card-description">Monitor on-boarding processes of every customer</p>
                                     <!-- <h5 class="card-title mb-3">trackers SERVICE</h5> -->
                                     
-                                    <% if (message) {%>
-                                        <div id="alert-message" class="alert alert-success alert-dismissible fade show" role="alert">
-                                          <i data-feather="check"></i> <strong>  <%= message%></strong>
-                        
+                                    <% if (message.length > 0) { %>
+									
+                                        <div id="alert-message" class="alert  text-center alert-success alert-dismissible fade show" role="alert">
+                                          <i data-feather="check"></i> <strong><%= message[0] %></strong>
                                         </div>
-                                          
-                                    <%}%>
                                       
+                                  <% } else if (error.length) {%>
+                                    <div id="alert-message" class="alert  text-center alert-danger alert-dismissible fade show" role="alert">
+                                        <i data-feather="check"></i> <strong><%= error[0]%></strong>
+                                      </div>
+                                      <% } else {}%>
                                     
                                </div>
                                <div class="col-md-4">   
@@ -164,9 +167,10 @@
                                                                     <%= trackers[i].stage.process_stage%>
                                                                 </button>
                                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
+        
                                                                     <%for (j in stages) {%>
                                                                         
-                                                                        <form action="/track/updateStage/<%= trackers[i]._id%>" method="post">
+                                                                        <form action="/updateStage/<%= trackers[i]._id%>" method="post">
                                                                             <button type="submit"  class="dropdown-item" style="border:none;">
                                                                                 <%= stages[j]%>
                                                                             </button>
@@ -238,7 +242,7 @@
                                                                     <%if (trackers[i].completionPercentage <40 ){%> bg-danger  %>
                                                                     <%}else if (trackers[i].completionPercentage > 30 && trackers[i].completionPercentage <= 60) {%>
                                                                          bg-warning																
-                                                                    <%}else %> bg-success " role="progressbar"  aria-valuenow="<%= trackers[i].completionPercentage%>" aria-valuemin="0" aria-valuemax="100">
+                                                                    <%}else %> bg-success " role="progressbar" style="width: 100%;"  aria-valuenow="<%= trackers[i].completionPercentage%>" aria-valuemin="0" aria-valuemax="100">
                                                                         <%= trackers[i].completionPercentage%>
                                                                     
                                                                     </div>

@@ -18,7 +18,7 @@ const updateTech = async (req, res) => {
   
       if (!tracker) {
         req.flash('tracker_404','Client not found');
-        return res.status(404).redirect('/404');
+        return res.status(404).redirect('/client/'+id);
       }
   
       // Update the address fields
@@ -40,7 +40,7 @@ const updateTech = async (req, res) => {
     } catch (error) {
       console.error('Error updating Technical Info:', error);
       req.flash('server_error','A server error occured. Try Again')
-      res.status(500).redirect('/500')
+      res.status(500).redirect('/client/'+id);
     }
   
   };
@@ -57,7 +57,7 @@ const updateTesting = async (req, res) => {
   
       if (!tracker) {
         req.flash('tracker_404','Client not found');
-        return res.status(404).redirect('/404');
+        return res.status(404).redirect('/client/'+req.params.id);
       }
   
       // Update the address fields
@@ -77,7 +77,7 @@ const updateTesting = async (req, res) => {
     } catch (error) {
       console.error('Error updating Technical Info:', error);
       req.flash('server_error','A server error occured. Try Again')
-      res.status(500).redirect('/500')
+      res.status(500).redirect('/client/'+req.params.id);
     }
   
   };
@@ -105,7 +105,7 @@ const updateTesting = async (req, res) => {
   
       if (!tracker) {
         req.flash('tracker_404','Client not found');
-        return res.status(404).redirect('/404');
+        return res.status(404).redirect('/client/'+customerRefId);
       }
   
       // Add the uploaded document to the documents array in the Tracker document
@@ -119,11 +119,72 @@ const updateTesting = async (req, res) => {
       console.error('Error uploading document:', error);
       // res.status(500).json({ error: 'Failed to upload document' });
       req.flash('server_error','A server error occured. Try Again')
-      res.status(500).redirect('/500')
+      res.status(500).redirect('/client/'+customerRefId)
     }
   };
   
+  const updateTrackerStage = async (req, res) => {
+    const trackerId = req.params.id;
+    const newProcessStage = req.body.stage;
+    let totalStages = 0;
+    let completedStages = 0;
+    let completionPercentage = 0;
+    console.log("Stage: ", newProcessStage)
+    try {
+      const tracker = await Tracker.findById(trackerId);
+  
+      // update the overall percentage\
+      if (tracker.service_interest && tracker.service_interest.status === 'Complete') {
+        totalStages++;
+        completedStages++;
+      } else {
+        totalStages++;
+      }
+    
+      if (tracker.Tech_info && tracker.Tech_info.status === 'Complete') {
+        totalStages++;
+        completedStages++;
+      } else {
+        totalStages++;
+      }
+    
+      if (tracker.testing && tracker.testing.testing_status === 'Completed') {
+        totalStages++;
+        completedStages++;
+      } else {
+        totalStages++;
+      }
+    
+      completionPercentage = (completedStages / totalStages) * 100;
+      console.log("Overall Completion: ", completionPercentage.toFixed(2));
+    
 
+
+      if (!tracker) {
+        req.flash('tracker_404','Client not found');
+        return res.status(404).redirect('/client/'+trackerId );
+      }
+      let stageStatus = tracker.stage.status
+      tracker.stage.process_stage = newProcessStage;
+      if (tracker.stage.process_stage === 'Service Subscription'){
+        tracker.stage.status = tracker.service_interest.status
+      } else if (tracker.stage.process_stage === 'Technical Info'){
+        tracker.stage.status = tracker.Tech_info.status
+      }else if (tracker.stage.process_stage === 'Registration & Testing'){
+        tracker.stage.status = tracker.testing.testing_status
+      }else{
+        tracker.stage.status = completionPercentage;
+        console.log("this is overall percentage: ", completionPercentage)
+      }
+      const stage = await tracker.save();
+      console.log("Updates: ", stage.stage)
+      req.flash('update_success','Stage status Updated')
+      res.status(200).redirect('/');
+    } catch (error) {
+      console.error('Error updating tracker stage process:', error);
+      req.flash('server_error','A server error occured. Try Again');
+      res.status(500).redirect('/client/'+trackerId);    }
+};
 
   const getAllCustomerTrackers = async (req, res) => {
     try {
@@ -131,7 +192,6 @@ const updateTesting = async (req, res) => {
       let completedStages = 0;
       let completionPercentage = 0;
       let mytasks = [];
-      let completedPercentile = 0;
       let incompletePercentile = 0;
       const trackers = await Tracker.find();
       const myClients = [];
@@ -139,79 +199,56 @@ const updateTesting = async (req, res) => {
       const sms = [];
       const stages = ['Overall Completion', 'Service Subscription', 'Technical Info', 'Registration & Testing'];
   
-      for (const tracker of trackers) {
-        const serviceName = tracker.service_interest.service_name.toLowerCase();
-  
-        if (tracker.service_interest && tracker.service_interest.status === 'Complete') {
-          totalStages++;
-          completedStages++;
-        } else {
-          totalStages++;
-        }
-  
-        if (tracker.Tech_info && tracker.Tech_info.status === 'Complete') {
-          totalStages++;
-          completedStages++;
-        } else {
-          totalStages++;
-        }
-  
-        if (tracker.testing && tracker.testing.testing_status === 'Completed') {
-          totalStages++;
-          completedStages++;
-        } else {
-          totalStages++;
-        }
-  
-        completionPercentage = (completedStages / totalStages) * 100;
-  
+      const overallCompletion = (completedStages / totalStages) * 100;
 
+    // const voip = [];
+    // const sms = [];
+    // const stages = ['Overall Completion', 'Service Subscription', 'Technical Info', 'Registration & Testing'];
 
-        completionPercentage = (completedStages / totalStages) * 100;
-        completedPercentile = (completedStages / trackers.length) * 100;
-        incompletePercentile = 100 - completedPercentile;
+    for (const tracker of trackers) {
+      const serviceName = tracker.service_interest.service_name;
+      const trackerCompletedStages = (tracker.service_interest?.status === 'Complete' ? 1 : 0) +
+        (tracker.Tech_info?.status === 'Complete' ? 1 : 0) +
+        (tracker.testing?.testing_status === 'Completed' ? 1 : 0);
+      const trackerTotalStages = 3;
+      const trackerCompletionPercentage = (trackerCompletedStages / trackerTotalStages) * 100;
 
-        if (serviceName === 'voip') {
-          tracker.completionPercentage = completionPercentage.toFixed(2);
-          voip.push(tracker);
-        } else if (serviceName === 'sms') {
-          tracker.completionPercentage = completionPercentage.toFixed(2);
-          sms.push(tracker);
-        }
-  
-        if (tracker.account_manager === req.user._id.toString()) {
-          mytasks.push(tracker);
-          
-        }
-        print('YOU ARE ACCOUNT MANAGER: ', tracker.account_manager === req.user._id.toString())
-        print('Clients Manager: ', tracker.account_manager);
-        print('Your ID: ', req.user._id)
+      tracker.completionPercentage = trackerCompletionPercentage.toFixed(2);
+      tracker.overallCompletion = trackerCompletionPercentage;
+
+      if (tracker.account_manager === req.user._id.toString()) {
+        mytasks.push(tracker);
+        
       }
-      
-
+    }
       // Retrieve all notes associated with the user ID
       const userId = req.user._id;
+      const completedPercentile = (trackers.filter(tracker => tracker.overallCompletion === 100).length / trackers.length) * 100;
       
       let userNotes = await Note.find({ user: userId }).populate('tracker').populate('user');
       let myNotes = []
       console.log("MY TASKS: ", mytasks);
+      let flash = await req.flash('update_success') || req.flash('permission') || req.flash('register-success');
+      let error = req.flash('tracker_404' ) || req.flash('server_error')|| req.flash('unauthorized')
+  
       res.status(200).render('staff-home', {
         stages,
         pageTitle: "Home",
         user: await req.user,
         isAuthenticated: req.user.isLoggedIn,
-        message: await req.flash('Login-success')[0],
+        message: flash,
+        error,
         mytasks,
         trackers,
         userNotes, // Add the userNotes array to the response
-        completedPercentile,
-        incompletePercentile,
+        completedPercentile: completedPercentile.toFixed(2),
+        incompletePercentile: (100 - completedPercentile).toFixed(2),
         userNotes
 
       });
     } catch (error) {
       console.error('Error retrieving trackers:', error);
-      res.status(500).json({ error: 'Failed to retrieve trackers' });
+      res.status(500).redirect('/500');
     }
   };
   
@@ -228,7 +265,8 @@ const updateTesting = async (req, res) => {
         .populate('notes');
   
       if (!tracker) {
-        return res.status(404).json({ error: 'Tracker not found' });
+        req.flash('tracker_404', 'Client not found!')
+        return res.status(404).redirect('/')
       }
   
       const documentTypes = {
@@ -290,10 +328,10 @@ const updateTesting = async (req, res) => {
         }
         users.push(user)
       }
-      let flash =
-        (await req.flash('update_success')) ||
-        req.flash('unauthorized') ||
-        req.flash('permission');
+
+      
+      let flash = await req.flash('update_success') || req.flash('permission') || req.flash('register-success');
+      let error = req.flash('tracker_404' ) || req.flash('server_error')|| req.flash('unauthorized')
   
       res.render('staff-single', {
         pageTitle: tracker.Customer_Name,
@@ -307,13 +345,15 @@ const updateTesting = async (req, res) => {
         mytasks: mytasks,
         role: role,
         isStaff: false,
-        flash,
+        message:flash,
+        error,
         notes,
         users
       });
     } catch (error) {
       console.log(error);
-      res.status(500).redirect('/500');
+      req.flash('server_error', "Server error has occured. Please try again.")
+      res.status(500).redirect('/');
     }
   };
   
@@ -339,7 +379,7 @@ const addNote = async (req, res) => {
 
     if (!tracker) {
       req.flash('tracker_404','Client not found');
-      return res.status(404).redirect('/track/tracker/'+id);
+      return res.status(404).redirect('/client/'+id);
 
     }
 
@@ -352,7 +392,7 @@ const addNote = async (req, res) => {
   } catch (error) {
     console.error('Error adding note to tracker:', error);
     req.flash('server_error','A server error occured. Try Again')
-    res.status(500).redirect('/500')
+    res.status(500).redirect('/client/'+id)
   }
 };
 
@@ -425,7 +465,8 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
     getAllCustomerTrackers,
     getSingleTracker,
     addNote,
-    updateDocument
+    updateDocument,
+    updateTrackerStage
     
     
 };

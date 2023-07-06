@@ -67,9 +67,6 @@
 																		<%= voip[i].stage.process_stage%>
 																	</button>
 																	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
-																		<button type="Button"  class="dropdown-item" style="border:none;">
-																			voip[i].completionPercentage
-																		</button>
 																		<%for (j in stages) {%>
 																			
 																			<form action="/track/updateStage/<%= voip[i]._id%>" method="post">
@@ -135,7 +132,7 @@
 																		
 																		</div>
 																	<% } else if (voip[i].stage.status === 'Complete' || voip[i].stage.status === 'Completed'  ) {%>
-																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 100%;"  role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
 																			<%= voip[i].stage.status%>
 																		
 																		</div>

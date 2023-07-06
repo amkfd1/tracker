@@ -22,11 +22,17 @@
 									</span>
 								</h4>
 								<p class="card-description">Monitor on-boarding processes of every customer</p>
-								<% if (flash.length > 0) { %>
+								<% if (message.length > 0) { %>
+									
 									<div id="alert-message" class="alert  text-center alert-success alert-dismissible fade show" role="alert">
-									  <i data-feather="check"></i> <strong><%= flash[0] %></strong>
+									  <i data-feather="check"></i> <strong><%= message[0] %></strong>
 									</div>
-								<% } %>
+								  
+							  <% } else if (error.length) {%>
+								<div id="alert-message" class="alert  text-center alert-danger alert-dismissible fade show" role="alert">
+									<i data-feather="check"></i> <strong><%= error[0]%></strong>
+								  </div>
+								  <% } else {}%>
 							</div>
 							<% if (isAccountManager || isLegal) {%>
 								<div class="col">

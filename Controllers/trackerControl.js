@@ -39,7 +39,7 @@ const uploadDocument = async (req, res) => {
 
     if (!tracker) {
       req.flash('tracker_404','Client not found');
-      return res.status(404).redirect('/track/tracker/'+id);
+      return res.status(404).redirect('/track/tracker/'+document.customerRefId);
     }
 
     // Add the documentId to the tracker's documents field
@@ -56,7 +56,7 @@ const uploadDocument = async (req, res) => {
   } catch (error) {
     console.error('Error uploading document:', error);
     req.flash('server_error','A server error occured. Try Again');
-    res.status(500).redirect('/500') ;
+    res.status(500).redirect('/track/tracker/'+document.customerRefId) ;
   }
 };
 
@@ -77,7 +77,7 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
       // req.flash('not-found', 'Document Not Found')
       // return res.status(404).redirect('/track/tracker/' + document.customerRefId);
       req.flash('tracker_404','Client not found');
-      return res.status(404).redirect('/track/tracker/'+id);
+      return res.status(404).redirect('/track/tracker/'+document.customerRefId);
     }
 
     // Check if the user is the uploader or has "Read_Update" permission in the tags

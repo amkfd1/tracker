@@ -36,7 +36,7 @@ router.post('/addNote', isAuth, staffController.addNote);
 router.post('/updateTechnical/:id', isAuth, staffController.updateTech);
 router.post('/updateTesting/:id', isAuth, staffController.updateTesting);
 // router.post('/addContact/:id', isAuth, customerTrackerController.addContact);
-// router.post('/addNote/', isAuth, customerTrackerController.addNote);
+router.post('/updateStage/:id', isAuth, staffController.updateTrackerStage);
 // open Pdf
 router.get("/client/doc/:id", async (req, res) => {
   var docId = req.query.doc;
