@@ -51,9 +51,15 @@ router.post('/updateStage/:id', isAdmin, customerTrackerController.updateTracker
 
 
 router.get('/newClient/', isAdmin, async function (req, res) {
+    let error = req.flash('server_error');
+    let message = req.flash('update_success');
+
+    console.log(error, message)
     res.render('edit-add', {
         pageTitle: "Add New Tracker",
         new: true,
+        error,
+        message,
         isAuthenticated: req.user.isLoggedIn
     });
 });

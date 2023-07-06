@@ -11,6 +11,18 @@
 					<div class="card-body card-body-alt px-5" >
 						<h5 class="card-title mb-3">Create New Customer</h5>
 						<p class="card-description">Add new Client below. Fill out the form to keep track of Onboarding processes</p>
+						
+						<% if (message.length > 0) { %>
+									
+							<div id="alert-message" class="alert  text-center alert-success alert-dismissible fade show" role="alert">
+							  <i data-feather="check"></i> <strong><%= message[0] %></strong>
+							</div>
+						  
+					  <% } else if (error.length) {%>
+						<div id="alert-message" class="alert  text-center alert-danger alert-dismissible fade show" role="alert">
+							<i data-feather="check"></i> <strong><%= error[0]%></strong>
+						  </div>
+						  <% } else {}%>
 						<form action="/track/newClient" method="POST" class="forms-sample">
 							<section >
 								
@@ -98,7 +110,14 @@
 								<div class="form-group row ">
 									<div class="col-md-4">
 										<label>Service Type:</label>
-										<input class="form-control mb-4 mb-md-0" name="service_name">
+										
+												<select name="service_name" class="form-control form-control-sm mb-3">
+													<option  selected="         "></option>
+													<option  value="VoIP">VoIP</option>
+													<option  value="SMS">SMS</option>
+						
+												</select>
+										
 									</div>
 									<div class="col-md-3">
 										<label>Interested Routes: </label>

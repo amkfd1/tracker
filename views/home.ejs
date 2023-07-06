@@ -12,13 +12,20 @@
 							
 								<h5 class="card-title mb-3">OnBoarding Tracker</h5>
 								<p class="card-description">Monitor on-boarding processes of every customer</p>
-								<% if (message) {%>
-									<div id="alert-message" class="alert alert-success alert-dismissible fade show" role="alert">
-									  <i data-feather="check"></i> <strong>  <%= message[0]%></strong>
-					
+								<!-- THis is to show all messages -->
+								<% if (message.length > 0) { %>
+									
+									<div id="alert-message" class="alert  text-center alert-success alert-dismissible fade show" role="alert">
+									  <i data-feather="check"></i> <strong><%= message[0] %></strong>
 									</div>
-									  
-								<%}%>
+								  
+							  <% } else if (error.length) {%>
+								<div id="alert-message" class="alert  text-center alert-danger alert-dismissible fade show" role="alert">
+									<i data-feather="check"></i> <strong><%= error[0]%></strong>
+								  </div>
+								  <% } else {}%>
+								  
+								<!-- End of showing all messages -->
 								<h5 class="card-title mb-3">VoIP SERVICE</h5>
 		
 									<section class="mt-3 mb-5">
@@ -60,6 +67,9 @@
 																		<%= voip[i].stage.process_stage%>
 																	</button>
 																	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
+																		<button type="Button"  class="dropdown-item" style="border:none;">
+																			voip[i].completionPercentage
+																		</button>
 																		<%for (j in stages) {%>
 																			
 																			<form action="/track/updateStage/<%= voip[i]._id%>" method="post">

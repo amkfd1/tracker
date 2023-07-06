@@ -27,7 +27,10 @@ const TrackerSchema = new Schema({
         type: Boolean,
         default: false
       },
-      service_name: String,
+      service_name: {
+        type:String,
+        enum:['VoIP', 'SMS']
+      },
       routes: String,
       rates_offered: String,
       currency: {
