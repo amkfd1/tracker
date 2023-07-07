@@ -11,8 +11,7 @@ const authControl = require('./Controllers/authControl');
 const cookieParser = require('cookie-parser');
 var flash = require('connect-flash');
 const session = require('express-session');
-const isAuth = require('./middleware/verifyAuth');
- 
+ const isAuth = require('./middleware/verifyAuth');
 
 const fs = require('fs');
 const MONGODB_URI =
@@ -40,10 +39,13 @@ app.use(session({
   resave: false
 }));
 
+
+
 app.use(flash());
 // app.use(
 //   multer({ storage: fileStorage, fileFilter: fileFilter }).array('image')
 // );
+// app.use(logs);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 // console.log('images destination');
@@ -64,7 +66,7 @@ app.get('/500', async (req, res) => {
 app.use(isAuth, (req, res, next) => {
   const timestamp = new Date().toISOString();
   const userName = req.user.name || 'Anonymous';
-  const route = `${req.method} ${req.url}`;
+  const route = `${req.url}`;
 
   // Check if the page is being refreshed
   const isPageRefreshed = req.get('Cache-Control') === 'max-age=0' || req.get('Pragma') === 'no-cache';
