@@ -18,10 +18,11 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage }); 
 
 
 router.get('/', isAuth, staffController.getAllCustomerTrackers);
+router.post('/document/grant-access/', isAuth, staffController.grantDocumentPermission);
 
 // Update an existing customer tracker
 router.post('/updateTracker/:id', customerTrackerController.updateTracker); 

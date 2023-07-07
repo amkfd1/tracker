@@ -36,8 +36,8 @@
 								
 								<div class="form-group row ">
 									<div class="col-md-5 border-right">
-										<label>Company Name:</label>
-										<input value="" name="Customer_Name" class="form-control mb-4 mb-md-0" >
+										<label>Company Name:*</label>
+										<input required value="" name="Customer_Name" class="form-control mb-4 mb-md-0" >
 										<div class="row mt-3">
 											<div class="col">
 												<label>Stage:</label>
@@ -109,9 +109,9 @@
 								</h4>
 								<div class="form-group row ">
 									<div class="col-md-4">
-										<label>Service Type:</label>
+										<label>Service Type:*</label>
 										
-												<select name="service_name" class="form-control form-control-sm mb-3">
+												<select required name="service_name" class="form-control form-control-sm mb-3">
 													<option  selected="         "></option>
 													<option  value="VoIP">VoIP</option>
 													<option  value="SMS">SMS</option>
@@ -128,7 +128,7 @@
 										<input class="form-control" name="rates_offered">
 									</div>
 									<div class="col-md-2">
-										<label>Currency: </label>
+										<label>Currency:* </label>
 										<input Value="USD" class="form-control" name="currency">
 									</div>
 									<div class="col-md-6 mt-3">

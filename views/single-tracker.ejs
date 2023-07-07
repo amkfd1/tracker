@@ -22,15 +22,15 @@
 									</span>
 								</h4>
 								<p class="card-description">Monitor on-boarding processes of every customer</p>
-								<% if (message.length > 0) { %>
+								<% if (message) { %>
 									
 									<div id="alert-message" class="alert  text-center alert-success alert-dismissible fade show" role="alert">
-									  <i data-feather="check"></i> <strong><%= message[0] %></strong>
+									  <i data-feather="check"></i> <strong><%= message %></strong>
 									</div>
 								  
-							  <% } else if (error.length) {%>
+							  <% } else if (error) {%>
 								<div id="alert-message" class="alert  text-center alert-danger alert-dismissible fade show" role="alert">
-									<i data-feather="check"></i> <strong><%= error[0]%></strong>
+									<i data-feather="x"></i> <strong><%= error %></strong>
 								  </div>
 								  <% } else {}%>
 							</div>
@@ -324,6 +324,38 @@
 										</div>
 									</div>
 								
+								<!-- Documents Upload Modal -->
+								<div class="modal fade " id="docs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div  >
+										<div class="modal-dialog " >
+										<div class="modal-content ">
+											<div class="modal-header">
+											<h4 class="modal-title" id="exampleModalLabel">Upload Document for <code><%= Tracker.Customer_Name %> </code></h4>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+											</div>
+											<div class="modal-body">
+											<form method="post" action="/track/upload/<%= Tracker._id%>" enctype="multipart/form-data">
+												<div class="form-group row ">
+													<div class="col">
+														<label>Title:</label>
+														<input  required class="form-control mb-4 mb-md-0" name="documentTitle">
+													</div>
+													<div class="col-md-6">
+														<label>Document: </label>
+														<input required type="file" name="document" id="myDropify" class="border">								</div>
+												</div>
+												<div class="modal-footer moveModal">
+													<button type="submit" class="btn btn-info">Upload Document</button>
+													</div>
+											</form>
+											</div>
+											
+										</div>
+										</div>
+									</div>
+								</div>
 								<% } %>
                             </div>
                         </div>
@@ -651,38 +683,7 @@
 				</div>
 			</div>
 
-			<!-- Documents Upload Modal -->
-			<div class="modal fade " id="docs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div  >
-					<div class="modal-dialog " >
-					<div class="modal-content ">
-						<div class="modal-header">
-						<h4 class="modal-title" id="exampleModalLabel">Upload Document for <code><%= Tracker.Customer_Name %> </code></h4>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						</div>
-						<div class="modal-body">
-						<form method="post" action="/track/upload/<%= Tracker._id%>" enctype="multipart/form-data">
-							<div class="form-group row ">
-								<div class="col">
-									<label>Title:</label>
-									<input  class="form-control mb-4 mb-md-0" name="documentTitle">
-								</div>
-								<div class="col-md-6">
-									<label>Document: </label>
-									<input type="file" name="document" id="myDropify" class="border">								</div>
-							</div>
-							<div class="modal-footer moveModal">
-								<button type="submit" class="btn btn-info">Upload Document</button>
-								</div>
-						</form>
-						</div>
-						
-					</div>
-					</div>
-				</div>
-			</div>
+			
 
 			<!-- Grant Access Modal -->
 			<div class="modal fade " id="grantAccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

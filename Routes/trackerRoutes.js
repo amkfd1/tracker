@@ -51,8 +51,8 @@ router.post('/updateStage/:id', isAdmin, customerTrackerController.updateTracker
 
 
 router.get('/newClient/', isAdmin, async function (req, res) {
-    let error = req.flash('server_error');
-    let message = req.flash('update_success');
+  let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
+  let error = req.flash('tracker_404' )[0] || req.flash('unauthorized')[0] || req.flash('server_error')[0]; 
 
     console.log(error, message)
     res.render('edit-add', {

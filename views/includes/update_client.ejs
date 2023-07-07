@@ -72,7 +72,7 @@
                                 <div class="mt-2 border-top"></div>
                             </div>
                         </h6>
-                        <div class="form-group row ">
+                        <div class="form-group row "> 
                             <div class="col">
                                 <label>Platform:</label>
                                 <input value="<%= Tracker.contact_point.platform%>" class="form-control mb-4 mb-md-0" name="platform" >
@@ -95,7 +95,13 @@
                         <div class="form-group row ">
                             <div class="col-md-6">
                                 <label>Service Type:</label>
-                                <input value="<%= Tracker.service_interest.service_name%>"class="form-control mb-4 mb-md-0" name="service_name">
+                                <select required name="service_name" class="form-control form-control-sm mb-3">
+                                    <option  selected=" <%= Tracker.service_interest.service_name%>"><%= Tracker.service_interest.service_name%></option>
+                                    <option  value="VoIP">VoIP</option>
+                                    <option  value="SMS">SMS</option>
+        
+                                </select>
+                                
                             </div>
                             <div class="col-md-6">
                                 <label>Interested Routes: </label>
@@ -129,7 +135,13 @@
                         <div class="form-group row ">
                             <div class="col-md-6">
                                 <label>Service Type:</label>
-                                <input value="<%= Tracker.Tech_info.TI_service_name%>" class="form-control mb-4 mb-md-0" name="TI_service_name">
+                                <select required name="service_name" class="form-control form-control-sm mb-3">
+                                    <option  selected=" <%= Tracker.service_interest.service_name%>"><%= Tracker.service_interest.service_name%></option>
+                                    <option  value="VoIP">VoIP</option>
+                                    <option  value="SMS">SMS</option>
+        
+                                </select>
+                                <!-- <input value="<%= Tracker.Tech_info.TI_service_name%>" class="form-control mb-4 mb-md-0" name="TI_service_name"> -->
                             </div>
                             <div class="col-md-6">
                                 <label>Signalling IP(s): </label>

@@ -23,15 +23,15 @@
                                     <p class="card-description">Monitor on-boarding processes of every customer</p>
                                     <!-- <h5 class="card-title mb-3">trackers SERVICE</h5> -->
                                     
-                                    <% if (message.length > 0) { %>
+                                    <% if (message) { %>
 									
                                         <div id="alert-message" class="alert  text-center alert-success alert-dismissible fade show" role="alert">
-                                          <i data-feather="check"></i> <strong><%= message[0] %></strong>
+                                          <i data-feather="check"></i> <strong><%= message%></strong>
                                         </div>
                                       
-                                  <% } else if (error.length) {%>
+                                  <% } else if (error) {%>
                                     <div id="alert-message" class="alert  text-center alert-danger alert-dismissible fade show" role="alert">
-                                        <i data-feather="check"></i> <strong><%= error[0]%></strong>
+                                        <i data-feather="check"></i> <strong><%= error%></strong>
                                       </div>
                                       <% } else {}%>
                                     

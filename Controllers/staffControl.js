@@ -82,7 +82,52 @@ const updateTesting = async (req, res) => {
   
   };
 
-
+  const grantDocumentPermission = async (req, res) => {
+    try {
+      const id = req.params.id || req.body.document;
+      const { userId, permission } = req.body;
+  
+      const document = await Document.findById(id);
+  
+      // console.log('This is the document ID: ', id);
+      // console.log('This is the BODY: ', req.body);
+      // console.log('This is the document : ', document);
+  
+  
+      if (!document) {
+        req.flash('tracker_404', 'Client not found');
+        print('NO SUCH DOCUMENT')
+        return res.status(404).redirect('/client/' + id);
+      }
+  
+      // Check if the user has permission to grant document permission
+      const loggedInUserId = req.user._id;
+  
+      if (document.userId.toString() !== loggedInUserId.toString() ) {
+        
+        console.log('YOU ARE UNAUTHORIZED')
+        req.flash('unauthorized', 'Not Authorized!');
+        return res.status(403).redirect('/client/' + document.customerRefId);
+      }
+  
+      // Grant permission to the user
+      const tag = {
+        user: userId,
+        permission: permission,
+      };
+  
+      document.tags.push(tag);
+      await document.save();
+      print('PRINTING DOCUMENT FROM GA: ', tag)
+      req.flash('permission', 'Access to document is granted!');
+      res.status(200).redirect('/client/' + document.customerRefId);
+    } catch (error) {
+      console.error('Error granting document permission:', error);
+      req.flash('server_error', 'A server error occurred. Try again');
+      res.status(500).redirect('/500');
+    }
+  };
+  
 
   const addContact = async (req, res) => {
     try {
@@ -137,7 +182,7 @@ const updateTesting = async (req, res) => {
       if (tracker.service_interest && tracker.service_interest.status === 'Complete') {
         totalStages++;
         completedStages++;
-      } else {
+      } else { 
         totalStages++;
       }
     
@@ -228,8 +273,8 @@ const updateTesting = async (req, res) => {
       let userNotes = await Note.find({ user: userId }).populate('tracker').populate('user');
       let myNotes = []
       console.log("MY TASKS: ", mytasks);
-      let flash = await req.flash('update_success') || req.flash('permission') || req.flash('register-success');
-      let error = req.flash('tracker_404' ) || req.flash('server_error')|| req.flash('unauthorized')
+      let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
+      let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0]
   
       res.status(200).render('staff-home', {
         stages,
@@ -282,6 +327,7 @@ const updateTesting = async (req, res) => {
         const documentId = doc._id;
         const documentTitle = doc.documentTitle;
         const tags = doc.tags;
+        const userId = doc.userId;
         const extension = documentPath.split('.').pop().toLowerCase();
         const documentType = documentTypes[extension] || 'none';
   
@@ -296,8 +342,8 @@ const updateTesting = async (req, res) => {
             break;
           }
         }
-  
-        return { documentId, documentPath, documentType, documentTitle, tags, isPermitted };
+       
+        return { documentId, documentPath, documentType, documentTitle, tags, isPermitted, userId };
       });
   
       let isLegal = false;
@@ -330,9 +376,10 @@ const updateTesting = async (req, res) => {
       }
 
       
-      let flash = await req.flash('update_success') || req.flash('permission') || req.flash('register-success');
-      let error = req.flash('tracker_404' ) || req.flash('server_error')|| req.flash('unauthorized')
-  
+      let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
+      let error = req.flash('tracker_404' )[0] || req.flash('unauthorized')[0] || req.flash('server_error')[0]; 
+      console.log("unauthorized message: ", error);
+      
       res.render('staff-single', {
         pageTitle: tracker.Customer_Name,
         Tracker: tracker,
@@ -346,9 +393,10 @@ const updateTesting = async (req, res) => {
         role: role,
         isStaff: false,
         message:flash,
-        error,
+        error: error,
         notes,
-        users
+        users,
+      
       });
     } catch (error) {
       console.log(error);
@@ -421,8 +469,8 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
     const hasPermission = document.tags.some(tag => tag.user.equals(req.user._id) && tag.permission === 'Read_Update');
 
     if (!isUploader && !hasPermission) {
-      console.log("YOU DON'T HAVE PERMISSION")
-      req.flash('unauthorized', 'You\'re not authorized to perform this action. Contact Admin.')
+      console.log("YOU DON'T HAVE PERMISSION");
+      req.flash('unauthorized', 'You\'re not authorized to perform this action. Contact Admin.');
       return res.status(402).redirect('/client/' + customerRefId);
       // return res.status(404).redirect('/client/' + document.customerRefId);
 
@@ -466,7 +514,8 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
     getSingleTracker,
     addNote,
     updateDocument,
-    updateTrackerStage
+    updateTrackerStage,
+    grantDocumentPermission
     
     
 };

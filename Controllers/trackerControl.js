@@ -37,7 +37,7 @@ const uploadDocument = async (req, res) => {
     // Find the tracker associated with the customerRefId
     const tracker = await Tracker.findOne({ _id: customerRefId });
 
-    if (!tracker) {
+    if (!tracker || !document) {
       req.flash('tracker_404','Client not found');
       return res.status(404).redirect('/track/tracker/'+document.customerRefId);
     }
@@ -48,18 +48,20 @@ const uploadDocument = async (req, res) => {
     await tracker.save();
 
     if (req.user.role != "Admin"){
+      req.flash('update_success', 'Document uploaded!')
       res.status(200).redirect('/client/' + customerRefId);
     } else {
-      
+      req.flash('update_success', 'Document uploaded!')
+
       res.status(200).redirect('/track/tracker/' + customerRefId);
     }
   } catch (error) {
     console.error('Error uploading document:', error);
-    req.flash('server_error','A server error occured. Try Again');
-    res.status(500).redirect('/track/tracker/'+document.customerRefId) ;
+    req.flash('server_error','Oops! Document not uploaded');
+    res.status(500).redirect('/track/tracker/'+req.params.id) ;
   }
 };
-
+ 
 // Update Document
 
 // Controller function to update date and document path
@@ -91,7 +93,6 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
 
       // throw new Error('t');
     }
-    // 649181d06c54fadcfd174783
     // Update the document fields
     
     const oldDocument = document.documentPath;
@@ -107,15 +108,21 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
     // Save the updated document
     print('NEW RefId: ', document.customerRefId)
     await document.save();
-    req.flash('update_success', "Document has been updated sucessfully.")
-    return res.status(200).redirect('/track/tracker/'+ customerRefId);
+
+    if (req.user.role != "Admin"){
+      req.flash('update_success', "Document has been updated sucessfully.")
+      res.status(200).redirect('/client/' + customerRefId);
+    } else {
+      req.flash('update_success', "Document has been updated sucessfully.")
+      res.status(200).redirect('/track/tracker/' + customerRefId);
+    }
   });
   } catch (error) {
     console.error(error);
     // req.flash('server-error', 'Your document has not been updated. Please Try Again.')
     // return res.status(500).json({ error: 'Internal server error' });
     req.flash('server_error','A server error occured. Try Again')
-    res.status(500).redirect('/500')  
+    res.status(500).redirect('/track/tracker/' + customerRefId)  
   }
   
 }
@@ -412,7 +419,7 @@ const addCustomerTracker = async (req, res) => {
 } catch (error) {
     console.error(error);
     // throw new Error('Failed to add customer tracker');
-    req.flash('server_error','A server error occured. Try Again')
+    req.flash('server_error','One or more field(s) are required. Try Again')
     res.status(500).redirect('/track/Newclient')
 }
 };
@@ -665,9 +672,9 @@ const getAllCustomerTrackers = async (req, res) => {
       },
     ]);
 
-    let flash = await req.flash('update_success') || req.flash('permission') || req.flash('register-success') ;
-    let error = req.flash('tracker_404' ) || req.flash('server_error')|| req.flash('unauthorized') 
-    console.log("SERVER ERROR FLASH: ", req.flash('server_error'), "\nEntire FLASH: ", flash[0])
+    let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0] ;
+    let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0] 
+    // console.log("SERVER ERROR FLASH: ", req.flash('server_error'), "\nEntire FLASH: ", flash[0])
     res.status(200).render('home', {
       voip,
       sms,
@@ -813,8 +820,8 @@ const getSingleTracker = async (req, res) => {
       users.push(user);
     }
     // console.log("Notes: ", users)
-    let flash = await req.flash('update_success') || req.flash('permission') || req.flash('register-success');
-    let error = req.flash('tracker_404' ) || req.flash('server_error')|| req.flash('unauthorized') 
+    let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
+    let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0];
     res.render('single-tracker', {
       pageTitle: tracker.Customer_Name,
       Tracker: tracker,
