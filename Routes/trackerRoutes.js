@@ -14,12 +14,13 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const originalname = file.originalname.replace(/\//g, '\\'); // Replace forward slashes with backslashes in the original file name
-    cb(null, uniqueSuffix + '-' + originalname); // Set the filename for the uploaded file
+    const filePath = uniqueSuffix + '-' + file.originalname.replace(/\//g, '\\');
+    cb(null, filePath); // Set the filename for the uploaded file with backslashes
   },
 });
 
 const upload = multer({ storage: storage });
+
 
 // Add a new customer tracker
 router.post('/newClient',isAdmin, customerTrackerController.addCustomerTracker);

@@ -22,9 +22,9 @@ const uploadDocument = async (req, res) => {
     const { id: customerRefId } = req.params;
 
     // Extract the original document name
-    const documentPath = req.file.path;
+    const documentPath = 'uploads/'+req.file.filename;
     const originalname = req.file.originalname;
-
+    print('filename: ', documentPath)
     // Create a new document instance
     const document = new Document({
       userId,
