@@ -222,6 +222,40 @@
 								<!-- <a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#updateDocs[i]" data-whatever="">
 									<i class="text-info" data-feather="edit" aria-hidden="true"></i>
 								</a> -->
+
+								<!-- Documents Upload Modal -->
+								<div class="modal fade " id="docs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div  >
+										<div class="modal-dialog " >
+										<div class="modal-content ">
+											<div class="modal-header">
+											<h4 class="modal-title" id="exampleModalLabel">Upload Document for <code><%= Tracker.Customer_Name %> </code></h4>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+											</div>
+											<div class="modal-body">
+											<form method="post" action="/track/upload/<%= Tracker._id%>" enctype="multipart/form-data">
+												<div class="form-group row ">
+													<div class="col">
+														<label>Title:</label>
+														<input  required class="form-control mb-4 mb-md-0" name="documentTitle">
+													</div>
+													<div class="col-md-6">
+														<label>Document: </label>
+														<input required type="file" name="document" id="myDropify" class="border">								</div>
+												</div>
+												<div class="modal-footer moveModal">
+													<button type="submit" class="btn btn-info">Upload Document</button>
+													</div>
+											</form>
+											</div>
+											
+										</div>
+										</div>
+									</div>
+								</div>
+								<!-- End Upload Modal -->
 								<%for (i in documents) {%>
                                 <ul class="list-group list-group-flush">
                                     
@@ -324,38 +358,7 @@
 										</div>
 									</div>
 								
-								<!-- Documents Upload Modal -->
-								<div class="modal fade " id="docs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-									<div  >
-										<div class="modal-dialog " >
-										<div class="modal-content ">
-											<div class="modal-header">
-											<h4 class="modal-title" id="exampleModalLabel">Upload Document for <code><%= Tracker.Customer_Name %> </code></h4>
-											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
-											</div>
-											<div class="modal-body">
-											<form method="post" action="/track/upload/<%= Tracker._id%>" enctype="multipart/form-data">
-												<div class="form-group row ">
-													<div class="col">
-														<label>Title:</label>
-														<input  required class="form-control mb-4 mb-md-0" name="documentTitle">
-													</div>
-													<div class="col-md-6">
-														<label>Document: </label>
-														<input required type="file" name="document" id="myDropify" class="border">								</div>
-												</div>
-												<div class="modal-footer moveModal">
-													<button type="submit" class="btn btn-info">Upload Document</button>
-													</div>
-											</form>
-											</div>
-											
-										</div>
-										</div>
-									</div>
-								</div>
+								
 								<% } %>
                             </div>
                         </div>
