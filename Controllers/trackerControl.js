@@ -12,7 +12,9 @@ const mongoose = require('mongoose');
 
 const print = console.log
 
-// Upload Document
+// const Document = require('../Models/document');
+// const Tracker = require('../Models/tracker');
+
 const uploadDocument = async (req, res) => {
   try {
     const { documentTitle } = req.body;
@@ -29,7 +31,7 @@ const uploadDocument = async (req, res) => {
       documentTitle,
       documentPath,
       originalname,
-      customerRefId
+      customerRefId,
     });
 
     await document.save();
@@ -38,8 +40,8 @@ const uploadDocument = async (req, res) => {
     const tracker = await Tracker.findOne({ _id: customerRefId });
 
     if (!tracker || !document) {
-      req.flash('tracker_404','Client not found');
-      return res.status(404).redirect('/track/tracker/'+document.customerRefId);
+      req.flash('tracker_404', 'Client not found');
+      return res.status(404).redirect('/track/tracker/' + document.customerRefId);
     }
 
     // Add the documentId to the tracker's documents field
@@ -47,21 +49,21 @@ const uploadDocument = async (req, res) => {
 
     await tracker.save();
 
-    if (req.user.role != "Admin"){
-      req.flash('update_success', 'Document uploaded!')
+    if (req.user.role !== 'Admin') {
+      req.flash('update_success', 'Document uploaded!');
       res.status(200).redirect('/client/' + customerRefId);
     } else {
-      req.flash('update_success', 'Document uploaded!')
-
+      req.flash('update_success', 'Document uploaded!');
       res.status(200).redirect('/track/tracker/' + customerRefId);
     }
   } catch (error) {
     console.error('Error uploading document:', error);
-    req.flash('server_error','Oops! Document not uploaded');
-    res.status(500).redirect('/track/tracker/'+req.params.id) ;
+    req.flash('server_error', 'Oops! Document not uploaded');
+    res.status(500).redirect('/track/tracker/' + req.params.id);
   }
 };
- 
+
+
 // Update Document
 
 // Controller function to update date and document path
