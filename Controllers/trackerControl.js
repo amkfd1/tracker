@@ -15,53 +15,187 @@ const print = console.log
 // const Document = require('../Models/document');
 // const Tracker = require('../Models/tracker');
 
+// const uploadDocument = async (req, res) => {
+//   try {
+//     const { documentTitle } = req.body;
+//     const userId = req.user._id;
+//     const { id: customerRefId } = req.params;
+
+//     // Extract the original document name
+//     const documentPath = 'uploads/'+req.file.filename;
+//     const originalname = req.file.originalname;
+//     print('filename: ', documentPath)
+//     // Create a new document instance
+//     const document = new Document({
+//       userId,
+//       documentTitle,
+//       documentPath,
+//       originalname,
+//       customerRefId,
+//     });
+
+//     await document.save();
+
+//     // Find the tracker associated with the customerRefId
+//     const tracker = await Tracker.findOne({ _id: customerRefId });
+
+//     if (!tracker || !document) {
+//       req.flash('tracker_404', 'Client not found');
+//       return res.status(404).redirect('/track/tracker/' + document.customerRefId);
+//     }
+
+//     // Add the documentId to the tracker's documents field
+//     tracker.documents.push(document._id);
+
+//     await tracker.save();
+
+//     if (req.user.role !== 'Admin') {
+//       req.flash('update_success', 'Document uploaded!');
+//       res.status(200).redirect('/client/' + customerRefId);
+//     } else {
+//       req.flash('update_success', 'Document uploaded!');
+//       res.status(200).redirect('/track/tracker/' + customerRefId);
+//     }
+//   } catch (error) {
+//     console.error('Error uploading document:', error);
+//     req.flash('server_error', 'Oops! Document not uploaded');
+//     res.status(500).redirect('/track/tracker/' + req.params.id);
+//   }
+// };
+
+
+const AWS = require('aws-sdk');
+// const multer = require('multer');
+const multerS3 = require('multer-s3');
+// $Env:AWS_REGION="us-east-2"
+// $Env:AWS_ACCESS_KEY_ID="ASIARCWQKHW3QSWZOGEM"
+// $Env:AWS_SECRET_ACCESS_KEY="6BXn+sKng2vYHivOelptSJS9tWPxiNz8mS21/GpW"
+// $Env:AWS_SESSION_TOKEN="IQoJb3JpZ2luX2VjEP3//////////wEaCXVzLWVhc3QtMiJHMEUCIQC8/bjOrRTn3qv51bquCKta4x/8pYdS/m7x27ZJsTaZWAIgXCh6YiyhgaOta5B5T/gBSIo2+7wT15vsnKZKdivdufEqrwIIdhAAGgwwNzQ1MjUwNjQ2MzEiDKVw12BfErSFNMwKFSqMAgBfWmqKeOdCxu4gqtq+/YJMiVkjSJgQGPfPP+yCEbUckLSfCE/1GtZVCF+bN015/zG7WbvEvfUGDy1B/FmtbiDmNSuSCXnCJUhn+QbTtL8L96SyvhjxfGZwgLM3cZI3kyP6du/IUAp0DhwWC8lzaFeLhYu6MEmZAqQrsP6vNR+uEJ1GC/wAEKcXf9+YVKrTt6bGlKTSSLOxda2eB350hAZbdgVFcLPO9vYx9w6E2t42DNLrhzvX9dqs6OTqN9CipdpR/YLgCP9ologYqNtP3DXpxwSc6XRjJK/lKQ0+vCRISFLbVopg3jKXIruDXEAu5HbvgaQES2ndeMvtAvl7dFOCP8BWuYeyWTjO3BMwkLilpQY6nQFYPpnnkhhgKWf1x2SdKeZi9yvYgT3u/sY6oBvrPcLJT//gzioNzNNQp9SEyvLL1bX0A+vhrgSJ35FAjr4at3iaYdAvdpY5WvguYHZtrBVOfgKvIrJBGawbpX4mXBaltwCXs/tzOqu7YJtO2sJjnIP6Eiu195rsRx+IZpTE5/ozmXVXENA3sfn6mfwS3iz3OslY76mGHDUSj1F1iDnT"
+// Configure AWS SDK with your credentials
+AWS.config.update({
+  accessKeyId: 'ASIARCWQKHW3QSWZOGEM',
+  secretAccessKey: '6BXn+sKng2vYHivOelptSJS9tWPxiNz8mS21/GpW',
+  region: 'us-east-2'
+});
+
+// Create an instance of the S3 service
+const s3 = new AWS.S3();
+
+// Set up Multer storage and file upload configuration
+// const upload = multer({
+//   storage: multerS3({
+//     s3: s3,
+//     bucket: 'cyclic-jittery-pullover-crow-us-east-2',
+//     acl: 'public-read', // Set the appropriate access control policy
+//     metadata: function (req, file, cb) {
+//       cb(null, { fieldName: file.fieldname });
+//     },
+//     key: function (req, file, cb) {
+//       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+//       const key = 'uploads/' + uniqueSuffix + '-' + file.originalname; // Set the file key (path) in the S3 bucket
+//       cb(null, key);
+//     }
+//   })
+// });
+
+// // Upload Document
+// const uploadDocument = (req, res) => {
+//   upload.single('document')(req, res, function (err) {
+//     if (err) {
+//       console.error('Error uploading document:', err);
+//       req.flash('server_error', 'Oops! Document not uploaded');
+//       return res.status(500).redirect('/track/tracker/' + req.params.id);
+//     }
+
+//     // Access the uploaded file details
+//     const { documentTitle } = req.body;
+//     const userId = req.user._id;
+//     const { id: customerRefId } = req.params;
+//     const { originalname, key } = req.file;
+
+//     // Create a new document instance
+//     const document = new Document({
+//       userId,
+//       documentTitle,
+//       documentPath: key,
+//       originalname,
+//       customerRefId
+//     });
+
+//     document.save()
+//       .then(() => {
+//         // Find the tracker associated with the customerRefId
+//         return Tracker.findOne({ _id: customerRefId });
+//       })
+//       .then(tracker => {
+//         if (!tracker || !document) {
+//           req.flash('tracker_404', 'Client not found');
+//           return res.status(404).redirect('/track/tracker/' + document.customerRefId);
+//         }
+
+//         // Add the documentId to the tracker's documents field
+//         tracker.documents.push(document._id);
+//         return tracker.save();
+//       })
+//       .then(() => {
+//         if (req.user.role !== 'Admin') {
+//           req.flash('update_success', 'Document uploaded!');
+//           res.status(200).redirect('/client/' + customerRefId);
+//         } else {
+//           req.flash('update_success', 'Document uploaded!');
+//           res.status(200).redirect('/track/tracker/' + customerRefId);
+//         }
+//       })
+//       .catch(error => {
+//         console.error('Error uploading document:', error);
+//         req.flash('server_error', 'Oops! Document not uploaded');
+//         res.status(500).redirect('/track/tracker/' + req.params.id);
+//       });
+//   });
+// };
+
 const uploadDocument = async (req, res) => {
   try {
     const { documentTitle } = req.body;
-    const userId = req.user._id;
     const { id: customerRefId } = req.params;
+    const file = req.file;
 
-    // Extract the original document name
-    const documentPath = 'uploads/'+req.file.filename;
-    const originalname = req.file.originalname;
-    print('filename: ', documentPath)
-    // Create a new document instance
+    // Create an instance of the S3 service
+    const s3 = new AWS.S3();
+
+    // Set the S3 bucket and key for the uploaded file
+    const bucket = 'YOUR_BUCKET_NAME';
+    const key = file.key;
+
+    // Upload the file to the S3 bucket
+    const uploadParams = {
+      Bucket: bucket,
+      Key: key,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    };
+
+    await s3.upload(uploadParams).promise();
+
+    // Save the document information to your MongoDB database
     const document = new Document({
-      userId,
+      userId: req.user._id,
       documentTitle,
-      documentPath,
-      originalname,
+      documentPath: key,
+      originalname: file.originalname,
       customerRefId,
     });
 
     await document.save();
 
-    // Find the tracker associated with the customerRefId
-    const tracker = await Tracker.findOne({ _id: customerRefId });
+    // Rest of your code...
 
-    if (!tracker || !document) {
-      req.flash('tracker_404', 'Client not found');
-      return res.status(404).redirect('/track/tracker/' + document.customerRefId);
-    }
-
-    // Add the documentId to the tracker's documents field
-    tracker.documents.push(document._id);
-
-    await tracker.save();
-
-    if (req.user.role !== 'Admin') {
-      req.flash('update_success', 'Document uploaded!');
-      res.status(200).redirect('/client/' + customerRefId);
-    } else {
-      req.flash('update_success', 'Document uploaded!');
-      res.status(200).redirect('/track/tracker/' + customerRefId);
-    }
   } catch (error) {
     console.error('Error uploading document:', error);
-    req.flash('server_error', 'Oops! Document not uploaded');
-    res.status(500).redirect('/track/tracker/' + req.params.id);
+    // Handle the error...
   }
 };
+
 
 
 // Update Document

@@ -6,21 +6,63 @@ const isAuth = require('../middleware/verifyAuth');
 const isAdmin = require('../middleware/isAdmin');
 
 const multer = require('multer');
+const AWS = require('aws-sdk');
+const multerS3 = require('multer-s3');
 
-// Set up Multer storage and file upload configuration
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads'); // Specify the destination folder for storing uploaded files
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const filePath = uniqueSuffix + '-' + file.originalname.replace(/\//g, '\\');
-    cb(null, filePath); // Set the filename for the uploaded file with backslashes
-  },
+// Configure the AWS SDK with your credentials and region
+AWS.config.update({
+  accessKeyId: 'ASIARCWQKHW3QSWZOGEM',
+  secretAccessKey: '6BXn+sKng2vYHivOelptSJS9tWPxiNz8mS21/GpW',
+  region: 'us-east-2'
 });
 
-const upload = multer({ storage: storage });
+// Create an instance of the S3 service
+const s3 = new AWS.S3();
 
+// Set up Multer storage and file upload configuration
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'cyclic-jittery-pullover-crow-us-east-2',
+    key: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      const filePath = uniqueSuffix + '-' + file.originalname.replace(/\\/g, '/');
+      cb(null, filePath);
+    },
+  }),
+});
+
+router.post('/upload/:id', isAuth, upload.single('document'), async (req, res) => {
+  try {
+    // Retrieve the uploaded file information
+    const { originalname } = req.file;
+    const { id: customerRefId } = req.params;
+
+    // Construct the S3 key for the uploaded file
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const key = uniqueSuffix + '-' + originalname.replace(/\\/g, '/');
+
+    // Upload the file to S3
+    const uploadParams = {
+      Bucket: 'cyclic-jittery-pullover-crow-us-east-2',
+      Key: key,
+      Body: req.file.buffer, // Assuming the file data is stored in the buffer
+    };
+
+    await s3.upload(uploadParams).promise();
+
+    // Save the document information to your database or perform other operations
+
+    res.status(200).json({ message: 'File uploaded successfully' });
+  } catch (error) {
+    console.error('Error uploading document:', error);
+    res.status(500).json({ error: 'Failed to upload document' });
+  }
+});
+
+
+// Use the upload middleware in your route handler
+// router.post('/upload/:id', isAuth, upload.single('document'), customerTrackerController.uploadDocument);
 
 // Add a new customer tracker
 router.post('/newClient',isAdmin, customerTrackerController.addCustomerTracker);
