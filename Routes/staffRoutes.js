@@ -39,25 +39,33 @@ router.post('/updateTesting/:id', isAuth, staffController.updateTesting);
 // router.post('/addContact/:id', isAuth, customerTrackerController.addContact);
 router.post('/updateStage/:id', isAuth, staffController.updateTrackerStage);
 // open Pdf
+const uploadDirectory = 'upload';
+
 router.get("/client/doc/:id", async (req, res) => {
   var docId = req.query.doc;
   const document = await Document.findById(req.params.id);
-    console.log("This is the document ", document)
-    if (!document) {
-      return res.status(404).json({ error: 'Document not found' });
-    }
+  console.log("This is the document ", document)
+  if (!document) {
+    return res.status(404).json({ error: 'Document not found' });
+  }
   console.log("This is your receipt Id: ", docId)
-  var stream = fs.createReadStream(document.documentPath);
-  var filename = "samsple.pdf"; 
-  // Be careful of special characters
-  filename = encodeURIComponent(filename);
-  // Ideally this should strip them
+  
+  // Construct the file path
+  const filename = "sample.pdf";
+  const filePath = path.join(__dirname, '..', uploadDirectory, filename);
 
-  res.setHeader('Content-disposition', 'inline; filename="' + filename + '"');
+  var stream = fs.createReadStream(filePath);
+  
+  // Be careful of special characters
+  const encodedFilename = encodeURIComponent(filename);
+  
+  // Set the response headers for the file
+  res.setHeader('Content-disposition', 'inline; filename="' + encodedFilename + '"');
   res.setHeader('Content-type', 'application/pdf');
 
   stream.pipe(res);
-  console.log( "hello there it works")
-  });
+  console.log("Hello, it works!");
+});
+
 
 module.exports = router;
