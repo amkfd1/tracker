@@ -12,15 +12,15 @@
 						<h5 class="card-title mb-3">Create New Customer</h5>
 						<p class="card-description">Add new Client below. Fill out the form to keep track of Onboarding processes</p>
 						
-						<% if (message.length > 0) { %>
+						<% if (message) { %>
 									
 							<div id="alert-message" class="alert  text-center alert-success alert-dismissible fade show" role="alert">
-							  <i data-feather="check"></i> <strong><%= message[0] %></strong>
+							  <i data-feather="check"></i> <strong><%= message %></strong>
 							</div>
 						  
-					  <% } else if (error.length) {%>
+					  <% } else if (error)  {%>
 						<div id="alert-message" class="alert  text-center alert-danger alert-dismissible fade show" role="alert">
-							<i data-feather="check"></i> <strong><%= error[0]%></strong>
+							<i data-feather="x"></i> <strong><%= error%></strong>
 						  </div>
 						  <% } else {}%>
 						<form action="/track/newClient" method="POST" class="forms-sample">

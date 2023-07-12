@@ -64,22 +64,22 @@ const print = console.log
 // };
 
 
-const AWS = require('aws-sdk');
+// const AWS = require('aws-sdk');
 // const multer = require('multer');
-const multerS3 = require('multer-s3');
+// const multerS3 = require('multer-s3');
 // $Env:AWS_REGION="us-east-2"
 // $Env:AWS_ACCESS_KEY_ID="ASIARCWQKHW3QSWZOGEM"
 // $Env:AWS_SECRET_ACCESS_KEY="6BXn+sKng2vYHivOelptSJS9tWPxiNz8mS21/GpW"
 // $Env:AWS_SESSION_TOKEN="IQoJb3JpZ2luX2VjEP3//////////wEaCXVzLWVhc3QtMiJHMEUCIQC8/bjOrRTn3qv51bquCKta4x/8pYdS/m7x27ZJsTaZWAIgXCh6YiyhgaOta5B5T/gBSIo2+7wT15vsnKZKdivdufEqrwIIdhAAGgwwNzQ1MjUwNjQ2MzEiDKVw12BfErSFNMwKFSqMAgBfWmqKeOdCxu4gqtq+/YJMiVkjSJgQGPfPP+yCEbUckLSfCE/1GtZVCF+bN015/zG7WbvEvfUGDy1B/FmtbiDmNSuSCXnCJUhn+QbTtL8L96SyvhjxfGZwgLM3cZI3kyP6du/IUAp0DhwWC8lzaFeLhYu6MEmZAqQrsP6vNR+uEJ1GC/wAEKcXf9+YVKrTt6bGlKTSSLOxda2eB350hAZbdgVFcLPO9vYx9w6E2t42DNLrhzvX9dqs6OTqN9CipdpR/YLgCP9ologYqNtP3DXpxwSc6XRjJK/lKQ0+vCRISFLbVopg3jKXIruDXEAu5HbvgaQES2ndeMvtAvl7dFOCP8BWuYeyWTjO3BMwkLilpQY6nQFYPpnnkhhgKWf1x2SdKeZi9yvYgT3u/sY6oBvrPcLJT//gzioNzNNQp9SEyvLL1bX0A+vhrgSJ35FAjr4at3iaYdAvdpY5WvguYHZtrBVOfgKvIrJBGawbpX4mXBaltwCXs/tzOqu7YJtO2sJjnIP6Eiu195rsRx+IZpTE5/ozmXVXENA3sfn6mfwS3iz3OslY76mGHDUSj1F1iDnT"
 // Configure AWS SDK with your credentials
-AWS.config.update({
-  accessKeyId: 'ASIARCWQKHW3QSWZOGEM',
-  secretAccessKey: '6BXn+sKng2vYHivOelptSJS9tWPxiNz8mS21/GpW',
-  region: 'us-east-2'
-});
+// AWS.config.update({
+//   accessKeyId: 'ASIARCWQKHW3QSWZOGEM',
+//   secretAccessKey: '6BXn+sKng2vYHivOelptSJS9tWPxiNz8mS21/GpW',
+//   region: 'us-east-2'
+// });
 
 // Create an instance of the S3 service
-const s3 = new AWS.S3();
+// const s3 = new AWS.S3();
 
 // Set up Multer storage and file upload configuration
 // const upload = multer({
@@ -154,49 +154,96 @@ const s3 = new AWS.S3();
 //   });
 // };
 
+// const uploadDocument = async (req, res) => {
+//   try {
+//     const { documentTitle } = req.body;
+//     const { id: customerRefId } = req.params;
+//     const file = req.file;
+
+//     // Create an instance of the S3 service
+//     const s3 = new AWS.S3();
+
+//     // Set the S3 bucket and key for the uploaded file
+//     const bucket = 'YOUR_BUCKET_NAME';
+//     const key = file.key;
+
+//     // Upload the file to the S3 bucket
+//     const uploadParams = {
+//       Bucket: bucket,
+//       Key: key,
+//       Body: file.buffer,
+//       ContentType: file.mimetype,
+//     };
+
+//     await s3.upload(uploadParams).promise();
+
+//     // Save the document information to your MongoDB database
+//     const document = new Document({
+//       userId: req.user._id,
+//       documentTitle,
+//       documentPath: key,
+//       originalname: file.originalname,
+//       customerRefId,
+//     });
+
+//     await document.save();
+
+//     // Rest of your code...
+
+//   } catch (error) {
+//     console.error('Error uploading document:', error);
+//     // Handle the error...
+//   }
+// };
+
+////////////////////////////////////////////////////////////////******************************////////////////////////// */
+// Upload Document
 const uploadDocument = async (req, res) => {
   try {
     const { documentTitle } = req.body;
+    const userId = req.user._id;
     const { id: customerRefId } = req.params;
-    const file = req.file;
 
-    // Create an instance of the S3 service
-    const s3 = new AWS.S3();
+    // Extract the original document name
+    const documentPath = req.file.path;
+    const originalname = req.file.originalname;
 
-    // Set the S3 bucket and key for the uploaded file
-    const bucket = 'YOUR_BUCKET_NAME';
-    const key = file.key;
-
-    // Upload the file to the S3 bucket
-    const uploadParams = {
-      Bucket: bucket,
-      Key: key,
-      Body: file.buffer,
-      ContentType: file.mimetype,
-    };
-
-    await s3.upload(uploadParams).promise();
-
-    // Save the document information to your MongoDB database
+    // Create a new document instance
     const document = new Document({
-      userId: req.user._id,
+      userId,
       documentTitle,
-      documentPath: key,
-      originalname: file.originalname,
-      customerRefId,
+      documentPath,
+      originalname,
+      customerRefId
     });
 
     await document.save();
 
-    // Rest of your code...
+    // Find the tracker associated with the customerRefId
+    const tracker = await Tracker.findOne({ _id: customerRefId });
 
+    if (!tracker) {
+      req.flash('tracker_404','Client not found');
+      return res.status(404).redirect('/track/tracker/'+id);
+    }
+
+    // Add the documentId to the tracker's documents field
+    tracker.documents.push(document._id);
+
+    await tracker.save();
+
+    if (req.user.role != "Admin"){
+      res.status(200).redirect('/client/' + customerRefId);
+    } else {
+      
+      res.status(200).redirect('/track/tracker/' + customerRefId);
+    }
   } catch (error) {
     console.error('Error uploading document:', error);
-    // Handle the error...
+    req.flash('server_error','A server error occured. Try Again');
+    res.status(500).redirect('/500') ;
   }
 };
-
-
 
 // Update Document
 

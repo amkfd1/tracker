@@ -98,12 +98,12 @@ router.get('/newClient/', isAdmin, async function (req, res) {
   let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
   let error = req.flash('tracker_404' )[0] || req.flash('unauthorized')[0] || req.flash('server_error')[0]; 
 
-    console.log(error, message)
+    console.log(error, flash)
     res.render('edit-add', {
         pageTitle: "Add New Tracker",
         new: true,
         error,
-        message,
+        message: flash,
         isAuthenticated: req.user.isLoggedIn
     });
 });
