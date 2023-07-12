@@ -795,7 +795,10 @@ const getSingleTracker = async (req, res) => {
       const documentPath = doc.documentPath;
       const documentTitle = doc.documentTitle;
       const documentId = doc._id
-      const extension = documentPath.split('.').pop().toLowerCase();
+      let extension 
+      if(!'undefined') {
+        extension = documentPath.split('.').pop().toLowerCase();
+      }
       const documentType = documentTypes[extension] || 'none';
       
       return { documentPath, documentType, documentTitle, documentId };
@@ -831,6 +834,7 @@ const getSingleTracker = async (req, res) => {
       isAuthenticated: req.user.isLoggedIn
     });
   } catch (error) {
+    console.log(error)
     req.flash('server_error','A server error occured. Try Again')
     res.status(500).redirect('/track/home')
   }
