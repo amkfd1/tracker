@@ -795,10 +795,10 @@ const getSingleTracker = async (req, res) => {
       const documentPath = doc.documentPath;
       const documentTitle = doc.documentTitle;
       const documentId = doc._id
-      let extension 
-      if(!'undefined') {
-        extension = documentPath.split('.').pop().toLowerCase();
-      }
+      let extension = documentPath.split('.').pop().toLowerCase();
+      // if(!'undefined') {
+      //   extension = documentPath.split('.').pop().toLowerCase();
+      // }
       const documentType = documentTypes[extension] || 'none';
       
       return { documentPath, documentType, documentTitle, documentId };
