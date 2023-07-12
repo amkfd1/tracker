@@ -17,7 +17,7 @@ const uploadDocument = async (req, res) => {
     const { documentTitle } = req.body;
     const userId = req.user._id;
     const { id: customerRefId } = req.params;
-
+print(req.file)
     // Extract the original document name
     const documentPath = req.file.path;
     const originalname = req.file.originalname;

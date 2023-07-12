@@ -11,17 +11,19 @@ const multer = require('multer');
 // const upload = multer({
 //   storage,
 // });
+// Set up the storage strategy
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '/uploads')
+    cb(null, 'uploads'); // Specify the destination folder
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, file.fieldname + '-' + uniqueSuffix)
+    cb(null, file.originalname); // Use the original file name
   }
-})
+});
 
-const upload = multer({ storage: storage })
+// Create the Multer instance with the custom storage
+const upload = multer({ storage: storage });
+
 
 router.post('/upload/:id', isAuth, upload.single('document'),customerTrackerController.uploadDocument)
 router.post('/newClient',isAdmin, customerTrackerController.addCustomerTracker);
