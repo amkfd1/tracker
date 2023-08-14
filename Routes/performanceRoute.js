@@ -12,6 +12,10 @@ router.get('/management-summary-sms',  performanceControl.getSMSPerformances);
 
 router.get('/monthly-summary',  performanceControl.getMonthlyPerformances);
 
-router.post('/add-stats',  performanceControl.addPerformance);
+router.get('/carrier-stats',  performanceControl.getTotalCarrierVoip);
+
+router.post('/admin/add-stats', isAdmin, performanceControl.addPerformanceAdmin);
+
+router.post('/add-stats', isAuth, performanceControl.addPerformanceStaff);
 
 module.exports = router;

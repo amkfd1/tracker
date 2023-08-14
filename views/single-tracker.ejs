@@ -347,6 +347,14 @@
 								<% } %>
                             </div>
                         </div>
+						<!-- GRAPH DISPLAY -->
+						<div class="row">
+							<div class="col">
+								<div class="flot-wrapper">
+									<div id="flotChartVoip" class="flot-chart" style="padding: 0px; position: relative;"><canvas class="flot-base" width="860" height="350" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 860px; height: 350px;"></canvas><div class="flot-text" style="position: absolute; inset: 0px; font-size: smaller; color: rgb(84, 84, 84);"><div class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; inset: 0px;"><div style="position: absolute; max-width: 118px; top: 334px; font: 400 13px / 15px Overpass, sans-serif; color: rgb(104, 104, 104); left: 31px; text-align: center;">Jan</div><div style="position: absolute; max-width: 118px; top: 334px; font: 400 13px / 15px Overpass, sans-serif; color: rgb(104, 104, 104); left: 140px; text-align: center;">Feb</div><div style="position: absolute; max-width: 118px; top: 334px; font: 400 13px / 15px Overpass, sans-serif; color: rgb(104, 104, 104); left: 248px; text-align: center;">Mar</div><div style="position: absolute; max-width: 118px; top: 334px; font: 400 13px / 15px Overpass, sans-serif; color: rgb(104, 104, 104); left: 358px; text-align: center;">Apr</div><div style="position: absolute; max-width: 118px; top: 334px; font: 400 13px / 15px Overpass, sans-serif; color: rgb(104, 104, 104); left: 465px; text-align: center;">May</div><div style="position: absolute; max-width: 118px; top: 334px; font: 400 13px / 15px Overpass, sans-serif; color: rgb(104, 104, 104); left: 571px; text-align: center;">June</div><div style="position: absolute; max-width: 118px; top: 334px; font: 400 13px / 15px Overpass, sans-serif; color: rgb(104, 104, 104); left: 682px; text-align: center;">July</div><div style="position: absolute; max-width: 118px; top: 334px; font: 400 13px / 15px Overpass, sans-serif; color: rgb(104, 104, 104); left: 791px; text-align: center;">Aug</div></div><div class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; inset: 0px;"><div style="position: absolute; top: 266px; font: 600 11px / 13px Overpass, sans-serif; color: rgb(104, 104, 104); left: 1px; text-align: right;">$8400k</div><div style="position: absolute; top: 205px; font: 600 11px / 13px Overpass, sans-serif; color: rgb(104, 104, 104); left: 1px; text-align: right;">$8500k</div><div style="position: absolute; top: 144px; font: 600 11px / 13px Overpass, sans-serif; color: rgb(104, 104, 104); left: 2px; text-align: right;">$8600k</div><div style="position: absolute; top: 83px; font: 600 11px / 13px Overpass, sans-serif; color: rgb(104, 104, 104); left: 2px; text-align: right;">$8700k</div><div style="position: absolute; top: 22px; font: 600 11px / 13px Overpass, sans-serif; color: rgb(104, 104, 104); left: 1px; text-align: right;">$8800k</div></div></div><canvas class="flot-overlay" width="860" height="350" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 860px; height: 350px;"></canvas></div>
+								  </div>
+							</div>
+						</div>
 							
 					</div>
 
@@ -790,7 +798,7 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<form action="/add-stats" method="post">
+						<form action="/admin/add-stats" method="post">
 						<div class="form-group">
 							<div class="row">
 								<div class="col">
@@ -841,7 +849,7 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<form action="/add-stats" method="post">
+						<form action="/admin/add-stats" method="post">
 						<div class="form-group">
 							<div class="row">
 								<div class="col">
@@ -886,7 +894,7 @@
 						</button>
 						
 						</div>
-						<div class="modal-body">
+						<div class="modal-body card-body-hor">
 							
 								<% for (i in notes) {%>
 									<button type="button" class="btn btn-outline-primary my-1" data-toggle="modal" href="#" data-target="#viewNotes<%[i]%>" data-whatever="">

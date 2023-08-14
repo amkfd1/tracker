@@ -173,7 +173,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Route for uploading profile image
-router.post('/change-profile/image/:userId', upload.single('profile'), async (req, res) => {
+router.post('/change-profile/image/:userId', async (req, res) => {
   const userId = req.params.userId;
 
   try {
@@ -186,7 +186,8 @@ router.post('/change-profile/image/:userId', upload.single('profile'), async (re
 
       // Update the user's profile image URL
       user.profile.image = req.file.filename; // Assuming multer has provided the file path
-
+      console.log('')
+      upload.single('profile'),
       // Save the updated user
       await user.save();
 

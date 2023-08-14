@@ -4,38 +4,74 @@ const Performance = require('../Models/performance');
 
 const getVoipPerformances = async (req, res) => {
   try {
-    const allPerformances = await Performance.find().populate({
-      path: 'tracker',
-      match: { 'service_interest.service_name': 'VoIP' }, // Filter for SMS trackers
-      limit: 1
-    });
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set time to the beginning of the day
 
-    let minutesGraph = [];
-    let mins =[]
+      const allPerformances = await Performance.find({
+          date: { $gte: today }
+      }).populate({
+          path: 'tracker',
+          match: { 'service_interest.service_name': 'VoIP' },
+          limit: 1
+      });
 
-    for (const performance of allPerformances) {
-      if (performance.tracker) {
-        const smsPerformance = {
-          carrier: performance.tracker.Customer_Name,
-          minutes: performance.minutesRoutesTerminated
-        };
-        mins.push(smsPerformance);
+      let minutesGraph = [];
 
+      for (const performance of allPerformances) {
+          if (performance.tracker) {
+              const voipPerformance = {
+                  carrier: performance.tracker.Customer_Name,
+                  minutes: performance.minutesRoutesTerminated
+              };
+              minutesGraph.push(voipPerformance);
+          }
       }
-    }
-    let ind = mins.length-1
-      minutesGraph.push(mins[ind])
-      console.log("ALL SMS: ", minutesGraph)
-    // console.log('Voip performances: ', minutesGraph);
-    res.status(200).json(minutesGraph);
+
+      console.log("Today's VoIP performances: ", minutesGraph);
+      res.status(200).json(minutesGraph);
   } catch (error) {
-    console.error('Error retrieving SMS performances:', error);
-    res.status(500).json({ error: 'Server error' });
+      console.error('Error retrieving VoIP performances:', error);
+      res.status(500).json({ error: 'Server error' });
   }
+};
 
 
-  
-  };
+
+
+  const getTotalCarrierVoip = async (req, res) => {
+    let carrierId = '64d6219d55063debbf94286a'; // Example carrierId
+    try {
+        const allPerformances = await Performance.find({ tracker: carrierId }).populate({
+            path: 'tracker'
+        });
+
+        let minutesGraph = [];
+        let mins = [];
+        let carrierName = '';
+
+        for (const performance of allPerformances) {
+            if (performance.tracker) {
+                carrierName = performance.tracker.Customer_Name;
+                minutesGraph.push([performance.minutesRoutesTerminated]);
+                // .push(mins)
+            }
+        }
+
+        console.log("Carrier Name: ", carrierName);
+        console.log("Minutes Terminated: ", minutesGraph);
+
+        return res.status(200).json({ carrierName, minutesGraph });
+    } catch (error) {
+        console.error('Error retrieving carrier performances:', error);
+        return res.status(500).json({ error: 'Server error' });
+    }
+};
+
+
+
+    
+
+
 
   const getSMSPerformances = async (req, res) => {
     try {
@@ -168,9 +204,10 @@ const getMonthlyPerformances = async (req, res) => {
 //     }
 //   };
 
-const addPerformance = async (req, res) => {
+const addPerformanceAdmin = async (req, res) => {
+  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent } = req.body;
+
   try {
-      const { trackerId, asr, acd, minutesRoutesTerminated, smsSent } = req.body;
 
       // Get the current date in 'YYYY-MM-DD' format
       const currentDate = new Date().toISOString().slice(0, 10);
@@ -201,9 +238,62 @@ const addPerformance = async (req, res) => {
 
       // Save the performance record to the database
       const savedPerformance = await existingPerformance.save();
-      console.log("Performance Saved/Updated: ", savedPerformance);
-      req.flash('update_success', "Stats successfully added")
-      res.status(201).redirect('/client/' + trackerId);
+      console.log("Performance Saved/Updated: ", req.user);
+      
+        req.flash('update_success', "Stats successfully added")
+        res.status(201).redirect('/track/tracker/' + trackerId);
+
+      
+  } catch (error) {
+      console.error('Error creating/updating performance:', error);
+      // res.status(500).json({ error: 'Error creating/updating performance' });
+      req.flash('server_error', "Error creating/updating performance")
+      res.status(201).redirect('/track/tracker/' + trackerId);
+
+  }
+};
+
+
+const addPerformanceStaff = async (req, res) => {
+  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent } = req.body;
+
+  try {
+
+      // Get the current date in 'YYYY-MM-DD' format
+      const currentDate = new Date().toISOString().slice(0, 10);
+
+      // Check if a performance record with the same trackerId and current date already exists
+      let existingPerformance = await Performance.findOne({
+          tracker: trackerId,
+          date: { $gte: new Date(currentDate), $lt: new Date(currentDate).setDate(new Date(currentDate).getDate() + 1) },
+      });
+
+      // print("Existing: ")
+      if (!existingPerformance) {
+          // Create a new performance record using the 'Performance' model
+          existingPerformance = new Performance({
+              tracker: trackerId,
+              date: currentDate,
+          });
+      }
+
+      // Update the performance record based on the request body
+      if (!req.body.sms) {
+          existingPerformance.asr = asr;
+          existingPerformance.acd = acd;
+          existingPerformance.minutesRoutesTerminated = minutesRoutesTerminated;
+      } else if (req.body.sms) {
+          existingPerformance.totalSMS = smsSent;
+      }
+
+      // Save the performance record to the database
+      const savedPerformance = await existingPerformance.save();
+      console.log("Performance Saved/Updated: ", req.user);
+      
+        req.flash('update_success', "Stats successfully added")
+        res.status(201).redirect('/client/' + trackerId);
+
+      
   } catch (error) {
       console.error('Error creating/updating performance:', error);
       // res.status(500).json({ error: 'Error creating/updating performance' });
@@ -213,13 +303,12 @@ const addPerformance = async (req, res) => {
   }
 };
 
-
-
-
   module.exports = 
 { 
   getVoipPerformances,
   getMonthlyPerformances,
-  addPerformance,
-  getSMSPerformances
+  addPerformanceAdmin,
+  addPerformanceStaff,
+  getSMSPerformances,
+  getTotalCarrierVoip
 }

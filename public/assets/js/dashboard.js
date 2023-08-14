@@ -346,61 +346,61 @@ fetchData();
 
   // Monthly flot chart 
 
-  // if ($('#flotChart1').length) {
-  //   fetch('http://www.localhost:3000/monthly-summary') // Replace with your actual API endpoint
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       const flotChart1Data = data.map(entry => [entry.month, entry.totalMinutes]);
-  //       console.log('This is your monthly DAta: ',flotChart1Data)
-  //       $.plot('#flotChart1', [{
-  //         data: flotChart1Data,
-  //         color: '#727cf5'
-  //       }], {
-  //         series: {
-  //           shadowSize: 0,
-  //           lines: {
-  //             show: true,
-  //             lineWidth: 2,
-  //             fill: true,
-  //             fillColor: 'transparent'
-  //           }
-  //         },
-  //         grid: {
-  //           borderColor: 'transparent',
-  //           borderWidth: 1,
-  //           labelMargin: 0,
-  //           aboveData: false
-  //         },
-  //         yaxis: {
-  //           show: true,
-  //           color: 'rgba(0,0,0,0.06)',
-  //           ticks: [[0, ''], [10, '10000'], [20, '20000'], [30, '30000'], [40, '40000'], [50, '50000']],
-  //           tickColor: gridLineColor,
-  //           min: 0,
-  //           max: 80,
-  //           font: {
-  //             size: 11,
-  //             weight: '600',
-  //             color: colors.muted
-  //           }
-  //         },
-  //         xaxis: {
-  //           show: true,
-  //           color: 'rgba(0,0,0,0.1)',
-  //           ticks: data.map(entry => [entry.month, entry.year]),
-  //           tickColor: gridLineColor,      
-  //           font: {
-  //             size: 13,
-  //             color: colors.muted
-  //           },
-  //           reserveSpace: false
-  //         }
-  //       });
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching data:', error);
-  //     });
-  // }
+  if ($('#flotChartVoip').length) {
+    fetch('http://www.localhost:3000/carrier-stats') // Replace with your actual API endpoint
+      .then(response => response.json())
+      .then(data => {
+        const flotChart1Data = data.map(entry => [entry.month, entry.totalMinutes]);
+        console.log('This is your monthly DAta: ',flotChart1Data)
+        $.plot('#flotChart1', [{
+          data: flotChart1Data,
+          color: '#727cf5'
+        }], {
+          series: {
+            shadowSize: 0,
+            lines: {
+              show: true,
+              lineWidth: 2,
+              fill: true,
+              fillColor: 'transparent'
+            }
+          },
+          grid: {
+            borderColor: 'transparent',
+            borderWidth: 1,
+            labelMargin: 0,
+            aboveData: false
+          },
+          yaxis: {
+            show: true,
+            color: 'rgba(0,0,0,0.06)',
+            ticks: [[0, ''], [10, '10000'], [20, '20000'], [30, '30000'], [40, '40000'], [50, '50000']],
+            tickColor: gridLineColor,
+            min: 0,
+            max: 80,
+            font: {
+              size: 11,
+              weight: '600',
+              color: colors.muted
+            }
+          },
+          xaxis: {
+            show: true,
+            color: 'rgba(0,0,0,0.1)',
+            ticks: data.map(entry => [entry.month, entry.year]),
+            tickColor: gridLineColor,      
+            font: {
+              size: 13,
+              color: colors.muted
+            },
+            reserveSpace: false
+          }
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }
 
   // Working data ************************************************
   // let flotData = []

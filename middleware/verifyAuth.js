@@ -24,16 +24,17 @@ const authenticateUser = async (req, res, next) => {
       req.flash('not_found', "User not found")
       return res.status(401).redirect('/auth/login');
     }
-
     // Set req.user as the authenticated user object
     req.user = {
       _id: user._id,
       name: user.name,
       username: user.username,
       role: user.role,
-      degignation: user.degignation,
+      department:user.role,
+      designation: user.designation,
       assignedTasks: user.assignedTasks,
     };
+    // console.log("USER: ", user)
 
     req.user.isLoggedIn = true;
     // const { role } = req.user;

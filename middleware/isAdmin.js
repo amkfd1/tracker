@@ -33,6 +33,7 @@ const authenticateUser = async (req, res, next) => {
       name: user.name,
       username: user.username,
       role: user.role,
+      department: user.role,
       designation: user.designation,
       assignedTasks: user.assignedTasks,
       isManagement
