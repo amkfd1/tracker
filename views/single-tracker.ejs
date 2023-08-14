@@ -202,11 +202,11 @@
                             <div class="col-md-4 mt-3">
                                 <label><h4 class="text-muted">Documents:</h4> </label>
 								<a href="#" class="float-right text-secondary" data-toggle="modal" data-target="#docs" data-whatever="">
-                                    <i class="text-success" data-feather="plus-circle" aria-hidden="true" ></i>
+                                    <i class="text-muted" data-feather="plus-circle" aria-hidden="true" ></i>
                                 </a>
 
 								<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#grantAccess" data-whatever="">
-									<i class="text-info" data-feather="share" aria-hidden="true"></i>
+									<i class="text-muted" data-feather="share" aria-hidden="true"></i>
 								</a>
 
 								<!-- Documents Upload Modal -->
@@ -662,7 +662,13 @@
 								</div>
 								<div class="col-md-6 mt-3">
 									<label>Status: </label>
-									<input class="form-control" value="<%= Tracker.testing.testing_status%>" name="testing_status">
+									<!-- <input class="form-control" value="<%= Tracker.testing.testing_status%>" name="testing_status"> -->
+									<select name="testing_status" class="form-control form-control-sm mb-3">
+										<option  selected=""><%= Tracker.Tech_info.status%></option>
+										<option  value="Initiated">Initiated</option>
+										<option  value="Ongoing">Incomplete</option>
+										<option  value="Completed">Complete</option>
+									</select>
 								</div>
 								<div class="col-md-12 mt-3">
 									<label>Notes: </label>
