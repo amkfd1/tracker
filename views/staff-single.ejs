@@ -38,18 +38,8 @@
 								<div class="col">
 									<p>
 										<div class="btn-group" role="group" aria-label="Basic example">
-											<%if (Tracker.service_interest.service_name == 'VoIP') {%>
-												<a class="btn btn-outline-dark text-muted " data-toggle="modal" href="#" data-target="#performance" data-whatever="">
-													VoIP Stats
-												</a>
-											<%} else { %>
-												<a class="btn btn-outline-dark text-muted " data-toggle="modal" href="#" data-target="#performancesms" data-whatever="">
-													SMS Stats
-												</a>
-											<% } %>
-											<a class="btn btn-outline-dark text-muted " data-toggle="collapse" href="#notes" role="button" aria-expanded="false" aria-controls="collapseExample">
-												Notes
-											</a>
+											
+											
 											<a class="btn btn-outline-dark text-muted"  data-toggle="collapse" href="#collapseExample2" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
 												Options
 											<a>
@@ -125,7 +115,23 @@
 								</div>
 							<% } %>
 
-							
+							<div class="col-md-2">
+								<div class="float-right">
+									<a class="btn btn-outline-dark text-muted " data-toggle="modal" data-target="#Notes1" data-whatever="@fat">
+										<i data-feather="clipboard"></i>
+									</a>
+								</div>
+
+								<%if (Tracker.service_interest.service_name == 'VoIP') {%>
+									<a class="btn btn-outline-dark text-muted " data-toggle="modal" href="#" data-target="#performance" data-whatever="">
+										<i data-feather="activity"></i>
+									</a>
+								<%} else { %>
+									<a class="btn btn-outline-dark text-muted " data-toggle="modal" href="#" data-target="#performancesms" data-whatever="">
+										<i data-feather="activity"></i>
+									</a>
+								<% } %>
+							</div>
 						</div>
 						
 						
@@ -652,11 +658,20 @@
 								</div>
 								<div class="col-md-6 mt-3">
 									<label>Date Concluded: </label>
-									<input class="form-control" value="<%= Tracker.testing.date_finished%>" name="date_finished">
+									<!-- <input class="form-control" value="<%= Tracker.testing.date_finished%>" name="date_finished"> -->
+									<div class="input-group date datepicker" id="datePickerExample">
+										<input name="date_finished" type="text" class="form-control"><span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+									</div>
 								</div>
 								<div class="col-md-6 mt-3">
 									<label>Status: </label>
-									<input class="form-control" value="<%= Tracker.testing.testing_status%>" name="testing_status">
+									<!-- <input class="form-control" value="<%= Tracker.testing.testing_status%>" name="testing_status"> -->
+									<select name="testing_status" class="form-control form-control-sm mb-3">
+										<option  selected=""><%= Tracker.testing.testing_status%></option>
+										<option  value="Initiated">Initiated</option>
+										<option  value="Ongoing">Incomplete</option>
+										<option  value="Completed">Complete</option>
+									</select>
 								</div>
 								<div class="col-md-12 mt-3">
 									<label>Notes: </label>
@@ -847,6 +862,54 @@
 					
 					</div>
 				</div>
+				</div>
+
+
+
+				<!-- Notes Modal -->
+
+				<div class="modal fade " id="Notes1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div >
+						<div class="modal-dialog " >
+						<div class="modal-content ">
+							<div class="modal-header">
+							<h4 class="modal-title" id="exampleModalLabel">NOTES <span class="ml-2">
+								<a  href="#" data-toggle="modal" data-target="#sendNote" data-whatever="">
+									<i class="  " data-feather="plus-circle"></i>
+								</a>
+							</span></h4>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							
+							</div>
+							<div class="modal-body card-body-hor">
+								
+									<% for (i in notes) {%>
+										<button type="button" class="btn btn-outline-primary my-1" data-toggle="modal" href="#" data-target="#viewNotes<%[i]%>" data-whatever="">
+											<%= notes[i].createdAt %>
+										</button>
+										<!-- view Notes  -->
+										<!-- <div class="modal fade "  id="viewNotes<%[i]%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> -->
+											
+												<div class="modal-dialog " >
+												<div class="modal-content ">
+													<div class="modal-header">
+													</div>
+													<div class="modal-body">
+														<p><%= notes[i].note%></p>
+													</div>
+													
+												</div>
+												</div>
+										<!-- </div> -->
+									<% } %>
+								
+							</div>
+							
+						</div>
+						</div>
+					</div>
 				</div>
 <!-- UPDATE CLIENT ACCOUNT MANAGER -->
 <%- include('includes/update_client') %>

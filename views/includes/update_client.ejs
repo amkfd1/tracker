@@ -112,7 +112,13 @@
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label>Status: </label>
-                                                <input value="<%= Tracker.service_interest.SI_status%>" class="form-control" name="SI_status">
+                                                <!-- <input value="<%= Tracker.service_interest.SI_status%>" class="form-control" name="SI_status"> -->
+                                                <select name="SI_status" class="form-control form-control-sm mb-3">
+                                                    <option  selected=""><%= Tracker.service_interest.status%></option>
+                                                    <option  value="NA">NA</option>
+                                                    <option  value="Incomplete">Incomplete</option>
+                                                    <option  value="Complete">Complete</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </section>
@@ -157,13 +163,23 @@
                                                 <label>Codices: </label>
                                                 <input value="<%= Tracker.Tech_info.status%>" class="form-control" name="TI_status">
                                             </div>
+                                            <div class="col-md-6 mt-3">
+                                                <label>Status: </label>
+                                                <!-- <input value="<%= Tracker.Tech_info.status%>" class="form-control" name="TI_status"> -->
+                                                <select name="TI_status" class="form-control form-control-sm mb-3">
+                                                    <option  selected=""><%= Tracker.Tech_info.status%></option>
+                                                    <option  value="NA">NA</option>
+                                                    <option  value="Incomplete">Incomplete</option>
+                                                    <option  value="Complete">Complete</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </section>
                 
                                     <section class="mt-3">
                                         <h6 class="card-title text-muted">
                                             <div class="mb-2 border-bottom ">
-                                                TECHNICAL INFO
+                                                TESTING
                                             
                                                 <div class="mt-2 border-top"></div>
                                             </div>
@@ -191,7 +207,13 @@
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label>Status: </label>
-                                                <input  value="<%= Tracker.testing.testing_status%>" class="form-control" name="testing_status">
+                                                <!-- <input  value="<%= Tracker.testing.testing_status%>" class="form-control" name="testing_status"> -->
+                                                <select name="testing_status" class="form-control form-control-sm mb-3">
+                                                    <option  selected=""><%= Tracker.testing.testing_status%></option>
+                                                    <option  value="Initiated">Initiated</option>
+                                                    <option  value="Ongoing">Incomplete</option>
+                                                    <option  value="Completed">Complete</option>
+                                                </select>
                                             </div>
                                             <div class="col-md-6 mt-3">
                                                 <label>Notes: </label>
