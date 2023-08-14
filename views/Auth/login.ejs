@@ -30,6 +30,12 @@
 
                                         </div>
                                          <h5 class="text-muted font-weight-normal mt-2 mb-4">Welcome back! Log in to your account.</h5>
+                                         <% if (error) {%>
+                                          <div id="alert-message" class="alert  text-center alert-danger alert-dismissible fade show" role="alert">
+                                              <i data-feather="x"></i> <strong><%= error%></strong>
+                                            </div>
+                                            <% } else {}%>
+                                          
                                           <form class="forms-sample" action="/auth/login" method="post">
                                             <div class="form-group">
                                               <label for="exampleInputEmail1">Username: </label>

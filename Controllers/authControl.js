@@ -135,7 +135,7 @@ router.post('/login', async (req, res) => {
     }
   
     // Compare the provided password with the stored hashed password
-    const isPasswordValid = password//await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       req.flash('login_error', 'Invalid username or password')
       return res.status(401).redirect('/auth/login');
@@ -215,13 +215,15 @@ router.get('/login', async (req, res) => {
     }
 
     // User is not logged in, render the login page
-    let flash = req.flash('login_error') 
-
+    // let flash = req.flash('login_error') 
+    let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('login_error')[0] 
+    console.log("ERROR: ", error)
     res.render('Auth/login', {
       isAuthenticated: false,
-      flash: flash,
+      // flash: flash,
       pageTitle: "Login",
-      user:{}
+      user:{},
+      error
     });
   } catch (error) {
     console.error('Error rendering login page:', error);
