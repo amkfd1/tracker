@@ -32,6 +32,9 @@ router.post('/newClient',isAdmin, customerTrackerController.addCustomerTracker);
 // Update an existing customer tracker
 router.post('/updateTracker/:id', customerTrackerController.updateTracker);
 
+// update User Info
+router.post('/update-user/:id', isAdmin, customerTrackerController.updateUser);
+
 // Get all customer trackers
 router.get('/home', isAdmin, customerTrackerController.getAllCustomerTrackers);
 router.get('/management', isAdmin,  customerTrackerController.getManagementDash);

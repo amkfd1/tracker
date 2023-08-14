@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const taskController = require('../Controllers/taskController');
+const isAdmin = require('../middleware/isAdmin');
+const isAuth = require('../middleware/verifyAuth');
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads'); // Specify the destination folder

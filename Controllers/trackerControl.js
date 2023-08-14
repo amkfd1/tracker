@@ -692,14 +692,15 @@ const getAllCustomerTrackers = async (req, res) => {
         role: reqUser.role,
         assignedTasks: reqUser.assignedTasks.length,
         myaccounts: reqUser.assignedTasks,
-        profile: reqUser.profile
+        profile: reqUser.profile,
+        username: reqUser.username
       };
       users.push(user);
       // console.log("THIS IS MY ACCOUNTS: ", user.myaccounts)
     }
     // console.log("THIS IS COMPARING TRACKERID AND USER ID: ", users[0].myaccounts[0].Customer_Name)
     const completedPercentile = (trackers.filter(tracker => tracker.overallCompletion == 100).length / trackers.length) * 100;
-    print("un Assigned: ", unassignedTrackers )
+    // print("un Assigned: ", unassigned Trackers )
     const logs = await Log.aggregate([
       { $sort: { timestamp: -1 } },
       {
@@ -717,9 +718,13 @@ const getAllCustomerTrackers = async (req, res) => {
     // if (req.user.designation == 'Management'){
     //   isManagement = true
     // }
+// Get all tasks
+
+
+
     let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0] ;
     let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0] 
-    console.log("USERS: ", users)
+    // console.log("USERS: ", users)
     res.status(200).render('home', {
       voip,
       sms,
@@ -1312,7 +1317,43 @@ const getPerformances = async (req, res) => {
   }
 };
 
-    
+const updateUser = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+      const {name, designation, department, username} = req.body;
+
+        let updateUser = {
+          name,
+          designation,
+          department,
+          username
+        }
+      // Find the user by ID
+      console.log("UPDATING USER INFOR: ",updateUser )
+      const user = await User.findById(userId);
+      if (!user) {
+        req.flash('server_error', "User not found")
+        return res.status(404).redirect('/track/home' );
+      }
+
+      // Update the emergency contact fields
+      user.name = name;
+      user.username = username;
+      user.designation = designation;
+      user.department = department;
+
+
+
+      // Save the updated user
+      await user.save();
+
+      req.flash('update_success', "Emergency contact successfully updated")
+      return res.status(404).redirect('/track/home');
+  } catch (error) {
+      res.status(500).json({ message: 'Error updating emergency contact', error: error.message });
+  }
+}; 
     
 module.exports = 
 { addCustomerTracker, 
@@ -1334,7 +1375,8 @@ module.exports =
     addNote,
     getManagementDash,
     getPerformances,
-    addPerformance
+    addPerformance,
+    updateUser
     
 };
 

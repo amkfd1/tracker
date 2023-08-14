@@ -34,6 +34,7 @@
 								  </div>
 								  <% } else {}%>
 							</div>
+							
 							<div class="col">
 								<p>
 									<div class="btn-group" role="group" aria-label="Basic example">
@@ -46,45 +47,13 @@
 												SMS Stats
 											</a>
 										<% } %>
-										<a class="btn btn-outline-dark text-muted " data-toggle="collapse" href="#notes" role="button" aria-expanded="false" aria-controls="collapseExample">
-										Notes
-										</a>
+										
 										<a class="btn btn-outline-dark text-muted"  data-toggle="collapse" href="#collapseExample2" aria-expanded="true" aria-controls="collapseExample">
 										Option
 										<a>
 									</div>
 								</p>
-								  <div class="collapse" id="notes">
-									<div class="card mt-2 card-body-alt" style="max-height: 6rem;">
-										<div class="card-header ">
-											<a href="#" data-toggle="modal" data-target="#sendNote" data-whatever="">
-												<i class=" px-2 py-2 " data-feather="plus-circle"></i> Add Notes</h6>
-											</a>
-										</div>
-										<div class="card-body">
-											<% for (i in notes) {%>
-												<button type="button" class="btn btn-outline-primary my-1" data-toggle="modal" href="#" data-target="#viewNotes<%[i]%>" data-whatever="">
-													<%= notes[i].createdAt %>
-												</button>
-												<!-- view Notes  -->
-												<div class="modal fade "  id="viewNotes<%[i]%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-													
-														<div class="modal-dialog " >
-														<div class="modal-content ">
-															<div class="modal-header">
-															</div>
-															<div class="modal-body">
-																<p><%= notes[i].note%></p>
-															</div>
-															
-														</div>
-														</div>
-												</div>
-											<% } %>
-										</div>
-										
-									</div>
-								  </div>
+								  
 								  <div class="collapse" id="collapseExample2">
 									<div class="card mt-2 card-body">
 										<div class="btn-group" role="group" aria-label="Basic example">
@@ -125,6 +94,13 @@
 										</div>
 									</div>
 								  </div>
+							</div>
+							<div class="col">
+								<div class="float-right">
+									<a class="btn btn-outline-dark text-muted " data-toggle="modal" data-target="#Notes" data-whatever="@fat">
+										<i data-feather="clipboard"></i>
+									</a>
+								</div>
 							</div>
 						</div>
 						<!-- end of toolbar top -->
@@ -894,6 +870,59 @@
 					</div>
 				</div>
 				</div>
+
+				<div class="modal fade " id="Notes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div >
+					<div class="modal-dialog " >
+					<div class="modal-content ">
+						<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">NOTES</h4>
+						<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button> -->
+						</div>
+						<div class="modal-body">
+							
+								<% for (i in notes) {%>
+									<button type="button" class="btn btn-outline-primary my-1" data-toggle="modal" href="#" data-target="#viewNotes<%[i]%>" data-whatever="">
+										<%= notes[i].createdAt %>
+									</button>
+									<!-- view Notes  -->
+									<!-- <div class="modal fade "  id="viewNotes<%[i]%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> -->
+										
+											<div class="modal-dialog " >
+											<div class="modal-content ">
+												<div class="modal-header">
+												</div>
+												<div class="modal-body">
+													<p><%= notes[i].note%></p>
+												</div>
+												
+											</div>
+											</div>
+									<!-- </div> -->
+								<% } %>
+							
+						</div>
+						
+					</div>
+					</div>
+				</div>
+			</div>
+
+
+
+				<div class="collapse" id="notes">
+					<div class="card mt-2 card-body-alt" style="max-height: 6rem;">
+						<div class="card-header ">
+							<a href="#" data-toggle="modal" data-target="#sendNote" data-whatever="">
+								<i class=" px-2 py-2 " data-feather="plus-circle"></i> Add Notes</h6>
+							</a>
+						</div>
+						
+						
+					</div>
+				  </div>
 			<!--NAVIGATION-->
 			<!-- Nav Includes -->
 			<%- include('partials/nav') %>
