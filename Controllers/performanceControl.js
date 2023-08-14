@@ -3,36 +3,36 @@ const Performance = require('../Models/performance');
 
 
 const getVoipPerformances = async (req, res) => {
-  try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // Set time to the beginning of the day
+    try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set time to the beginning of the day
 
-      const allPerformances = await Performance.find({
-          date: { $gte: today }
-      }).populate({
-          path: 'tracker',
-          match: { 'service_interest.service_name': 'VoIP' },
-          limit: 1
-      });
+        const allPerformances = await Performance.find({
+            date: { $gte: today }
+        }).populate({
+            path: 'tracker',
+            match: { 'service_interest.service_name': 'VoIP' },
+            limit: 1
+        });
 
-      let minutesGraph = [];
+        let minutesGraph = [];
 
-      for (const performance of allPerformances) {
-          if (performance.tracker) {
-              const voipPerformance = {
-                  carrier: performance.tracker.Customer_Name,
-                  minutes: performance.minutesRoutesTerminated
-              };
-              minutesGraph.push(voipPerformance);
-          }
-      }
+        for (const performance of allPerformances) {
+            if (performance.tracker) {
+                const voipPerformance = {
+                    carrier: performance.tracker.Customer_Name,
+                    minutes: performance.minutesRoutesTerminated
+                };
+                minutesGraph.push(voipPerformance);
+            }
+        }
 
-      console.log("Today's VoIP performances: ", minutesGraph);
-      res.status(200).json(minutesGraph);
-  } catch (error) {
-      console.error('Error retrieving VoIP performances:', error);
-      res.status(500).json({ error: 'Server error' });
-  }
+        console.log("Today's VoIP performances: ", minutesGraph);
+        res.status(200).json(minutesGraph);
+    } catch (error) {
+        console.error('Error retrieving VoIP performances:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
 };
 
 
@@ -75,7 +75,10 @@ const getVoipPerformances = async (req, res) => {
 
   const getSMSPerformances = async (req, res) => {
     try {
-      const allPerformances = await Performance.find().populate({
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set time to the beginning of the day
+
+      const allPerformances = await Performance.find({date: { $gte: today }}).populate({
         path: 'tracker',
         match: { 'service_interest.service_name': 'SMS' },
         limit: 1 // Filter for SMS trackers
