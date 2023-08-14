@@ -203,7 +203,9 @@ router.post('/change-profile/image/:userId', upload.single('profile'), async (re
 router.get('/password-reset', async (req, res) => {
   res.render('Auth/reset-password',{
     isAuthenticated: false,
-    pageTitle: "Reset Password"
+    pageTitle: "Reset Password",
+    user: {},
+
   })
 });
 
@@ -259,7 +261,7 @@ router.get('/change-password', async (req, res) => {
     // Proceed with the password reset process
     // For example, you can render a password reset form and pass the token to it
 
-    res.render('Auth/change-password', { token, isAuthenticated:false, pageTitle:'Forget Password'});
+    res.render('Auth/change-password', { token, isAuthenticated:false, pageTitle:'Forget Password', user: {},});
   } catch (error) {
     console.error('Error generating password reset link:', error);
     res.status(500).json({ error: 'Failed to generate password reset link' });
@@ -338,7 +340,7 @@ router.post('/password-reset-link', async (req, res) => {
     await passwordResetToken.save();
 
     // Construct the password reset link
-    const resetLink = `http://localhost:3000/auth/change-password?token=${token}`;
+    const resetLink = `https://m-kel-tech-tracker.onrender.com/auth/change-password?token=${token}`;
 
     // Send the password reset link to the user via email or any other means
 
