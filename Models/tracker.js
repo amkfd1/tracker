@@ -28,7 +28,7 @@ const TrackerSchema = new Schema({
         default: false
       },
       service_name: {
-        type:String,
+        type: String,
         enum:['VoIP', 'SMS']
       },
       routes: String,
@@ -79,7 +79,8 @@ const TrackerSchema = new Schema({
     }],
   },
   account_manager: {
-    type: String
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
   documents: [{
     type: Schema.Types.ObjectId,

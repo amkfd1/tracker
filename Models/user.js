@@ -30,6 +30,41 @@ const UserSchema = new Schema({
     assignedTasks: [{
         type: Schema.Types.ObjectId,
         ref: 'Tracker'
+    }],
+    settings: {
+        isLocked:{
+            type: Boolean,
+            default: false
+        },
+
+        maxAttempts: {
+            type: Number,
+            default: 5
+        }
+        
+    },
+
+    profile: {
+        dob: {
+            type: String
+        },
+        phone: String,
+        emergency_contact: {
+            name: String,
+            relationship: String,
+            phone: String,
+            alternative: String,
+            Address: String
+        },
+
+        image: {
+            type: String
+        }
+    },
+
+    tasks:[{
+        type: Schema.Types.ObjectId,
+        ref: 'Task',
     }]
 });
 

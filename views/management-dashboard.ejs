@@ -1,0 +1,308 @@
+
+<%- include('partials/head') %>
+<style>
+    .appIcons{
+        width: 15px;
+        height: 15px;
+    }
+    .text-mkel{
+      color: #63D2FF;
+    }
+</style>
+<body class="sidebar-dark">
+	<div class="main-wrapper">
+		<div class="page-wrapper full-page ">
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				<div class="card " style=" width: 90% ">
+                    
+					<div class="card-body card-body-alt px-5" >
+						
+                        <div class="">
+                            <div class="col-md-8">
+                                <h5 class="card-title mb-3">Management Dashboard</h5>
+                           </div>
+							              <div class="row">
+                                <div class="col-md-4">   
+                                    <!--  -->
+                                    <div class="card bg-dark card-body-hor"  style="height: 10rem; border-radius: 20px;">
+                                        <!-- <div class="row"> -->
+                                          <label class="text-muted ml-2 mt-2">SMS Stats:
+                                          </label>
+                                          <div class="row">
+                                            <div class="col mx-1">
+                                              
+                                              <label>Daily SMS Count</label>
+                                              <h4 class="text-primary text-center my-2"><%=dailySMS%></h4>
+                                              <p class="text-danger text-center">
+                                                <span>-1.1%</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down icon-sm mb-1"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                                              </p>
+                                            </div>
+                                            <div class="col mx-1">
+                                              <label>Weekly SMS Count</label>
+                                              <h4 class="text-primary my-2 text-center"><%=weeklySMS%></h4>
+                                              <p class="text-success text-center">
+                                                <span>+1.7%</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up icon-sm mb-1"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                                              </p>
+                                            </div>
+                                          </div>
+                                        <!-- </div> -->
+                                    </div>
+                                </div>
+                                <div class="col-md-4">   
+                                    <!--  -->
+                                    <div class="card bg-dark card-body-hor"  style="height: 10rem; border-radius: 20px;">
+                                      <label class="text-muted ml-2 mt-2">Traffic Stats:
+                                      </label>
+                                      <div class="row">
+                                        <div class="col mx-1">
+                                          
+                                          <label>Daily Minutes</label>
+                                          <h4 class="text-mkel my-2 text-center"><%=dailyMinutesSum%></h4>
+                                          <p class="text-success text-center">
+                                            <span>+1.4%</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up icon-sm mb-1"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+                                          </p>
+                                        </div>
+                                        <div class="col">
+                                          <label>Weekly Minutes</label>
+                                          <h4 class="text-mkel my-2 text-center"><%=weeklyMinutesSum%></h4>
+                                          <p class="text-danger text-center">
+                                            <span>-0.8%</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down icon-sm mb-1"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                               
+                               <div class="col-md-4">   
+                                <!--  -->
+                                <div class="card bg-dark"  style="height: 10rem; border-radius: 20px;">
+                                    <ul class="list-group bg-dark list-group-flush card-body-hor py-2">
+                                        <li class="list-group-item bg-dark">
+                                            <div class="row">
+                                                <div class="col-md-6 card bg-transparent">
+                                                    <label class="text-muted">Assigned:
+                                                        <span class="float-right">
+                                                            <a href="#" data-toggle="modal" data-target=".myClients">
+                                                                <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                        
+                                                            </a>
+                                                        </span>
+                                                    </label>
+                                                    
+                                                    
+                                                    <h5 class="text-info"><%= assignedTrackers.length %></h5>
+                                                </div>
+                                                <div class="col-md-6 card bg-transparent">
+                                                    <label class="text-muted">Un-Assigned:
+                                                        <span class="float-right">
+                                                            <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg">
+                                                                 <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                             </a>
+                                                         </span>
+                                                    </label>
+                                                    
+                                                    <h5 class="text-warning"><%= unassignedTrackers.length%></h5>
+                                                </div>
+                                            </div>						
+                                        </li>
+                                        
+                                        <li class="list-group-item bg-transparent">
+                                            <div class="row">
+                                                <div class="col-md-6 card bg-transparent">
+                                                    <label class="text-muted">Completed:
+                                                        <!-- <span class="float-right">
+                                                            <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                        </span> -->
+                                                    </label>
+                                                    
+                                                    <a><h5 class="text-success"><%= completedPercentile%>%</h5></a>
+                                                </div>
+                                                <div class="col-md-6 card bg-transparent">
+                                                    <label class="text-muted">Incomplete:
+                                                    </label>
+                                                    <!-- <span class="float-right">
+                                                        <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                    </span> -->
+                                                    <a><h5 class="text-danger"><%= incompletePercentile%>%</h5></a>
+                                                    
+                                                </div>
+                                            </div>	
+                                        </li>
+                                        
+                                    </ul>
+                                </div>
+                                <!--  -->
+                                
+                                   
+                                </div>
+                            </div>
+                            		
+                            
+                        </div> <!-- end of first row div -->
+
+                        
+
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between align-items-baseline mb-2">
+                            <h6 class="card-title mb-0">Carriers Daily Minutes</h6>
+                          </div>
+                          <p class="text-muted mb-4">Daily active traffic minutes</p>
+                          <div class="monthly-sales-chart-wrapper"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                            <canvas id="monthly-sales-chart" style="display: block; width: 656px; height: 300px;" width="656" height="300" class="chartjs-render-monitor"></canvas>
+                          </div>
+                        </div>
+
+                        <div class="row mt-3">
+                          <div class="col">
+                              <div class="card-body">
+                                  <div class="d-flex justify-content-between align-items-baseline mb-4 mb-md-3">
+                                    <h6 class="card-title mb-0">Partners' SMS Stats</h6>
+                                  </div>
+                                  <p class="text-muted mb-4">Active carriers daily SMS</p>
+
+                                  <div class="row align-items-start mb-2">
+                                    <div class="col-md-7">
+                                    </div>
+                                  </div>
+                                  <canvas id="chartjsBar" style="display: block; width: 860px; height: 500px;" width="860" height="500" class="chartjs-render-monitor"></canvas>
+                                </div>
+                          </div>
+                          <div class="col-md-5"> <!-- Users table -->
+                              <div class="card-body-alt" style="max-height: 80rem;">
+                              <div class="card-body" >
+                                  <div class="d-flex justify-content-between align-items-baseline mb-2">
+                                    <h6 class="card-title mb-0">Users</h6>
+                                   
+                                  </div>
+                                  <div class="d-flex flex-column mt-3" >
+                                   
+                                    <%for (i in users) {%>
+                                      <a href="#" class="d-flex align-items-center border-bottom pb-3" data-toggle="modal" data-target="#records<%=[i]%>">
+                                          <div class="mr-3">
+                                            <img src="https://via.placeholder.com/35x35" class="rounded-circle wd-35" alt="user">
+                                          </div>
+                                          <div class="w-100">
+                                            <div class="d-flex justify-content-between">
+                                              <h6 class="text-body my-2"><%= users[i].name%></h6>
+                                              <p class="my-2 <%if (users[i].role == 'Admin') {%>text-success<%} else {%> text-info tx-12 <%}%>"><%= users[i].role%></p>
+                                            </div>
+                                            <p class="text-muted tx-13">Has <%= users[i].assignedTasks%> Assigned Accounts</p>
+                                          </div>
+                                        </a>
+                                        <%- include('partials/records') %>
+                                    <% } %>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+					</div>
+
+				</div>
+				
+				
+				
+
+			</div>
+            	<!-- Expand Notes -->
+			<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+				  <div class="modal-content card-body-alt">
+					<table class="table table-striped " >
+						<thead class="border-info">
+							<tr>
+								<th>
+									Client
+								</th>
+								<th>
+									Note
+								</th>
+								<th>
+									Date
+								</th>
+								
+								
+							</tr>
+						</thead>
+						<tbody>
+							<% for (i in userNotes) {%>
+								<tr>
+									<td>
+										<%= userNotes[i].tracker.Customer_Name%>
+									</td>
+
+									<td>
+										<%= userNotes[i].note%>
+									</td>
+
+									<td>
+										<%= userNotes[i].createdAt%>
+									</td>
+								</tr>
+							<% } %>
+							
+						</tbody>
+					</table>
+				  </div>
+				</div>
+			  </div>
+		
+              <div class="modal fade myClients" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+				  <div class="modal-content card-body-alt">
+					<table class="table table-striped " >
+						<thead class="border-info">
+							<tr>
+								<th>
+									Client
+								</th>
+								<th>
+									Stage
+								</th>
+								<th>
+									Status
+								</th>
+								
+								
+							</tr>
+						</thead>
+						<tbody>
+							<% for (i in mytasks) {%>
+								<tr>
+									<td>
+										<a href="/client/<%= mytasks[i]._id%>"><%= mytasks[i].Customer_Name%></a>
+									</td>
+
+									<td>
+										<%= mytasks[i].stage.process_stage%>
+									</td>
+
+									<td>
+										<%= mytasks[i].stage.status%>
+									</td>
+								</tr>
+							<% } %>
+							
+						</tbody>
+					</table>
+				  </div>
+				</div>
+			  </div>
+			<!-- Nav Includes -->
+			<%- include('partials/nav') %>
+		</div>
+		
+	</div>
+
+  <%- include('partials/end') %>
+<!-- End Includes -->
+
+<!-- <script src="../../../assets/js/template.js"></script>
+<script src="../../../assets/js/dashboard.js"></script> -->

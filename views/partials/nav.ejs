@@ -11,28 +11,25 @@
                 <ul class="menu" >
                     <li>
                     <a href="/track/newClient">
-                        <span style="margin-top: -1.5rem;">New Client</span>
+                        <span >New </span>
                         <i class="" data-feather="user-plus" aria-hidden="true"></i>						
                     </a>
-                    <!-- <div class="btn-group dropup">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropup
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div> -->
                     </li>
                     <li>
-                    <a href="/track/home">
-                        <span >Home</span>
+                    <%if (isManagement) {%>
+                    <a href="/track/home"  id="homeButton">
+                        <span >Admin</span>
                         <i class="" data-feather="home" aria-hidden="true"></i>
                     </a>
+                    <% } else { %>
+                        <a href="/track/Management"  id="homeButton">
+                            <span >Management</span>
+                            <i class="" data-feather="box" aria-hidden="true"></i>
+                        </a>
+                    <% } %>
                     </li>
                     <li>
-                    <a href="#0" data-toggle="modal" data-target="#search" data-whatever="@fat">
+                    <a href="#0" data-toggle="modal" data-target="#search" data-whatever="@fat" >
                         <span>Search</span>
                         <i class="" data-feather="search" aria-hidden="true"></i>
                     </a>

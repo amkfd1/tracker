@@ -23,10 +23,7 @@ const authenticateUser = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ error: 'User not found' });
     }
-    let isManagement = false;
-    if (user.designation == 'Management'){
-      isManagement = true
-    }
+
     // Set req.user as the authenticated user object
     req.user = {
       _id: user._id,
@@ -35,16 +32,13 @@ const authenticateUser = async (req, res, next) => {
       role: user.role,
       designation: user.designation,
       assignedTasks: user.assignedTasks,
-      isManagement
     };
 
     req.user.isLoggedIn = true;
 
-    const { role } = req.user; // Assuming the user object is available in the request
+    const { designation } = req.user; // Assuming the user object is available in the request
   
-    if (role !== 'Admin') {
-      return res.redirect('/');
-    }
+  
   
     // console
     // Proceed to the next middleware or route handler

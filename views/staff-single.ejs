@@ -38,11 +38,20 @@
 								<div class="col">
 									<p>
 										<div class="btn-group" role="group" aria-label="Basic example">
+											<%if (Tracker.service_interest.service_name == 'VoIP') {%>
+												<a class="btn btn-outline-dark text-muted " data-toggle="modal" href="#" data-target="#performance" data-whatever="">
+													VoIP Stats
+												</a>
+											<%} else { %>
+												<a class="btn btn-outline-dark text-muted " data-toggle="modal" href="#" data-target="#performancesms" data-whatever="">
+													SMS Stats
+												</a>
+											<% } %>
 											<a class="btn btn-outline-dark text-muted " data-toggle="collapse" href="#notes" role="button" aria-expanded="false" aria-controls="collapseExample">
-											Notes
+												Notes
 											</a>
 											<a class="btn btn-outline-dark text-muted"  data-toggle="collapse" href="#collapseExample2" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
-											Options
+												Options
 											<a>
 										</div>
 									</p>
@@ -207,7 +216,7 @@
                                     <li class="list-group-item"><label class="text-muted mr-5">Trunk: </label> <%= Tracker.testing.trunk%></li>
                                     <li class="list-group-item"><label class="text-muted mr-5">Date Initiated: </label> <%= Tracker.testing.date_started%></li>
                                     <li class="list-group-item"><label class="text-muted mr-5">Date Updated: </label> <%= Tracker.testing.date_finished%></li>
-                                    <li class="list-group-item"><label class="text-muted mr-5">Status: </label> <%= Tracker.testing.status%></li>
+                                    <li class="list-group-item"><label class="text-muted mr-5">Status: </label> <%= Tracker.testing.testing_status%></li>
                                     <li class="list-group-item" style="height:3rem;"><label class="text-muted mr-5">Notes: </label> <%= Tracker.testing.notes%></li>
                                 </ul>
                             </div>
@@ -697,9 +706,148 @@
 				</div>
 			</div>
 			
-		
+		<!--  Add carrier Stats -->
+		<div class="modal fade" id="performance" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Add Carrier Stats</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="/track/add-stats" method="post">
+					<div class="form-group">
+						<div class="row">
+							<div class="col">
+								<label for="recipient-name" class="col-form-label">Carrier:</label>
+								<input disabled name="client" value="<%= Tracker.Customer_Name%>" type="text" class="form-control" >
+								<input name="trackerId" value="<%= Tracker._id%>" type="hidden" class="form-control" >
+							</div>
+							<div class="col">
+								
+								<label for="recipient-name" class="col-form-label">Minutes:</label>
+								<input  name="minutesRoutesTerminated" value="" type="text" class="form-control" >
+					
+							</div>
+							<div class="col">
+								
+								<label for="recipient-name" class="col-form-label">ASR:</label>
+								<input type="text" name="asr" class="form-control" id="exampleInputNumber1" >
+					
+							</div>
+							<div class="col">
+								
+								<label for="recipient-name" class="col-form-label">ACD:</label>
+								<input  name="acd" value="" type="text" class="form-control" >
+							</div>
+						
+						</div>
+					</div>
+					<div class="modal-footer d-flex page-content justify-content-center align-items-center">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-success">Post Stats</button>
+					</div>
+					</form>
+				</div>
+				
+				</div>
+			</div>
+			</div>
 			
 			
+			<!--  Add carrier voip Stats -->
+			<div class="modal fade" id="performance" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Add Carrier Stats</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form action="/add-stats" method="post">
+						<div class="form-group">
+							<div class="row">
+								<div class="col">
+									<label for="recipient-name" class="col-form-label">Carrier:</label>
+									<input disabled name="client" value="<%= Tracker.Customer_Name%>" type="text" class="form-control" >
+									<input name="trackerId" value="<%= Tracker._id%>" type="hidden" class="form-control" >
+								</div>
+								<div class="col">
+									
+									<label for="recipient-name" class="col-form-label">Minutes:</label>
+									<input  name="minutesRoutesTerminated" value="" type="text" class="form-control" >
+						
+								</div>
+								<div class="col">
+									
+									<label for="recipient-name" class="col-form-label">ASR:</label>
+									<input type="text" name="asr" class="form-control" id="exampleInputNumber1" >
+						
+								</div>
+								<div class="col">
+									
+									<label for="recipient-name" class="col-form-label">ACD:</label>
+									<input  name="acd" value="" type="text" class="form-control" >
+								</div>
+								<input  name="VoIP" value="VoIP" type="hidden" class="form-control" >
+							
+							</div>
+						</div>
+						<div class="modal-footer d-flex page-content justify-content-center align-items-center">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-success">Post Stats</button>
+						</div>
+						</form>
+					</div>
+					
+					</div>
+				</div>
+				</div>
+
+				<!--  Add carrier SMS Stats -->
+			<div class="modal fade" id="performancesms" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Add SMS Stats</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form action="/add-stats" method="post">
+						<div class="form-group">
+							<div class="row">
+								<div class="col">
+									<label for="recipient-name" class="col-form-label">Carrier:</label>
+									<input disabled name="client" value="<%= Tracker.Customer_Name%>" type="text" class="form-control" >
+									<input name="trackerId" value="<%= Tracker._id%>" type="hidden" class="form-control" >
+								</div>
+								<div class="col">
+									
+									<label for="recipient-name" class="col-form-label">SMS #:</label>
+									<input  name="smsSent" value="" type="text" class="form-control" >
+						
+								</div>
+								
+								<input  name="sms" value="SMS" type="hidden" class="form-control" >
+								
+							</div>
+						</div>
+						<div class="modal-footer d-flex page-content justify-content-center align-items-center">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-success">Post Stats</button>
+						</div>
+						</form>
+					</div>
+					
+					</div>
+				</div>
+				</div>
 <!-- UPDATE CLIENT ACCOUNT MANAGER -->
 <%- include('includes/update_client') %>
 <!-- Nav Includes -->

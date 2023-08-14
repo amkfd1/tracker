@@ -1,0 +1,310 @@
+
+<%- include('includes/head') %>
+<style>
+    .appIcons{
+        width: 15px;
+        height: 15px;
+    }
+    .text-mkel{
+      color: #63D2FF;
+    }
+</style>
+<body class="sidebar-dark">
+	<div class="main-wrapper">
+		<div class="page-wrapper full-page ">
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				<div class="card " style=" width: 90% ">
+                    
+					<div class="card-body card-body-alt px-5" >
+						
+                        
+                        <section >
+                            
+                          
+                             <div class="page-content d-flex align-items-center justify-content-center">
+                                <a class="text-muted" href="" data-toggle="modal" data-target="#updateprofile" data-whatever="">
+                                    <img class="mr-3" src="../../assets/images/<%= user.profile.image%>" width="150px" height="150px">
+                        
+                                </a>    
+                            </div>
+                            <div class="page-content d-flex align-items-center justify-content-center">
+                            
+                                <div class="row">
+                                    <div class="col-md-3 w-100">
+                                       
+                                            <a href="#" class="text-muted" data-toggle="modal" data-target="#emergency" data-whatever="">Update Profile </a>
+                                       
+                                    </div>
+                                    <div class="col-md-6">
+                                            <h5 class="card-title text-center ">Employee Record</h5>
+
+                                    </div>
+                                    <div class="col-md-3 w-100">
+                                        
+                                        <a class="text-danger " href="" data-toggle="modal" data-target="#resetPassword" data-whatever="">Change Password</a>
+        
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- THis is to show all messages -->
+								<% if (message) { %>
+									
+									<div id="alert-message" class="alert  text-center alert-success alert-dismissible fade show" role="alert">
+									  <i data-feather="check"></i> <strong><%= message %></strong>
+									</div>
+								  
+							  <% } else if (error)  {%>
+								<div id="alert-message" class="alert  text-center alert-danger alert-dismissible fade show" role="alert">
+									<i data-feather="x"></i> <strong><%= error%></strong>
+								  </div>
+								  <% } else {}%>
+                            <div class="border-bottom "></div>
+                                    
+                             <div class="row my-3 px-5">
+                                <div class="col-sm-6">
+                                    <label class="text-muted" for="name">Full Name:</label>
+                                    <h5 name="name" class="card-title"><%=user.name%></h5>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="text-muted"  for="username">Username:</label>
+                                    <h5 name="username" class="card-title"><%=user.username%></h5>
+                                </div>
+                             </div>   
+                             <div class="border-bottom"></div>
+                                    
+                             <div class="row my-3 px-5">
+                                <div class="col-sm-6">
+                                    <label class="text-muted" for="department">Department:</label>
+                                    <h5 name="department" class="card-title"><%=user.role%></h5>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="text-muted"  for="designation">Designation:</label>
+                                    <h5 name="designation" class="card-title">NA</h5>
+                                </div>
+                             </div>   
+                             <div class="border-bottom my-2"></div>
+                             <div class="page-content d-flex align-items-center justify-content-center">
+                                <p>
+                                    <a href="#" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                      Emergency Contact: <span><i data-feather="chevron-down"></i></span>
+                                    </a>
+                                  </p>
+                            </div>
+                            <!-- Emergency Contact Section -->
+                            <div class="collapse my-2" id="collapseExample">
+                               
+                                <div class="row my-3 px-5">
+                                    <div class="col-sm-6">
+                                        <label class="text-muted" for="name">Emergency Contact:</label>
+                                        <h5 name="name" class="card-title"><%=user.profile.emergency_contact.name%></h5>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="text-muted"  for="username">Phone Number:</label>
+                                        <h5 name="username" class="card-title"><%=user.profile.emergency_contact.phone%></h5>
+                                    </div>
+                                 </div>   
+                                 <div class="border-bottom"></div>
+                                        
+                                 <div class="row my-3 px-5">
+                                    <div class="col-sm-6">
+                                        <label class="text-muted" for="department">Relationship:</label>
+                                        <h5 name="department" class="card-title"><%=user.profile.emergency_contact.relationship%></h5>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="text-muted"  for="designation">Address:</label>
+                                        <h5 name="designation" class="card-title"><%=user.profile.emergency_contact.Address%></h5>
+                                    </div>
+                                 </div>   
+                                 <div class="border-bottom my-2"></div>
+                            
+                            </div>
+                            
+                             <div class="border-bottom  my-2"></div>
+
+
+
+                             <div class="text-muted card-title my-3"  >
+                                Assigned Carriers:
+                             </div>
+                    
+                             <div class="table-responsive card-body-hor">
+                                <table class="table table-striped " > 
+                                    <thead class="border-info">
+                                        <tr>
+                                            <th>
+                                                Carrier
+                                            </th>
+                                            <th>
+                                                Stage
+                                            </th>
+                                            <th>
+                                                Status
+                                            </th>
+                                            
+                                            
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% user.assignedTasks.forEach(account => { %>
+                                           <tr>
+                                            <td> <%= account.Customer_Name%></td>
+                                            <td> <%= account.stage.process_stage%></td>
+                                            <td> <%= account.stage.status%></td>
+                    
+                                           </tr>
+                                          <% }); %>
+                                            
+                                             
+                                            
+                                       
+                                        
+                                        
+                                    </tbody>
+                                </table>
+                            </div>	
+                        </section>
+                       
+					</div>
+
+				</div>
+				
+				
+				
+
+			</div>
+           
+			<!-- Nav Includes -->
+			<%- include('includes/nav') %>
+		</div>
+		
+	</div>
+
+  <%- include('includes/end') %>
+<!-- End Includes -->
+
+
+
+
+<!-- Profile Upload update Modal -->
+<div class="modal fade " id="updateprofile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div npm start>
+        <div class="modal-dialog " >
+        <div class="modal-content ">
+            <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel">Change Profile Photo</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <form method="post" action="/auth//change-profile/image/<%= user._id%>" enctype="multipart/form-data">
+                
+                    <div class="page-content d-flex align-items-center justify-content-center">
+                        <input type="file" name="profile" id="myDropify" class="border">								</div>
+                </div>
+                <div class="modal-footer moveModal">
+                    <button type="submit" class="btn btn-info">Upload</button>
+                    </div>
+                            </form>
+            </div>
+            
+        </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade " id="emergency" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div npm start>
+            <div class="modal-dialog " >
+            <div class="modal-content ">
+                <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Update Emgency Contact</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                <form method="post" action="/update-profile/<%= user._id%>" >
+                    
+                    <div class="row my-3 px-5">
+                        <div class="col-sm-6">
+                            <label class="text-muted" for="name">Emergency Contact:</label>
+                           <input type="text" class="form-control" name="ecname" id="exampleInputUsername1" autocomplete="Contact Name" placeholder="Contact Name">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="text-muted"  for="username">Phone Number:</label>
+                            <input type="text" class="form-control" name="pNUmber" id="exampleInputUsername1" autocomplete="Phone Number" placeholder="Phone Number">
+                        </div>
+                    </div>   
+                    <div class="border-bottom"></div>
+                            
+                    <div class="row my-3 px-5">
+                        <div class="col-sm-6">
+                            <label class="text-muted" for="department">Relationship:</label>
+                            <input type="text" class="form-control" name="relationship" id="exampleInputUsername1" autocomplete="relationship" placeholder="relationship">
+
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="text-muted"  for="designation">Address:</label>
+                            <input type="text" class="form-control" name="Address" id="exampleInputUsername1" autocomplete="Address" placeholder="Address">
+
+                        </div>
+                    </div>   
+                    <div class="border-bottom my-2"></div>
+                  </div>
+                    <div class="modal-footer moveModal">
+                        <button type="submit" class="btn btn-info">Update</button>
+                        </div>
+                                </form>
+                </div>
+                
+            </div>
+            </div>
+        </div>
+    
+
+
+<!-- Change Password Modal -->
+<div class="modal fade " id="resetPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div npm start>
+        <div class="modal-dialog " >
+        <div class="modal-content ">
+            <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel">Change Profile Photo</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <form method="post" action="/auth/reset-password/<%=user._id%>" >
+                
+                    <div class="d-flex align-items-center justify-content-center">
+                        <input type="password" class="form-control mx-2" name="password"  placeholder="Password">
+                        <input type="password" class="form-control mx-2" name="cPassword" placeholder="Confirm Password">
+
+
+                    </div>
+               
+                <div class="modal-footer moveModal">
+                    <button type="submit" class="btn btn-info">Save</button>
+                </div>
+            </form>
+            </div>
+            
+        </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+

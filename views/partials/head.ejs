@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Client | <%= pageTitle%></title>
+	<title> <%= pageTitle%></title>
 	<!-- core:css -->
 	<link rel="stylesheet" href="../../../assets/vendors/core/core.css">
 	<!-- endinject -->
@@ -16,7 +16,6 @@
 	<!-- end plugin css for this page -->
 	<!-- inject:css -->
 	<link rel="stylesheet" href="../../../assets/fonts/feather-font/css/iconfont.css">
-	<link rel="stylesheet" href="../../../assets/vendors/flag-icon-css/css/flag-icon.min.css">
 	<!-- endinject -->
   <!-- Layout styles -->  
 	<link rel="stylesheet" href="../../../assets/css/demo_2/style.css">
@@ -47,7 +46,7 @@
 		background: transparent;
 		box-shadow: 0 12px 8px rgb(0 0 0 / 8%);
 		overflow: hidden;
-		width: 40%;
+		width: 100%;
 		justify-content:center;
 	  }
 	  
@@ -58,7 +57,7 @@
 	  .menu a {
 		position: relative;
 		display: grid;
-		padding: 40px 20px;
+		padding: 40px ;
 		font-size: 14px;
 		font-weight: bold;
 		text-transform: uppercase;
@@ -71,6 +70,8 @@
 	  }
 	  
 	  .menu a span {
+		justify-content: center;
+		align-content: center;
 		transform: translateY(-60px);
 	  }
 	  
@@ -79,12 +80,12 @@
 	  }
 	  
 	  .menu a:hover span {
-		color: black;
+		color: #E3ECF3;
 		transform: translateY(-20px);
 	  }
 	  
 	  .menu a:hover i {
-		color: var(--black);
+		color: #E3ECF3;
 		transform: translateY(10px);
 	  }
 

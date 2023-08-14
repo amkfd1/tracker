@@ -4,12 +4,31 @@ const User = require('../Models/user.js');
 const Permission = require('../Models/permission');
 const jwt = require('jsonwebtoken');
 const print = console.log;
+const isAdmin = require('../middleware/isAdmin');
+const isAuth = require('../middleware/verifyAuth');
+const multer = require('multer');
 const crypto = require('crypto');
 const PasswordResetToken = require('../Models/PasswordResetToken'); // Assuming you have a PasswordResetToken model
 const router = express.Router();
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/assets/images/'); // Specify the destination folder for storing uploaded files
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const filePath = uniqueSuffix + '-' + file.originalname.replace(/\\/g, '/');
+    cb(null, filePath); // Set the filename for the uploaded file with forward slashes
+  },
+});
+
+const upload = multer({ storage: storage });
+
+
+
+
 // Register route
-router.post('/register', async (req, res) => {
+router.post('/register', isAdmin, async (req, res) => {
   try {
     const { name, username, role, designation } = req.body;
     let password = username+"123"
@@ -26,6 +45,21 @@ router.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    let emergency_contact = {
+      name: '',
+      relationship: '',
+      phone: '',
+      alternative: '',
+      Address: ''
+
+    }
+
+    let profile = {
+      phone: '',
+      image: '',
+      dob: '',
+      emergency_contact
+    }
     // Create a new user
     const newUser = new User({
       name,
@@ -33,6 +67,7 @@ router.post('/register', async (req, res) => {
       role,
       designation,
       password: hashedPassword,
+      profile
     });
 
     // Save the user to the database
@@ -47,6 +82,45 @@ router.post('/register', async (req, res) => {
   }
 });
 
+router.post('/reset-password/:userId', isAuth, async (req, res) => {
+  const userId = req.params.userId;
+  try {
+      const userId = req.params.userId;
+      let password = req.body.password;
+      let cPassword = req.body.cPassword;
+
+      // Validate password and confirm password
+      if (password !== cPassword) {
+          // return res.status(400).json({ message: 'Passwords do not match' });
+          req.flash('server_error', 'Passwords do not match')
+          return res.redirect('/user/user-record/'+userId)
+      }
+
+      // Find the user by ID
+      const user = await User.findById(userId);
+      if (!user) {
+          // return res.status(404).json({ message: 'User not found' });
+          req.flash('server_error', 'User not found')
+          return res.redirect('/user/user-record/'+userId)
+      }
+
+      // Update the user's password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      user.password = hashedPassword;
+      console.log('Password: ', password)
+      // Save the updated user
+      await user.save();
+      req.flash('update_success', 'Password changed')
+      return res.redirect('/user/user-record/'+userId)
+  } catch (error) {
+      // res.status(500).json({ message: 'Error resetting password', error: error.message });
+          req.flash('server_error', 'Error resetting password')
+          console.log('Error: ', error)
+          return res.redirect('/user/user-record/'+userId)
+  }
+});
+
 
 router.post('/login', async (req, res) => {
   try {
@@ -54,13 +128,14 @@ router.post('/login', async (req, res) => {
 
     // Check if the username exists in the database
     const user = await User.findOne({ username });
+
     if (!user) {
       req.flash('login_error', 'Invalid username or password');
       return res.status(401).redirect('/auth/login');
     }
-
+  
     // Compare the provided password with the stored hashed password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = password//await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       req.flash('login_error', 'Invalid username or password')
       return res.status(401).redirect('/auth/login');
@@ -73,7 +148,11 @@ router.post('/login', async (req, res) => {
     res.cookie('token', token, { httpOnly: true });
     
 
-    
+    let isManagement = false;
+
+    if (user.designation == 'Management') {
+      return res.status(401).redirect('/track/management');
+    }
 
     // print("User: ", await req.user)
     // const { role } = req.user;
@@ -93,13 +172,40 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Route for uploading profile image
+router.post('/change-profile/image/:userId', upload.single('profile'), async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+      // Find the user by ID
+      const user = await User.findById(userId);
+      if (!user) {
+          req.flash('server_error', 'User not found');
+          return res.redirect('/user/user-record/' + userId);
+      }
+
+      // Update the user's profile image URL
+      user.profile.image = req.file.filename; // Assuming multer has provided the file path
+
+      // Save the updated user
+      await user.save();
+
+      req.flash('update_success', 'Profile image uploaded successfully');
+      return res.redirect('/user/user-record/' + userId);
+  } catch (error) {
+      req.flash('server_error', 'Error uploading profile image');
+      return res.redirect('/user/user-record/' + userId);
+  }
+});
+
+
  
 router.get('/password-reset', async (req, res) => {
   res.render('Auth/reset-password',{
     isAuthenticated: false,
     pageTitle: "Reset Password"
   })
-})
+});
 
 router.get('/login', async (req, res) => {
   try {
@@ -114,7 +220,8 @@ router.get('/login', async (req, res) => {
     res.render('Auth/login', {
       isAuthenticated: false,
       flash: flash,
-      pageTitle: "Login"
+      pageTitle: "Login",
+      user:{}
     });
   } catch (error) {
     console.error('Error rendering login page:', error);

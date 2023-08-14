@@ -47,7 +47,7 @@
                                                     </label>
                                                     <span class="float-right">
                                                         <a href="#" data-toggle="modal" data-target=".myClients">
-                                                            <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                            <i class="appIcons text-muted" data-feather="maximize-2" ></i>
                                                     
                                                         </a>
                                                     </span>
@@ -59,7 +59,7 @@
                                                     </label>
                                                     <span class="float-right">
                                                        <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg">
-                                                            <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                            <i class="appIcons text-muted" data-feather="maximize-2" ></i>
                                                         </a>
                                                     </span>
                                                         <h5 class="text-warning"><%= userNotes.length%></h5>
@@ -72,17 +72,13 @@
                                                 <div class="col-md-6">
                                                     <label class="text-muted">Completed:
                                                     </label>
-                                                    <span class="float-right">
-                                                        <i class="appIcons text-muted" data-feather="external-link" ></i>
-                                                    </span>
+                                                 
                                                     <a><h5 class="text-success"><%= completedPercentile%>%</h5></a>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="text-muted">Incomplete:
                                                     </label>
-                                                    <span class="float-right">
-                                                        <i class="appIcons text-muted" data-feather="external-link" ></i>
-                                                    </span>
+                                                    
                                                     <a><h5 class="text-danger"><%= incompletePercentile%>%</h5></a>
                                                     
                                                 </div>
@@ -91,41 +87,7 @@
                                         
                                     </ul>
                                 </div>
-                                <!--  -->
                                 
-                                    <!-- <% if (!mytasks) {%>
-                                        <div class="card bg-dark" style="height: 10rem;">
-                                    
-                                            <div class="page-content d-flex justify-content-center align-items-center py-2 px-2">
-                                            <h6 class="card-title mt-3">You Have no assigned tasks/clients</h6>
-                                            </div>
-                                                                           
-                                        </div>
-                                    <%} else {%>
-                                        <div class="card bg-dark card-body-alt card-body-hor" style="height: 10rem; width:22rem;">
-                                    
-                                            <div class=" row py-2 px-2">
-                                                
-                                                    <div class="col">
-                                                        <h5 class="card-title pt-2">My Clients</h5>
-                                                        <% for (i in mytasks) {%>
-                                                            <a href="/client/<%= mytasks[i]._id%>" ><span class="text-muted">Client: </span><%= mytasks[i].Customer_Name%></a>
-                                                        <% } %>
-                                                    </div>
-                                                    <div class="col">
-                                                        <h5 class="card-title pt-2">Summaries</h5>
-                                                        <h6>My Clients: </h6> 
-                                                        <div class="page-content d-flex justify-content-center align-items-center py-2 px-2">
-
-                                                            <h4 class="text-success">  <%= mytasks.length%></h4>
-                                                        </div>
-                                                        <h6>Notes: </h6> 
-                                                    </div>
-                                                
-                                            </div>
-                                                                           
-                                        </div>
-                                    <% } %> -->
                                 </div>
                             </div>
                             
@@ -142,7 +104,7 @@
                                                         Stage
                                                     </th>
                                                     <th>
-                                                        
+                                                        Account Manager
                                                     </th>
                                                     <th>
                                                         Status
@@ -185,35 +147,12 @@
     
                                                         </td>
                                                         <td>
-                                                            <%if (trackers[i].stage.process_stage === "Overall Completion") {%>
-                                                                <h6 class="
-                                                                <%if (trackers[i].completionPercentage <40 ){%> text-danger  %>
-                                                                <%}else if (trackers[i].completionPercentage > 30 && trackers[i].completionPercentage <= 60) {%>
-                                                                     text-warning																
-                                                                <%}else %> text-success ">
-                                                                        
-                                                                    <i data-feather="percent"></i> 
-                                                                    <%= trackers[i].completionPercentage%></h6>
-                                                            <% }else {%>
-                                                                <h6 class="
-                                                                <%if (trackers[i].stage.status == 'NA' || trackers[i].stage.status == '' ){%> text-danger  %>
-                                                                <%}else if (trackers[i].stage.status == 'Incomplete' || trackers[i].stage.status == 'Initiated') {%>
-                                                                     text-warning
-                                                                <%}else if (trackers[i].stage.status == 'Ongoing' ) {%>	
-                                                                    text-warning															
-                                                                <%}else %> text-success ">
-                                                                        <%if (trackers[i].stage.status == "Complete" || trackers[i].stage.status == "Completed") { %>
-                                                                            <i data-feather="check"></i>
-                                                                            <%= trackers[i].stage.status%>
-                                                                        <%} else if(trackers[i].stage.status == "Incomplete" || trackers[i].stage.status == "Ongoing"){%>
-                                                                            <i data-feather="minus"></i> 
-                                                                            <%= trackers[i].stage.status%>
-                                                                        <%} else {%>
-                                                                            <i data-feather="percent"></i> 
-                                                                            <%= trackers[i].stage.status%>
-                                                                        </h6>
-                                                                        <% } %>
-                                                            <%}%>
+                                                            <% if (trackers[i].account_manager) {%>
+
+                                                                <%=trackers[i].account_manager.name%>
+                                                            <% } else { %>
+                                                                NA
+                                                            <% } %>
                                                         </td>
                                                         <td>
                                                             <div class="progress">

@@ -4,6 +4,7 @@ const customerTrackerController = require('../Controllers/trackerControl');
 const fs = require('fs');
 const isAuth = require('../middleware/verifyAuth');
 const isAdmin = require('../middleware/isAdmin');
+const isManagement = require('../middleware/isManagement');
 
 const multer = require('multer');
 
@@ -33,6 +34,7 @@ router.post('/updateTracker/:id', customerTrackerController.updateTracker);
 
 // Get all customer trackers
 router.get('/home', isAdmin, customerTrackerController.getAllCustomerTrackers);
+router.get('/management', isAdmin,  customerTrackerController.getManagementDash);
 
 router.get('/search', customerTrackerController.searchCustomerByName);
 // router.get('/openpdf', customerTrackerController.openPDF);
@@ -50,6 +52,8 @@ router.post('/addContact/:id', isAdmin, customerTrackerController.addContact);
 router.post('/addNote/', isAdmin, customerTrackerController.addNote);
 
 
+router.post('/add-stats',  customerTrackerController.addPerformance);
+
 // update stage
 router.post('/updateStage/:id', isAdmin, customerTrackerController.updateTrackerStage);
 
@@ -65,7 +69,8 @@ router.get('/newClient/', isAdmin, async function (req, res) {
         new: true,
         error,
         message: flash,
-        isAuthenticated: req.user.isLoggedIn
+        isAuthenticated: req.user.isLoggedIn,
+        isManagement: req.user.designation
     });
 });
 

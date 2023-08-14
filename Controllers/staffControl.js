@@ -238,12 +238,14 @@ const updateTesting = async (req, res) => {
       let completionPercentage = 0;
       let mytasks = [];
       let incompletePercentile = 0;
-      const trackers = await Tracker.find();
+      const trackers = await Tracker.find().populate('account_manager');
       const myClients = [];
       const voip = [];
       const sms = [];
       const stages = ['Overall Completion', 'Service Subscription', 'Technical Info', 'Registration & Testing'];
   
+      console.log('TRACKERS: ', trackers)
+
       const overallCompletion = (completedStages / totalStages) * 100;
 
     // const voip = [];
@@ -272,7 +274,7 @@ const updateTesting = async (req, res) => {
       
       let userNotes = await Note.find({ user: userId }).populate('tracker').populate('user');
       let myNotes = []
-      console.log("MY TASKS: ", mytasks);
+      // console.log("MY TASKS: ", mytasks);
       let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
       let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0]
   
@@ -378,8 +380,8 @@ const updateTesting = async (req, res) => {
       
       let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
       let error = req.flash('tracker_404' )[0] || req.flash('unauthorized')[0] || req.flash('server_error')[0]; 
-      console.log("unauthorized message: ", error);
-      
+      // console.log("unauthorized message: ", error);
+      console.log('Tracker: ', tracker)
       res.render('staff-single', {
         pageTitle: tracker.Customer_Name,
         Tracker: tracker,
@@ -505,6 +507,38 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
   
 }
 
+const updateEmergencyContact = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+      const {ecname, pNUmber, relationship, Address} = req.body;
+
+        let updatedEmergencyContact = {
+          name: ecname,
+          relationship: relationship,
+          phone: pNUmber,
+          Address: Address
+        }
+      // Find the user by ID
+      const user = await User.findById(userId);
+      if (!user) {
+        req.flash('server_error', "User not found")
+        return res.status(404).redirect('/user/user-record/'+userId );
+      }
+
+      // Update the emergency contact fields
+      user.profile.emergency_contact = updatedEmergencyContact;
+
+      // Save the updated user
+      await user.save();
+
+      req.flash('update_success', "Emergency contact successfully updated")
+      return res.status(404).redirect('/user/user-record/'+userId );
+  } catch (error) {
+      res.status(500).json({ message: 'Error updating emergency contact', error: error.message });
+  }
+};
+
   module.exports = 
 { 
     updateTesting,
@@ -515,7 +549,8 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
     addNote,
     updateDocument,
     updateTrackerStage,
-    grantDocumentPermission
+    grantDocumentPermission,
+    updateEmergencyContact
     
     
 };

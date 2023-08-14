@@ -1,0 +1,129 @@
+<div class="modal fade " id="records<%=[i]%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   
+    <div class="modal-dialog " >
+        <div class="modal-content ">
+
+            <div class="card-body card-body-alt px-5" >
+                
+                    <section >
+                    
+                        <%if (users[i].profile.image) {%>
+                            <div class="page-content d-flex align-items-center justify-content-center">
+                                <img class="mr-3" src="../../assets/images/<%=users[i].profile.image%>" width="150px" height="150px">
+    
+                            </div>
+                        <% } else {%>
+                            <div class="page-content d-flex align-items-center justify-content-center">
+                                <img class="mr-3" src="../../assets/images/profile.png" width="150px" height="150px">
+    
+                            </div>
+                        <%}%>
+                        <h5 class="card-title text-center mb-3 mt-3">Employee Record</h5>
+
+                        <div class="border-bottom "></div>
+                                
+                         <div class="row my-3">
+                            <div class="col">
+                                <label class="text-muted" for="name">Full Name:</label>
+                                <h5 name="name" class="card-title"><%=users[i].name%></h5>
+                            </div>
+                            <div class="col">
+                                <label class="text-muted"  for="username">Username:</label>
+                                <h5 name="username" class="card-title"><%=users[i].username%></h5>
+                            </div>
+                         </div>   
+                         <div class="border-bottom"></div>
+                                
+                         <div class="row my-3">
+                            <div class="col">
+                                <label class="text-muted" for="department">Department:</label>
+                                <h5 name="department" class="card-title"><%=users[i].role%></h5>
+                            </div>
+                            <div class="col">
+                                <label class="text-muted"  for="designation">Designation:</label>
+                                <h5 name="designation" class="card-title">NA</h5>
+                            </div>
+                         </div>   
+                         <div class="border-bottom "></div>
+                         <div class="text-muted card-title"  >
+                            Assigned Carriers:
+                         </div>
+                         <div class="container text-center">
+                            <p>
+                                <a href="#" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                  Emergency Contact: <span><i data-feather="chevron-down"></i></span>
+                                </a>
+                              </p>
+                        </div>
+                        <!-- Emergency Contact Section -->
+                        <div class="collapse my-2" id="collapseExample">
+                           
+                            <div class="row my-3 px-5">
+                                <div class="col-sm-6">
+                                    <label class="text-muted" for="name">Emergency Contact:</label>
+                                    <h5 name="name" class="card-title"><%=users[i].profile.emergency_contact.name%></h5>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="text-muted"  for="username">Phone Number:</label>
+                                    <h5 name="username" class="card-title"><%=users[i].profile.emergency_contact.phone%></h5>
+                                </div>
+                             </div>   
+                             <div class="border-bottom"></div>
+                                    
+                             <div class="row my-3 px-5">
+                                <div class="col-sm-6">
+                                    <label class="text-muted" for="department">Relationship:</label>
+                                    <h5 name="department" class="card-title"><%=users[i].profile.emergency_contact.relationship%></h5>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="text-muted"  for="designation">Address:</label>
+                                    <h5 name="designation" class="card-title"><%=users[i].profile.emergency_contact.Address%></h5>
+                                </div>
+                             </div>   
+                             <div class="border-bottom my-2"></div>
+                        
+                        </div>
+                         <div class="table-responsive card-body-hor">
+                            <table class="table table-striped " > 
+                                <thead class="border-info">
+                                    <tr>
+                                        <th>
+                                            Carrier
+                                        </th>
+                                        <th>
+                                            Stage
+                                        </th>
+                                        <th>
+                                            Status
+                                        </th>
+                                        
+                                        
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% users[i].myaccounts.forEach(account => { %>
+                                       <tr>
+                                        <td> <%= account.Customer_Name%></td>
+                                        <td> <%= account.stage.process_stage%></td>
+                                        <td> <%= account.stage.status%></td>
+
+                                       </tr>
+                                      <% }); %>
+                                        
+                                         
+                                        
+                                   
+                                    
+                                    
+                                </tbody>
+                            </table>
+                        </div>	
+                    </section>
+                   
+
+              
+            </div>
+        </div>
+    </div >
+</div>

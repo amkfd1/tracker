@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const trackerRoutes = require('./Routes/trackerRoutes');
+const perfRoutes = require('./Routes/performanceRoute');
 const staffRoutes = require('./Routes/staffRoutes');
 const Log = require('./Models/log');
 const Permission = require('./Models/permission');
@@ -51,7 +52,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // console.log('images destination');
 
 
-app.use('/auth', authControl);
+// app.use('/auth', authControl);
 app.get('/404', async (req, res) => {
   res.render('errors/404', {
     pageTitle: "Not Found"
@@ -63,43 +64,45 @@ app.get('/500', async (req, res) => {
 });
 
 // Global middleware for logging
-app.use(isAuth, (req, res, next) => {
-  const timestamp = new Date().toISOString();
-  const userName = req.user.name || 'Anonymous';
-  const route = `${req.url}`;
+// app.use( (req, res, next) => {
+//   const timestamp = new Date().toISOString();
+//   const userName = req.user.name || 'Anonymous';
+//   const route = `${req.url}`;
 
-  // Check if the page is being refreshed
-  const isPageRefreshed = req.get('Cache-Control') === 'max-age=0' || req.get('Pragma') === 'no-cache';
+//   // Check if the page is being refreshed
+//   const isPageRefreshed = req.get('Cache-Control') === 'max-age=0' || req.get('Pragma') === 'no-cache';
 
-  // Log the accessed route and user name
-  // console.log(`${timestamp} - User: ${userName} - Route: ${route}`);
+//   // Log the accessed route and user name
+//   // console.log(`${timestamp} - User: ${userName} - Route: ${route}`);
 
-  // Save logs into the database if the page is not being refreshed
-  if (!isPageRefreshed) {
-    const log = new Log({
-      timestamp,
-      userName,
-      route,
-    });
+//   // Save logs into the database if the page is not being refreshed
+//   if (!isPageRefreshed) {
+//     const log = new Log({
+//       timestamp,
+//       userName,
+//       route,
+//     });
 
-    log.save()
-      .then(() => {
-        console.log('Log saved into the database');
-      })
-      .catch((error) => {
-        console.error('Error saving log into the database:', error);
-      });
-  }
+//     log.save()
+//       .then(() => {
+//         console.log('Log saved into the database');
+//       })
+//       .catch((error) => {
+//         console.error('Error saving log into the database:', error);
+//       });
+//   }
 
-  next();
-});
+//   next();
+// });
 
 
 app.use('/track', trackerRoutes);
 
-// app.use('/auth', authControl);
+app.use('/auth', authControl);
 
 app.use('/', staffRoutes);
+app.use('/', perfRoutes);
+
 
 
 

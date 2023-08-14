@@ -4,6 +4,7 @@ const staffController = require('../Controllers/staffControl');
 const fs = require('fs');
 const isAuth = require('../middleware/verifyAuth');
 const customerTrackerController = require('../Controllers/trackerControl');
+const adminsettings = require('../Controllers/adminsettings');
 
 const multer = require('multer');
 
@@ -41,6 +42,9 @@ router.post('/updateTechnical/:id', isAuth, staffController.updateTech);
 router.post('/updateTesting/:id', isAuth, staffController.updateTesting);
 // router.post('/addContact/:id', isAuth, customerTrackerController.addContact);
 router.post('/updateStage/:id', isAuth, staffController.updateTrackerStage);
+
+router.post('/update-profile/:id', isAuth, staffController.updateEmergencyContact);
+
 // open Pdf
 const uploadDirectory = 'upload';
 
@@ -72,6 +76,5 @@ router.get("/client/doc/:id", async (req, res) => {
   console.log("File streaming has started.");
 });
 
-
-
+ router.get('/user/user-record/:userId', isAuth, adminsettings.getUserById)
 module.exports = router;

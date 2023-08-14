@@ -9,8 +9,21 @@ const path = require('path');
 const { Types } = require('mongoose');
 const Note = require('../Models/note');
 const mongoose = require('mongoose');
+const Performance = require('../Models/performance');
+const Task = require('../Models/task');
 
 const print = console.log
+
+// Currency Formater
+
+let currency = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+
+// console.log(`The formated version of ${price} is ${}`);
+
+
 
 const uploadDocument = async (req, res) => {
   try {
@@ -47,9 +60,12 @@ print(req.file)
     await tracker.save();
 
     if (req.user.role != "Admin"){
+      req.flash('update_success','Document Uploaded');
+
       res.status(200).redirect('/client/' + customerRefId);
     } else {
-      
+      req.flash('update_success','Document Uploaded');
+
       res.status(200).redirect('/track/tracker/' + customerRefId);
     }
   } catch (error) {
@@ -142,7 +158,7 @@ const grantDocumentPermission = async (req, res) => {
 
 
     if (!document) {
-      req.flash('tracker_404', 'Client not found');
+      req.flash('tracker_404', 'Document not found');
       print('NO SUCH DOCUMENT')
       return res.status(404).redirect('/track/tracker/' + id);
     }
@@ -179,32 +195,52 @@ const grantDocumentPermission = async (req, res) => {
 
 
 // Assign Account manager
+
 const assignTaskToUser = async (req, res) => {
   const { id } = req.params;
   const { userId } = req.body;
-  print("ID: ", id, "/n UserId: ", userId);
-
+print('ASSIGN BODY: ', req.body)
   try {
     // Find the user by userId
     const user = await User.findById(userId);
-    // console.log("User: ", user)
+
+    // Check if the user is already assigned the task
+    if (user.assignedTasks.includes(id)) {
+      req.flash('task_already_assigned', 'This task is already assigned to the user.');
+      console.log("Already assigned")
+      return res.status(400).redirect('/track/tracker/' + id);
+    }
+
+    // Find the tracker by id
+    const tracker = await Tracker.findById(id);
+
+    // Check if the tracker already has an account_manager
+    if (tracker.account_manager) {
+      req.flash('account_manager_assigned', 'This tracker already has an account manager.');
+      return res.status(400).redirect('/track/tracker/' + id);
+    }
+
     // Assign the tracker to the user's assignedTasks field
     user.assignedTasks.push(id);
     await user.save();
 
     // Update the tracker's account_manager field
-    const tracker = await Tracker.findById(id);
     tracker.account_manager = user._id;
     await tracker.save();
-    console.log("CLIENT IS ASSIGNED AN ACCOUNT MANAGER: ", tracker.account_manager)
-    req.flash('update_success', "Account Manager Successfully Assigned!")
-    res.status(200).redirect('/track/home');
+
+    req.flash('update_success', 'Account Manager Successfully Assigned!');
+    res.status(200).redirect('/track/tracker/'+id);
   } catch (error) {
     console.error('Error assigning task to user:', error);
-    req.flash('server_error','A server error occured. Try Again')
-    res.status(500).redirect('/track/home/'+id)
+    req.flash('server_error', 'A server error occurred. Try Again');
+    res.status(500).redirect('/track/tracker/' + id);
   }
 };
+
+
+// *****************end ******************************
+
+
 
 // Create Note 
 const addNote = async (req, res) => {
@@ -291,7 +327,7 @@ const addContact = async (req, res) => {
 
 
 const updateTracker = async (req, res) => {
-  let trackerId = req.params.id  
+  let trackerId = req.params.id
   try {
       const {
         Customer_Name,
@@ -317,9 +353,13 @@ const updateTracker = async (req, res) => {
         trunk,
         date_started,
         date_finished,
-        testing_status
+        testing_status,
+        TI_status
       } = req.body;
   
+console.log("This is your input: ", req.body);
+
+
       const address = {
         building_number,
         street,
@@ -338,7 +378,7 @@ const updateTracker = async (req, res) => {
         routes,
         rates_offered,
         currency,
-        SI_status
+        status:SI_status
       };
   
       const Tech_info = {
@@ -347,7 +387,8 @@ const updateTracker = async (req, res) => {
         media_Ip,
         prefix,
         port,
-        codices
+        codices, 
+        status: TI_status
       };
   
       const testing = {
@@ -368,7 +409,7 @@ const updateTracker = async (req, res) => {
           Tech_info,
           testing
         },
-        { new: true }
+        
       );
   
       if (!updatedTracker) {
@@ -393,6 +434,7 @@ const updateTracker = async (req, res) => {
 
 // Add a new customer tracker
 const addCustomerTracker = async (req, res) => {
+  
  try{
     const {
       Customer_Name,building_number, street, city,zip, country, platform, contact_link, service_name, routes,rates_offered, currency,  SI_status,
@@ -573,7 +615,7 @@ const updateTesting = async (req, res) => {
 // Get all customer trackers
 const getAllCustomerTrackers = async (req, res) => {
   try {
-    const trackers = await Tracker.find();
+    const trackers = await Tracker.find().populate('account_manager');
 
     let totalStages = 0;
     let completedStages = 0;
@@ -604,7 +646,7 @@ const getAllCustomerTrackers = async (req, res) => {
       }
     }
 
-    const overallCompletion = (completedStages / totalStages) * 100;
+    const overallCompletion = ((completedStages / totalStages) * 100).toFixed(2);
 
     const voip = [];
     const sms = [];
@@ -619,7 +661,7 @@ const getAllCustomerTrackers = async (req, res) => {
       const trackerCompletionPercentage = (trackerCompletedStages / trackerTotalStages) * 100;
 
       tracker.completionPercentage = trackerCompletionPercentage.toFixed(2);
-      tracker.overallCompletion = trackerCompletionPercentage;
+      tracker.overallCompletion = trackerCompletionPercentage.toFixed(2);
 
       if (serviceName === 'VoIP') {
         voip.push(tracker);
@@ -627,7 +669,7 @@ const getAllCustomerTrackers = async (req, res) => {
         sms.push(tracker);
       }
     }
-
+    // console.log("This is SMS: ", sms)
     let assignedTrackers = [];
     let unassignedTrackers = [];
 
@@ -640,7 +682,7 @@ const getAllCustomerTrackers = async (req, res) => {
     }
 
     let users = [];
-    const reqUsers = await User.find();
+    const reqUsers = await User.find().populate('assignedTasks');
 
     for (const reqUser of reqUsers) {
       let user = {
@@ -649,12 +691,15 @@ const getAllCustomerTrackers = async (req, res) => {
         designation: reqUser.designation,
         role: reqUser.role,
         assignedTasks: reqUser.assignedTasks.length,
+        myaccounts: reqUser.assignedTasks,
+        profile: reqUser.profile
       };
       users.push(user);
+      // console.log("THIS IS MY ACCOUNTS: ", user.myaccounts)
     }
-
-    const completedPercentile = (trackers.filter(tracker => tracker.overallCompletion === 100).length / trackers.length) * 100;
-
+    // console.log("THIS IS COMPARING TRACKERID AND USER ID: ", users[0].myaccounts[0].Customer_Name)
+    const completedPercentile = (trackers.filter(tracker => tracker.overallCompletion == 100).length / trackers.length) * 100;
+    print("un Assigned: ", unassignedTrackers )
     const logs = await Log.aggregate([
       { $sort: { timestamp: -1 } },
       {
@@ -668,10 +713,13 @@ const getAllCustomerTrackers = async (req, res) => {
         },
       },
     ]);
-
+    // let isManagement = false;
+    // if (req.user.designation == 'Management'){
+    //   isManagement = true
+    // }
     let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0] ;
     let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0] 
-    // console.log("SERVER ERROR FLASH: ", req.flash('server_error'), "\nEntire FLASH: ", flash[0])
+    console.log("USERS: ", users)
     res.status(200).render('home', {
       voip,
       sms,
@@ -680,7 +728,7 @@ const getAllCustomerTrackers = async (req, res) => {
       logs: logs,
       users,
       flash: req.flash('Login-success'),
-      completionPercentage: overallCompletion.toFixed(2),
+      completionPercentage: overallCompletion,
       assignedClients,
       unassignedClients,
       completedPercentile: completedPercentile.toFixed(2),
@@ -690,10 +738,13 @@ const getAllCustomerTrackers = async (req, res) => {
       message: flash,
       isAuthenticated: req.user.isLoggedIn,
       error,
+      trackers,
+      reqUsers,
+      isManagement: false
     });
   } catch (error) {
     console.error('Error retrieving trackers:', error);
-    res.status(500).redirect('/500');
+    res.status(500).redirect('/track/home');
   }
 };
 
@@ -736,14 +787,14 @@ const updateTrackerStage = async (req, res) => {
         totalStages++;
       }
     
-      completionPercentage = (completedStages / totalStages) * 100;
-      console.log("Overall Completion: ", completionPercentage.toFixed(2));
+      completionPercentage = ((completedStages / totalStages) * 100).toFixed(2);
+      console.log("Overall Completion: ", completionPercentage);
     
 
 
       if (!tracker) {
         req.flash('tracker_404','Client not found');
-        return res.status(404).redirect('/track/tracker/'+trackerId );
+        return res.status(404).redirect('/track/home');
       }
       let stageStatus = tracker.stage.status
       tracker.stage.process_stage = newProcessStage;
@@ -764,7 +815,7 @@ const updateTrackerStage = async (req, res) => {
     } catch (error) {
       console.error('Error updating tracker stage process:', error);
       req.flash('server_error','A server error occured. Try Again');
-      res.status(500).redirect('/track/tracker/'+trackerId);    }
+      res.status(500).redirect('/track/home/');    }
 };
 
 
@@ -821,7 +872,7 @@ const getSingleTracker = async (req, res) => {
     }
     // console.log("Notes: ", users)
     let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
-    let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0];
+    let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0] || req.flash('task_already_assigned')[0] || req.flash('account_manager_assigned')[0];
     res.render('single-tracker', {
       pageTitle: tracker.Customer_Name,
       Tracker: tracker,
@@ -831,7 +882,8 @@ const getSingleTracker = async (req, res) => {
       notes,
       message: flash,
       error,
-      isAuthenticated: req.user.isLoggedIn
+      isAuthenticated: req.user.isLoggedIn,
+      isManagement: req.user.isManagement
     });
   } catch (error) {
     console.log(error)
@@ -858,11 +910,414 @@ const searchCustomerByName = async (req, res) => {
 
 
 
+
+// const Performance = require('./path/to/performanceSchema'); // Update the path to your performance schema
+
+// Function to get the sum of 'terminatedminutes' for the same day
+async function dailyMinutes() {
+  // ... Implement the dailyMinutes function as shown in the previous response ...
+  const currentDate = new Date();
+  try {
+    const sumForSameDay = await Performance.aggregate([
+      {
+        $match: {
+          date: {
+            $gte: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 0, 0, 0),
+            $lte: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 23, 59, 59),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalTerminatedMinutes: {
+            $sum: '$minutesRoutesTerminated',
+          },
+        },
+      },
+    ]);
+    return sumForSameDay.length ? sumForSameDay[0].totalTerminatedMinutes : 0;
+  } catch (error) {
+    console.error('Error while calculating daily minutes:', error);
+    throw error;
+  }
+}
+
+// Function to get the sum of 'terminatedminutes' for the entire week
+async function weeklyMinutes() {
+  const endDate = new Date(); // Current date
+  const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000); // 7 days ago
+
+  const performances = await Performance.find({
+    date: { $gte: startDate, $lte: endDate }
+  }).populate({
+    path: 'tracker',
+    match: { 'service_interest.service_name': 'VoIP' }
+  });
+
+  let totalMinutes = 0;
+  let totalASR = 0;
+  let totalACD = 0;
+  let voipPerformanceCount = 0;
+
+  performances.forEach(performance => {
+    if (performance.tracker) {
+      totalMinutes += performance.minutesRoutesTerminated;
+      totalASR += performance.asr;
+      totalACD += performance.acd;
+      voipPerformanceCount++;
+    }
+  });
+
+  const weeklyAverageASR = totalASR / voipPerformanceCount;
+  const weeklyAverageACD = totalACD / voipPerformanceCount;
+
+  return {
+    totalMinutes,
+    weeklyAverageASR,
+    weeklyAverageACD
+  };
+}
+
+
+// Function to get the sum of 'terminatedminutes' for the entire week
+async function weeklySMSCount() {
+  const endDate = new Date(); // Current date
+  const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000); // 7 days ago
+
+  const performances = await Performance.find({
+    date: { $gte: startDate, $lte: endDate }
+  }).populate({
+    path: 'tracker',
+    match: { 'service_interest.service_name': 'SMS' }
+  });
+
+  let totalSms = 0;
+  let smsPerformanceCount = 0;
+
+  performances.forEach(performance => {
+    if (performance.tracker) {
+      totalSms+= performance.totalSMS;
+      
+      smsPerformanceCount++;
+    }
+  });
+
+
+
+  return {
+    totalSms,
+   
+  };
+}
+
+async function dailySMSCount() {
+  const currentDate = new Date(); // Current date
+
+  const performances = await Performance.find({
+    date: {
+      $gte: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 0, 0, 0),
+      $lte: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 23, 59, 59)
+    }
+  }).populate({
+    path: 'tracker',
+    match: { 'service_interest.service_name': 'SMS' }
+  });
+
+  let smsCount = 0;
+  let totalSms = 0;
+  performances.forEach(performance => {
+    if (performance.tracker) {
+      totalSms+= performance.totalSMS;
+      smsCount++;
+    }
+  });
+
+  return totalSms;
+}
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>OG<<<<<<<<<<<<<<<<
+const getManagementDash = async (req, res) => {
+  try {
+    const trackers = await Tracker.find().populate('account_manager');
+
+    let totalStages = 0;
+    let completedStages = 0;
+    let assignedClients = 0;
+    let unassignedClients = 0;
+
+    for (const tracker of trackers) {
+      const serviceName = tracker.service_interest.service_name;
+
+      if (tracker.service_interest && tracker.service_interest.status === 'Complete') {
+        completedStages++;
+      }
+
+      if (tracker.Tech_info && tracker.Tech_info.status === 'Complete') {
+        completedStages++;
+      }
+
+      if (tracker.testing && tracker.testing.testing_status === 'Completed') {
+        completedStages++;
+      }
+
+      totalStages += 3;
+
+      if (tracker.account_manager) {
+        assignedClients++;
+      } else {
+        unassignedClients++;
+      }
+    }
+
+    const overallCompletion = ((completedStages / totalStages) * 100).toFixed(2);
+
+    const voip = [];
+    const sms = [];
+    const stages = ['Overall Completion', 'Service Subscription', 'Technical Info', 'Registration & Testing'];
+
+    for (const tracker of trackers) {
+      const serviceName = tracker.service_interest.service_name;
+      const trackerCompletedStages = (tracker.service_interest?.status === 'Complete' ? 1 : 0) +
+        (tracker.Tech_info?.status === 'Complete' ? 1 : 0) +
+        (tracker.testing?.testing_status === 'Completed' ? 1 : 0);
+      const trackerTotalStages = 3;
+      const trackerCompletionPercentage = (trackerCompletedStages / trackerTotalStages) * 100;
+
+      tracker.completionPercentage = trackerCompletionPercentage.toFixed(2);
+      tracker.overallCompletion = trackerCompletionPercentage.toFixed(2);
+
+      if (serviceName === 'VoIP') {
+        voip.push(tracker);
+      } else if (serviceName === 'SMS') {
+        sms.push(tracker);
+      }
+    }
+    // console.log("This is SMS: ", sms)
+    let assignedTrackers = [];
+    let unassignedTrackers = [];
+
+    for (const tracker of trackers) {
+      if (tracker.account_manager) {
+        assignedTrackers.push(tracker);
+      } else {
+        unassignedTrackers.push(tracker);
+      }
+    }
+
+    const completedPercentile = (trackers.filter(tracker => tracker.overallCompletion == 100).length / trackers.length) * 100;
+    print("COMPLETED PERCENTILE:  ", completedPercentile )
+    // Fetch data from the Performance schema
+    const performances = await Performance.find().populate('tracker');
+    // console.log("PERFORMANCES: ", performances)
+    minutesGraph = []
+   for (i in performances){
+    let performance = [
+      performances[i].tracker.Customer_Name,
+      performances[i].minutesRoutesTerminated
+      
+    ]
+    minutesGraph.push(performance)
+   }
+
+  //  console.log("THIS IS THE CARRIER AND THE PERFORMANCE: ", minutesGraph)
+    // Calculate average ASR, ACD, and weekly minutes
+    let carrier = ''
+    let totalASR = 0;
+    let totalACD = 0;
+    let totalWeeklyMinutes = 0;
+
+    performances.forEach(performance => {
+      totalASR += performance.asr;
+      totalACD += performance.acd;
+      totalWeeklyMinutes += performance.minutesRoutesTerminated;
+    });
+
+
+     // Call the dailyMinutes and weeklyMinutes functions
+     const dailyMinutesSum = await dailyMinutes();
+     const weeklyMinutesSum = (await weeklyMinutes()).totalMinutes;
+     const weeklyResult = await weeklyMinutes();
+     const weeklyAverageASR = weeklyResult.weeklyAverageASR;
+     const weeklyAverageACD = weeklyResult.weeklyAverageACD;
+
+      const weeklySMS = await weeklySMSCount()
+      const dailySMS = await dailySMSCount()
+
+    //  console.log("this is your Daily SMS data: ",dailySMS )
+    let users = [];
+    const reqUsers = await User.find().populate('assignedTasks');
+
+    for (const reqUser of reqUsers) {
+      let user = {
+        name: reqUser.name,
+        id: reqUser._id,
+        username: reqUser.username,
+        designation: reqUser.designation,
+        role: reqUser.role,
+        assignedTasks: reqUser.assignedTasks.length,
+        myaccounts: reqUser.assignedTasks,
+        profile: reqUser.profile
+      };
+      users.push(user);
+      console.log("COMPLETION PERCENTILE: ",overallCompletion )
+    }
+    // console.log("GET YOUR WEEKLY SUM: ", weeklyMinutesSum)
+    // Render the management dashboard view
+    res.status(200).render('management-dashboard', {
+      voip,
+      sms,
+      stages,
+      pageTitle: "Management Dashboard",
+      completionPercentage: overallCompletion,
+      assignedClients,
+      unassignedClients,
+      completedPercentile: completedPercentile.toFixed(2),
+      incompletePercentile: (100 - completedPercentile).toFixed(2),
+      assignedTrackers,
+      unassignedTrackers,
+      isManagement: true,
+      isAuthenticated: req.user.isLoggedIn,
+      message: null,
+      error: null,
+      mytasks: [],
+      userNotes:[],
+      users,
+      dailyMinutesSum: dailyMinutesSum.toLocaleString("en-US"),
+      weeklyMinutesSum: weeklyMinutesSum.toLocaleString("en-US"),
+      averageWeeklyMinutes: weeklyResult,
+      weeklyAverageASR: weeklyAverageASR.toFixed(2),
+      weeklyAverageACD: weeklyAverageACD.toFixed(2),
+      weeklyResult, 
+      weeklySMS: weeklySMS.totalSms.toLocaleString("en-US"),
+      dailySMS: dailySMS.toLocaleString("en-US"),
+      
+    });
+  } catch (error) {
+    console.error('Error retrieving trackers:', error);
+    res.status(500).redirect('/500');
+  }
+};
+// >>>>>>>>>>>>>>>>>>>>>>OG END <<<<<<<<<<<<<<<<<
+
+
+const addPerformance = async (req, res) => {
+  try {
+      const { trackerId, asr, acd, minutesRoutesTerminated, smsSent } = req.body;
+
+      // Get the current date in 'YYYY-MM-DD' format
+      const currentDate = new Date().toISOString().slice(0, 10);
+
+      // Check if a performance record with the same trackerId and current date already exists
+      let existingPerformance = await Performance.findOne({
+          tracker: trackerId,
+          date: { $gte: new Date(currentDate), $lt: new Date(currentDate).setDate(new Date(currentDate).getDate() + 1) },
+      });
+
+      print("Existing: ")
+      if (!existingPerformance) {
+          // Create a new performance record using the 'Performance' model
+          existingPerformance = new Performance({
+              tracker: trackerId,
+              date: currentDate,
+          });
+      }
+
+      // Update the performance record based on the request body
+      if (!req.body.sms) {
+          existingPerformance.asr = asr;
+          existingPerformance.acd = acd;
+          existingPerformance.minutesRoutesTerminated = minutesRoutesTerminated;
+      } else if (req.body.sms) {
+          existingPerformance.totalSMS = smsSent;
+      }
+
+      // Save the performance record to the database
+      const savedPerformance = await existingPerformance.save();
+      console.log("Performance Saved/Updated: ", savedPerformance);
+      req.flash('server_error', "Today's Carrier minutes are already uploaded")
+      res.status(201).redirect('/client/' + trackerId);
+  } catch (error) {
+      console.error('Error creating/updating performance:', error);
+      res.status(500).json({ error: 'Error creating/updating performance' });
+  }
+};
+
+
+const generateDummyPerformanceData = async () => {
+  try {
+    const dummyData = [
+      {
+        tracker: '6123456789abcdef12345678', // Replace with an existing tracker ID
+        asr: 0.85,
+        acd: 120,
+        minutesRoutesTerminated: [50, 60, 70],
+      },
+      {
+        tracker: 'abcdef123456789012345678', // Replace with an existing tracker ID
+        asr: 0.78,
+        acd: 100,
+        minutesRoutesTerminated: [40, 55, 80],
+      },
+      {
+        tracker: '789012345678abcdef123456', // Replace with an existing tracker ID
+        asr: 0.92,
+        acd: 150,
+        minutesRoutesTerminated: [60, 70, 85],
+      },
+      {
+        tracker: '456789012345678abcdef123', // Replace with an existing tracker ID
+        asr: 0.67,
+        acd: 110,
+        minutesRoutesTerminated: [35, 45, 65],
+      },
+      {
+        tracker: '23456789abcdef1234567890', // Replace with an existing tracker ID
+        asr: 0.76,
+        acd: 130,
+        minutesRoutesTerminated: [70, 80, 90],
+      },
+    ];
+
+    const performanceData = await Performance.insertMany(dummyData);
+    console.log('Dummy performance data created:', performanceData);
+  } catch (error) {
+    console.error('Error generating dummy performance data:', error);
+  }
+};
+
+// Call the method to generate dummy data
+// generateDummyPerformanceData();
+
+const getPerformances = async (req, res) => {
+  try {
+    const allPerformances = await Performance.find().populate('tracker');
+   let minutesGraph = []
+    for (i in allPerformances){
+     let performance = {
+       carrier: allPerformances[i].tracker.Customer_Name,
+       minutes: allPerformances[i].minutesRoutesTerminated
+       
+    }
+     minutesGraph.push(performance)
+    }
+    console.log("find your stats: ", minutesGraph)
+    res.status(200).json(minutesGraph);
+  } catch (error) {
+    // console.error('Error retrieving all performances:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
     
     
 module.exports = 
 { addCustomerTracker, 
     updateTracker, 
+    updateCustomerTracker,
     getAllCustomerTrackers,
     updateAddress,
     getSingleTracker,
@@ -876,7 +1331,10 @@ module.exports =
     updateDocument,
     grantDocumentPermission,
     assignTaskToUser,
-    addNote
+    addNote,
+    getManagementDash,
+    getPerformances,
+    addPerformance
     
 };
 

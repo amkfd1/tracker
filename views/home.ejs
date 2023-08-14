@@ -28,10 +28,10 @@
 								<!-- End of showing all messages -->
 								<h5 class="card-title mb-3">VoIP SERVICE</h5>
 		
-									<section class="mt-3 mb-5">
-										<div class="table-responsive card-body-alt">
+									<section class="">
+										<div class="table-responsive ">
 											<table class="table table-striped " id="voipTable">
-												<thead class="border-info">
+												<thead class="border-info text-center">
 													<tr>
 														<th>
 															Company
@@ -39,9 +39,7 @@
 														<th>
 															Stage
 														</th>
-														<th>
-															
-														</th>
+														
 														<th>
 															Status
 														</th>
@@ -49,7 +47,7 @@
 															Service
 														</th>
 														<th>
-
+															A.M.
 														</th>
 													</tr>
 												</thead>
@@ -83,37 +81,7 @@
 																
 		
 															</td>
-															<td>
-																<%if (voip[i].stage.process_stage === "Overall Completion") {%>
-																	<h6 class="
-																	<%if (voip[i].completionPercentage <40 ){%> text-danger  %>
-																	<%}else if (voip[i].completionPercentage > 30 && voip[i].completionPercentage <= 60) {%>
-																		 text-warning																
-																	<%}else %> text-success ">
-																			
-																		<i data-feather="percent"></i> 
-																		<%= voip[i].completionPercentage%></h6>
-																<% }else {%>
-																	<h6 class="
-																	<%if (voip[i].stage.status == 'NA' || voip[i].stage.status == '' ){%> text-danger  %>
-																	<%}else if (voip[i].stage.status == 'Incomplete' || voip[i].stage.status == 'Initiated') {%>
-																		 text-warning
-																	<%}else if (voip[i].stage.status == 'Ongoing' ) {%>	
-																		text-warning															
-																	<%}else %> text-success ">
-																			<%if (voip[i].stage.status == "Complete" || voip[i].stage.status == "Completed") { %>
-																				<i data-feather="check"></i>
-																				<%= voip[i].stage.status%>
-																			<%} else if(voip[i].stage.status == "Incomplete" || voip[i].stage.status == "Ongoing" || voip[i].stage.status == "Initiated"){%>
-																				<i data-feather="minus"></i> 
-																				<%= voip[i].stage.status%>
-																			<%} else {%>
-																				<i data-feather="percent"></i> 
-																				<%= voip[i].stage.status%>
-																			</h6>
-																			<% } %>
-																<%}%>
-															</td>
+															
 															<td>
 																<div class="progress">
 																	<% if (voip[i].stage.status === '' || voip[i].stage.status === 'NA'){%>
@@ -141,7 +109,7 @@
 																		<%if (voip[i].completionPercentage <40 ){%> bg-danger  %>
 																		<%}else if (voip[i].completionPercentage > 30 && voip[i].completionPercentage <= 60) {%>
 																			 bg-warning																
-																		<%}else %> bg-success " role="progressbar"  aria-valuenow="<%= voip[i].completionPercentage%>" aria-valuemin="0" aria-valuemax="100">
+																		<%}else %> bg-success " role="progressbar"  style="width: 100%;"  aria-valuenow="<%= voip[i].completionPercentage%>" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
 																			<%= voip[i].completionPercentage%>
 																		
 																		</div>
@@ -152,75 +120,39 @@
 																<%= voip[i].service_interest.service_name%>
 		
 															</td>
+															
 															<td>
-																<a href="" data-toggle="modal" data-target="#assign<%= voip[i]._id%>" data-whatever="">
-																	<i data-feather="share-2"></i>
-																</a>
-																
+																<% if (voip[i].account_manager) {%>
+
+																	<%=voip[i].account_manager.name%>
+																<% } else { %>
+																	NA
+																<% } %>
+
 															</td>
+																
+															
 														</tr>
-														<!-- Assign account manager  -->
-														<div class="modal fade " id="assign<%= voip[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-															<div  style="">
-																<div class="modal-dialog " >
-																<div class="modal-content ">
-																	<div class="modal-header">
-																	<h4 class="modal-title" id="exampleModalLabel">Assign Client to Account Manager <code><%=voip[i]._Customer_Name %> </code></h4>
-																	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																		<span aria-hidden="true">&times;</span>
-																	</button>
-																	</div>
-																	<div class="modal-body">
-																	<form method="post" action="/track/assign/account-manager/<%= voip[i]._id%>" >
-																		<div class="form-group row ">
-																			<div class="col">
-																				<label>Title:</label>
-																				<input disabled value="<%=voip[i].Customer_Name %>" class="form-control mb-4 mb-md-0" name="documentTitle">
-																			</div>
-																			<div class="col">
-																				<label>Assign Account Manager: </label>
-																				<select name="userId" class="form-control form-control-sm mb-3">
-																					<option  selected=""></option>
-																					<%for (i in users) {%>
-																						<option value="<%= users[i].id%>"><%= users[i].name%></option>
-																					<% } %>				
-																				</select>
-																			</div>
-																												
-																		</div>
-																		</div>
-																		
-																		<div class="modal-footer moveModal">
-																			<button type="submit" class="btn btn-info">Assign</button>
-																			</div>
-																	</form>
-																	</div>
-																	
-																</div>
-																</div>
-															</div>
+													
 													<% } %>
 												</tbody>
 											</table>
 										</div>		
 									</section>
 									
-			
-			
-			
-									<div class="mb-2 mt-4 border-bottom ">
-												
-										
-										<div class="mt-2 border-top"></div>
+									<div class="border-top my-5">
+										<div class="border-bottom"></div>
 									</div>
 			
+			
+									
 									<!--SMS Section Table-->
-									<section class="mt-5 mb-2">
-										<h5 class="card-title MT-5 mb-3">SMS SERVICE</h5>
+									<section class="">
+										<h5 class="card-title ">SMS SERVICE</h5>
 		
-										<div class="table-responsive card-body-alt">
+										<div class="table-responsive ">
 											<table class="table table-striped" id="smsTable">
-												<thead>
+												<thead class="text-center">
 													<tr>
 														<th>
 															Company
@@ -228,9 +160,7 @@
 														<th>
 															Stage
 														</th>
-														<th>
-		
-														</th>
+														
 														<th>
 															Status
 														</th>
@@ -238,7 +168,7 @@
 															Service
 														</th>
 														<th>
-
+															A.M.
 														</th>
 													</tr>
 												</thead>
@@ -272,37 +202,7 @@
 																
 		
 															</td>
-															<td>
-																<%if (sms[i].stage.process_stage === "Overall Completion") {%>
-																	<h6 class="
-																	<%if (sms[i].completionPercentage <40 ){%> text-danger  %>
-																	<%}else if (sms[i].completionPercentage > 30 && sms[i].completionPercentage <= 60) {%>
-																		 text-warning																
-																	<%}else %> text-success ">
-																			
-																		<i data-feather="percent"></i> 
-																		<%= sms[i].completionPercentage%></h6>
-																<% }else {%>
-																	<h6 class="
-																		<%if (sms[i].stage.status == 'NA' || sms[i].stage.status == '' ){%> text-danger  %>
-																		<%}else if (sms[i].stage.status == 'Incomplete' || sms[i].stage.status == 'Initiated') {%>
-																			text-warning
-																		<%}else if (sms[i].stage.status == 'Ongoing' ) {%>	
-																			text-warning															
-																		<%}else %> text-success ">
-																		<%if (sms[i].stage.status == "Complete" || sms[i].stage.status == "Completed") { %>
-																			<i data-feather="check"></i>
-																			<%= sms[i].stage.status%>
-																		<%} else if(sms[i].stage.status == "Incomplete" || sms[i].stage.status == "Ongoing"|| sms[i].stage.status == "Initiated"){%>
-																			<i data-feather="minus"></i> 
-																			<%= sms[i].stage.status%>
-																		<%} else {%>
-																			<i data-feather="percent"></i> 
-																			<%= sms[i].stage.status%>
-																		</h6>
-																		<% } %>
-																<%}%>
-															</td>
+															
 															<td>
 																<div class="progress">
 																	<% if (sms[i].stage.status === '' || sms[i].stage.status === 'NA'){%>
@@ -330,9 +230,9 @@
 																		<%if (sms[i].completionPercentage <40 ){%> bg-danger  %>
 																		<%}else if (sms[i].completionPercentage > 30 && sms[i].completionPercentage <= 60) {%>
 																			 bg-warning																
-																		<%}else %> bg-success " role="progressbar"  aria-valuenow="<%= sms[i].completionPercentage%>" aria-valuemin="0" aria-valuemax="100">
+																		<%}else %> bg-success " role="progressbar"  style="width: 100%;"  aria-valuenow="<%= sms[i].completionPercentage%>" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
 																			<%= sms[i].completionPercentage%>
-																		
+																	
 																		</div>
 																	<% } %>
 																</div>
@@ -342,9 +242,12 @@
 		
 															</td>
 															<td>
-																<a href="" data-toggle="modal" data-target="#assign<%= sms[i]._id%>" data-whatever="">
-																	<i data-feather="share-2"></i>
-																</a>
+																<% if (sms[i].account_manager) {%>
+
+																	<%=sms[i].account_manager.name%>
+																<% } else { %>
+																	NA
+																<% } %>
 															</td>
 														</tr>
 														<!-- Assign account manager  -->
@@ -412,7 +315,7 @@
 												
 												<span class="float-right">
 													<a href="#" data-toggle="modal" data-target=".assigned">
-														<i class="appIcons text-muted" data-feather="external-link" ></i>
+														<i class="appIcons " data-feather="maximize-2" ></i>
 													</a>
 												</span>
 												<a href="#" data-toggle="modal" data-target=".assigned">
@@ -424,7 +327,7 @@
 												</label>
 												<span class="float-right">
 													<a href="#" data-toggle="modal" data-target=".unassigned">
-														<i class="appIcons text-muted" data-feather="external-link" ></i>
+														<i class="appIcons " data-feather="maximize-2" ></i>
 													</a>
 												</span>
 												
@@ -440,17 +343,17 @@
 											<div class="col-md-6">
 												<label class="text-muted">Complete:
 												</label>
-												<span class="float-right">
+												<!-- <span class="float-right">
 													<i class="appIcons text-muted" data-feather="external-link" ></i>
-												</span>
-												<a><h5 class="text-success"><%= completedPercentile%>%</h5></a>
+												</span> -->
+												<a><h5 class="text-success"><%= completedPercentile%></h5></a>
 											</div>
 											<div class="col-md-6">
 												<label class="text-muted">Incomplete:
 												</label>
-												<span class="float-right">
+												<!-- <span class="float-right">
 													<i class="appIcons text-muted" data-feather="external-link" ></i>
-												</span>
+												</span> -->
 												<a><h5 class="text-danger"><%= incompletePercentile%>%</h5></a>
 												
 											</div>
@@ -462,56 +365,35 @@
 							<!-- END OF COL 2 TOP CARD -->
 							<!-- User tables -->
 							<!-- USER TABLE -->
-							<section class="mt-3 mb-5">
-								<h4 class="card-title">
+							<section class="mx-3 ">
+								<h4 class="card-title mt-5">
 									USERS
 									<a href="#" class="float-right mx-3" data-toggle="modal" data-target=".bd-example-modal-sm">
 										<i data-feather="user-plus"></i>
 									</a>
 								</h4>
-								<div class="table-responsive card-body-hor">
-									<table class="table table-striped " > 
-										<thead class="border-info">
-											<tr>
-												<th>
-													User
-												</th>
-												<th>
-													Role
-												</th>
-												<th>
-													Assigned
-												</th>
-												
-												
-												
-											</tr>
-										</thead>
-										<tbody>
-											<% for (i in users) {%>
-												<tr>
-													<td>
-														<%= users[i].name%>
-													</td>
-
-													<td>
-														<%= users[i].role%>
-													</td>
-
-													<td>
-														<%= users[i].assignedTasks%>
-													</td>
-												</tr>
-											<% } %>
-											
-										</tbody>
-									</table>
-								</div>		
+								<div class="mt-3 card-body-hor" style="max-height: 300px; width: 100%;">
+									<%for (i in users) {%>
+										<a href="#" class="d-flex align-items-center border-bottom " data-toggle="modal" data-target="#records<%=[i]%>">
+											<div class="mr-3">
+											  <img src="https://via.placeholder.com/35x35" class="rounded-circle wd-35" alt="user">
+											</div>
+											<div class="w-100">
+											  <div class="d-flex justify-content-between">
+												<h6 class="text-body my-2"><%= users[i].name%></h6>
+												<p class="my-2 px-2 <%if (users[i].role == 'Admin') {%>text-success<%} else {%> text-info tx-12 <%}%>"><%= users[i].role%></p>
+											  </div>
+											  <p class="text-muted tx-13"><%= users[i].assignedTasks%> Assigned Accounts</p>
+											</div>
+										  </a>
+										  <%- include('partials/records') %>
+									  <% } %>
+								</div>
 							</section>
 
 							<!-- User Logs Section -->
-							<section class="mt-3 mb-5 border-light">
-								<h4 class="card-title">
+							<section class="mx-4 border-light">
+								<h4 class="card-title mt-5">
 									LOGS
 									<a href="#" class="float-right mx-3" data-toggle="modal" data-target=".bd-example-modal-lg">
 										<i data-feather="external-link"></i>
@@ -702,14 +584,16 @@
 					</div>	
 				</div>
 				<div class="form-group">
-				<label for="exampleInputEmail1">Designation:</label>
-				<select name="designation" class="form-control form-control-sm mb-3">
-					<option  selected=""></option>
-					<option  value="Technical">Technical</option>
-					<option  value="Legal">Legal</option>
-					<option  value="Support">Support</option>
+					<label for="exampleInputEmail1">Designation:</label>
+					<select name="designation" class="form-control form-control-sm mb-3">
+						<option  selected=""></option>
+						<option  value="Technical">Technical</option>
+						<option  value="Legal">Legal</option>
+						<option  value="Support">Support</option>
+						<option  value="Management">Management</option>
 
-				</select>				</div>
+					</select>		
+				</div>
 				
 				<div class="form-check form-check-flat form-check-primary">
 				</div>
@@ -750,7 +634,7 @@
 						</td>
 
 						<td>
-							<%= assignedTrackers[i].account_manager%>
+							<%= assignedTrackers[i].account_manager.name%>
 						</td>
 
 						
@@ -788,7 +672,23 @@
 						</td>
 
 						<td>
-							<%= unassignedTrackers[i].account_manager%>
+							<div class="dropdown">
+								<button class="btn btn-dark bg-transparent dropdown-toggle" type="button" id="dropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									
+								</button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
+									<%for (j in users) {%>
+										<form action="/track/assign/account-manager/<%= unassignedTrackers[i]._id%>" method="post">
+											<button type="submit"  class="dropdown-item" style="border:none;">
+												<%= users[j].name%>
+											</button>
+											<input name="userId" type="hidden" value="<%=users[j].id%>">
+										</form>
+										
+									<% } %>	
+								</div>
+							</div>
+							
 						</td>
 
 						
