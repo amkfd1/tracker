@@ -310,6 +310,7 @@ const updateTesting = async (req, res) => {
         .populate('documents')
         .populate('alternative_contact')
         .populate('notes');
+      const Notes = await Note.find({tracker:id}).populate('user')
   
       if (!tracker) {
         req.flash('tracker_404', 'Client not found!')
@@ -364,7 +365,6 @@ const updateTesting = async (req, res) => {
       }
   
       let role = req.user && req.user.role;
-      const notes = tracker.notes;
   
       let users = [] 
       const reqUsers = await User.find();
@@ -376,7 +376,17 @@ const updateTesting = async (req, res) => {
         }
         users.push(user)
       }
-
+      const notes = [];
+      for (const note of Notes) {
+        let message = {
+          createdAt: (note.createdAt).toISOString().slice(0, 19).replace('T', ' '),
+          id: note._id,
+          user: note.user.name,
+          note: note.note,
+        };
+        notes.push(message)
+    }
+     print("THIS IS TRACKER NOTES: ", notes)
       
       let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
       let error = req.flash('tracker_404' )[0] || req.flash('unauthorized')[0] || req.flash('server_error')[0]; 

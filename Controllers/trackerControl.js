@@ -138,7 +138,57 @@ print("UPDATING FUNCTION HERE, FILE;: ", req.user._id)
     res.status(500).redirect('/track/tracker/' + customerRefId)  
   }
   
+};
+
+// **************** Start document delete function 
+
+async function deleteDocument(id, userId) {
+    try {
+        const document = await Document.findById(id);
+
+        if (!document) {
+            throw new Error('Document not found');
+        }
+
+        // Check if the user is the uploader or has "Read_Update" permission in the tags
+        const isUploader = document.userId.equals(userId);
+        const hasPermission = document.tags.some(tag => tag.user.equals(userId) && tag.permission === 'Read_Update');
+
+        if (!isUploader && !hasPermission) {
+            throw new Error('Unauthorized');
+        }
+
+        // Delete the document file from the local folder
+        fs.unlink(document.documentPath, async (err) => {
+            if (err) {
+                throw err;
+            }
+
+            console.log('Deleted file successfully.');
+
+            // Remove the document from the database
+            await Document.findByIdAndDelete(id);
+        });
+    } catch (error) {
+        throw error;
+    }
 }
+
+// Usage
+async function deleteAndUpdateDocument(req, res) {
+    const { id, carrierId, userId } = req.params;
+    // const userId = req.user._id;
+print("Delete files: ", req.params);
+    try {
+        // await deleteDocument(id, userId);
+        // Perform any additional actions or redirects here
+        res.redirect('/track/tracker/'+carrierId)
+    } catch (error) {
+        console.error(error);
+        // Handle error, possibly show a flash message and redirect
+    }
+};
+// *******************End of Delete document
 
 
 // Grant Document Permission
@@ -830,7 +880,7 @@ const getSingleTracker = async (req, res) => {
   // print('GET SOINGLE TRACKERiD ',id)
   try {
     const tracker = await Tracker.findById(id).populate('documents').populate('alternative_contact').populate('notes');
-    
+    const Notes = await Note.find({tracker:id}).populate('user')
     if (!tracker) {
       req.flash('tracker_404', 'Client not found. Try Again.')
       return res.status(404).redirect('/track/home');
@@ -850,18 +900,28 @@ const getSingleTracker = async (req, res) => {
     const documents = tracker.documents.map((doc) => {
       const documentPath = doc.documentPath;
       const documentTitle = doc.documentTitle;
-      const documentId = doc._id
+      const documentId = doc._id;
+      const userId = doc.userId;
       let extension = documentPath.split('.').pop().toLowerCase();
       // if(!'undefined') {
       //   extension = documentPath.split('.').pop().toLowerCase();
       // }
       const documentType = documentTypes[extension] || 'none';
       
-      return { documentPath, documentType, documentTitle, documentId };
+      return { documentPath, documentType, documentTitle, documentId, userId };
     });
 
-    const notes = tracker.notes;
-     
+    const notes = [];
+    for (const note of Notes) {
+      let message = {
+        createdAt: (note.createdAt).toISOString().slice(0, 19).replace('T', ' '),
+        id: note._id,
+        user: note.user.name,
+        note: note.note,
+      };
+      notes.push(message)
+    }
+     print("THIS IS TRACKER NOTES: ", notes)
     let users = [];
     const reqUsers = await User.find();
 
@@ -1377,7 +1437,8 @@ module.exports =
     getManagementDash,
     getPerformances,
     addPerformance,
-    updateUser
+    updateUser,
+    deleteAndUpdateDocument
     
 };
 

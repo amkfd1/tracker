@@ -43,6 +43,7 @@ router.get('/search', customerTrackerController.searchCustomerByName);
 // router.get('/openpdf', customerTrackerController.openPDF);
 
 
+
 // Get all customer trackers
 router.get('/tracker/:id', isAdmin, customerTrackerController.getSingleTracker);
 
@@ -87,6 +88,8 @@ router.post('/upload/update/:id', isAuth, upload.single('document'), customerTra
 
 router.post('/document/send/:id', isAuth, customerTrackerController.grantDocumentPermission);
 router.post('/assign/account-manager/:id', isAdmin, customerTrackerController.assignTaskToUser);
+
+router.get('/delete-document/:id/:carrierId/:userId', isAdmin, customerTrackerController.deleteAndUpdateDocument);
 
 
 router.post('/document/grant-access/', isAuth, customerTrackerController.grantDocumentPermission);

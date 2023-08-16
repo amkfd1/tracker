@@ -54,7 +54,7 @@
                                 <div class="col-md-4">   
                                     <!--  -->
                                     <div class="card bg-dark card-body-hor"  style="height: 10rem; border-radius: 20px;">
-                                      <label class="text-muted ml-2 mt-2">Traffic Stats:
+                                      <label class="text-muted ml-2 mt-2">VoIP Stats:
                                       </label>
                                       <div class="row">
                                         <div class="col mx-1">
@@ -87,10 +87,10 @@
                                         <li class="list-group-item bg-dark">
                                             <div class="row">
                                                 <div class="col-md-6 card bg-transparent">
-                                                    <label class="text-muted">Assigned:
+                                                    <label class="text-muted">TASKS:
                                                         <span class="float-right">
                                                             <a href="#" data-toggle="modal" data-target=".myClients">
-                                                                <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                                <i class="appIcons text-muted" data-feather="maximize-2" ></i>
                                                         
                                                             </a>
                                                         </span>
@@ -100,15 +100,15 @@
                                                     <h5 class="text-info"><%= assignedTrackers.length %></h5>
                                                 </div>
                                                 <div class="col-md-6 card bg-transparent">
-                                                    <label class="text-muted">Un-Assigned:
+                                                    <label class="text-muted">USERS:
                                                         <span class="float-right">
                                                             <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg">
-                                                                 <i class="appIcons text-muted" data-feather="external-link" ></i>
+                                                                 <i class="appIcons text-muted" data-feather="maximize-2" ></i>
                                                              </a>
                                                          </span>
                                                     </label>
                                                     
-                                                    <h5 class="text-warning"><%= unassignedTrackers.length%></h5>
+                                                    <h5 class="text-warning"><%= users.length%></h5>
                                                 </div>
                                             </div>						
                                         </li>
@@ -175,32 +175,7 @@
                                 </div>
                           </div>
                           <div class="col-md-5"> <!-- Users table -->
-                              <div class="card-body-alt" style="max-height: 80rem;">
-                              <div class="card-body" >
-                                  <div class="d-flex justify-content-between align-items-baseline mb-2">
-                                    <h6 class="card-title mb-0">Users</h6>
-                                   
-                                  </div>
-                                  <div class="d-flex flex-column mt-3" >
-                                   
-                                    <%for (i in users) {%>
-                                      <a href="#" class="d-flex align-items-center border-bottom pb-3" data-toggle="modal" data-target="#records<%=[i]%>">
-                                          <div class="mr-3">
-                                            <img src="https://via.placeholder.com/35x35" class="rounded-circle wd-35" alt="user">
-                                          </div>
-                                          <div class="w-100">
-                                            <div class="d-flex justify-content-between">
-                                              <h6 class="text-body my-2"><%= users[i].name%></h6>
-                                              <p class="my-2 <%if (users[i].role == 'Admin') {%>text-success<%} else {%> text-info tx-12 <%}%>"><%= users[i].role%></p>
-                                            </div>
-                                            <p class="text-muted tx-13">Has <%= users[i].assignedTasks%> Assigned Accounts</p>
-                                          </div>
-                                        </a>
-                                        <%- include('partials/records') %>
-                                    <% } %>
-                                  </div>
-                                </div>
-                              </div>
+                              
                           </div>
                       </div>
 					</div>
@@ -215,41 +190,32 @@
 			<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-lg">
 				  <div class="modal-content card-body-alt">
-					<table class="table table-striped " >
-						<thead class="border-info">
-							<tr>
-								<th>
-									Client
-								</th>
-								<th>
-									Note
-								</th>
-								<th>
-									Date
-								</th>
-								
-								
-							</tr>
-						</thead>
-						<tbody>
-							<% for (i in userNotes) {%>
-								<tr>
-									<td>
-										<%= userNotes[i].tracker.Customer_Name%>
-									</td>
-
-									<td>
-										<%= userNotes[i].note%>
-									</td>
-
-									<td>
-										<%= userNotes[i].createdAt%>
-									</td>
-								</tr>
-							<% } %>
-							
-						</tbody>
-					</table>
+            <div class="card-body-alt" style="max-height: 80rem;">
+              <div class="card-body" >
+                  <div class="d-flex justify-content-between align-items-baseline mb-2">
+                    <h6 class="card-title mb-0">Users</h6>
+                   
+                  </div>
+                  <div class="d-flex flex-column mt-3" >
+                   
+                    <%for (i in users) {%>
+                      <a href="#" class="d-flex align-items-center border-bottom pb-3" data-toggle="modal" data-target="#records<%=[i]%>">
+                          <div class="mr-3">
+                            <img src="https://via.placeholder.com/35x35" class="rounded-circle wd-35" alt="user">
+                          </div>
+                          <div class="w-100">
+                            <div class="d-flex justify-content-between">
+                              <h6 class="text-body my-2"><%= users[i].name%></h6>
+                              <p class="my-2 <%if (users[i].role == 'Admin') {%>text-success<%} else {%> text-info tx-12 <%}%>"><%= users[i].role%></p>
+                            </div>
+                            <p class="text-muted tx-13">Has <%= users[i].assignedTasks%> Assigned Accounts</p>
+                          </div>
+                        </a>
+                        <%- include('partials/records') %>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
 				  </div>
 				</div>
 			  </div>

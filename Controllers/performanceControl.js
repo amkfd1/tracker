@@ -208,7 +208,7 @@ const getMonthlyPerformances = async (req, res) => {
 //   };
 
 const addPerformanceAdmin = async (req, res) => {
-  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent } = req.body;
+  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent, date } = req.body;
 
   try {
 
@@ -218,7 +218,7 @@ const addPerformanceAdmin = async (req, res) => {
       // Check if a performance record with the same trackerId and current date already exists
       let existingPerformance = await Performance.findOne({
           tracker: trackerId,
-          date: { $gte: new Date(currentDate), $lt: new Date(currentDate).setDate(new Date(currentDate).getDate() + 1) },
+          date: { $gte: new Date(date), $lt: new Date(date).setDate(new Date(date).getDate() + 1) },
       });
 
       // print("Existing: ")
@@ -226,7 +226,7 @@ const addPerformanceAdmin = async (req, res) => {
           // Create a new performance record using the 'Performance' model
           existingPerformance = new Performance({
               tracker: trackerId,
-              date: currentDate,
+              date,
           });
       }
 
@@ -258,17 +258,17 @@ const addPerformanceAdmin = async (req, res) => {
 
 
 const addPerformanceStaff = async (req, res) => {
-  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent } = req.body;
+  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent, date } = req.body;
 
   try {
 
       // Get the current date in 'YYYY-MM-DD' format
-      const currentDate = new Date().toISOString().slice(0, 10);
+      // const currentDate = new Date().toISOString().slice(0, 10);
 
       // Check if a performance record with the same trackerId and current date already exists
       let existingPerformance = await Performance.findOne({
           tracker: trackerId,
-          date: { $gte: new Date(currentDate), $lt: new Date(currentDate).setDate(new Date(currentDate).getDate() + 1) },
+          date: { $gte: new Date(date), $lt: new Date(date).setDate(new Date(date).getDate() + 1) },
       });
 
       // print("Existing: ")
@@ -276,7 +276,7 @@ const addPerformanceStaff = async (req, res) => {
           // Create a new performance record using the 'Performance' model
           existingPerformance = new Performance({
               tracker: trackerId,
-              date: currentDate,
+              date: date,
           });
       }
 
