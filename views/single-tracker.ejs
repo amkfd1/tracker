@@ -273,11 +273,14 @@
 									<div class="modal-dialog modal-dialog-centered" role="document">
 									<div class="modal-content">
 										<div class="page-content d-flex justify-content-center align-items-cente modal-header">
-										<h5 class="modal-title text-center" id="exampleModalCenterTitle">Are you sure?</h5>
+										<h5 class="modal-title text-center" id="exampleModalCenterTitle">Are you sure you want to delete <span class="text-danger"><%= documents[i].documentTitle%></span></h5>
 										</div>
 										<div class="page-content d-flex justify-content-center align-items-center">
 										<button type="button" class="btn btn-secondary mx-2" data-dismiss="modal">Close</button>
-										<a href="/track/delete-document/<%= documents[i].documentId%>/<%= Tracker._id%>/<%= documents[i].userId%>"><button type="button" class="btn btn-danger mx-2">Delete</button></a>
+										<a href="/track/delete-document/<%= documents[i].documentId%>/<%= Tracker._id%>/<%= documents[i].userId%>">
+											
+											<button type="button" class="btn btn-danger mx-2">
+												<i data-feather="trash"></i>Delete</button></a>
 										</div>
 									</div>
 									</div>
