@@ -55,14 +55,14 @@
                                                     <h5 class="text-info"><%= mytasks.length %></h5>
                                                 </div>
                                                 <div class="col-md-6 ">
-                                                    <label class="text-muted">Notes:
+                                                    <label class="text-muted">Tasks:
                                                     </label>
                                                     <span class="float-right">
                                                        <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg">
                                                             <i class="appIcons text-muted" data-feather="maximize-2" ></i>
                                                         </a>
                                                     </span>
-                                                        <h5 class="text-warning"><%= userNotes.length%></h5>
+                                                        <h5 class="text-warning"><%= tasks.length%></h5>
                                                 </div>
                                             </div>						
                                         </li>
@@ -229,31 +229,38 @@
 						<thead class="border-info">
 							<tr>
 								<th>
-									Client
+								    Task
 								</th>
 								<th>
-									Note
+									Assigned By
 								</th>
 								<th>
-									Date
+									Status
 								</th>
-								
+								<th>
+									Deadline
+								</th>
 								
 							</tr>
 						</thead>
 						<tbody>
-							<% for (i in userNotes) {%>
+							<% for (i in tasks) {%>
 								<tr>
 									<td>
-										<%= userNotes[i].tracker.Customer_Name%>
+                                        <a href="/tasks/task/<%= tasks[i]._id%>">
+                                            <%= tasks[i].title%>
+                                        </a>	
 									</td>
 
 									<td>
-										<%= userNotes[i].note%>
+										<%= tasks[i].assignedBy%>
 									</td>
 
 									<td>
-										<%= userNotes[i].createdAt%>
+										<%= tasks[i].status%>
+									</td>
+                                    <td>
+										<%= tasks[i].deadline%>
 									</td>
 								</tr>
 							<% } %>

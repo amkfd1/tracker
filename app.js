@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const trackerRoutes = require('./Routes/trackerRoutes');
 const perfRoutes = require('./Routes/performanceRoute');
+const tasksRoutes = require('./Routes/taskRoutes');
 const staffRoutes = require('./Routes/staffRoutes');
 const Log = require('./Models/log');
 const Permission = require('./Models/permission');
@@ -102,7 +103,7 @@ app.use('/auth', authControl);
 
 app.use('/', staffRoutes);
 app.use('/', perfRoutes);
-
+app.use('/', tasksRoutes);
 
 
 

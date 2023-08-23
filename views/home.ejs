@@ -302,6 +302,7 @@
 								.appIcons{
 									width: 15px;
 									height: 15px;
+									margin: 0;
 								}
 							</style>
 						<div class="col-md-4">
@@ -313,13 +314,14 @@
 												<label class="text-muted">Assigned:
 												</label>
 												
+												
 												<span class="float-right">
 													<a href="#" data-toggle="modal" data-target=".assigned">
-														<i class="appIcons " data-feather="maximize-2" ></i>
+														<i class="appIcons mx-0 px-0" data-feather="maximize-2" ></i>
 													</a>
 												</span>
 												<a href="#" data-toggle="modal" data-target=".assigned">
-													<h5 class="text-info"><%= assignedClients%></h5>
+													<h5 class="text-info mx-0 px-0"><%= assignedClients%></h5>
 												</a>
 											</div>
 											<div class="col-md-6 ">
@@ -327,7 +329,7 @@
 												</label>
 												<span class="float-right">
 													<a href="#" data-toggle="modal" data-target=".unassigned">
-														<i class="appIcons " data-feather="maximize-2" ></i>
+														<i class="appIcons mx-0 px-0" data-feather="maximize-2" ></i>
 													</a>
 												</span>
 												
@@ -394,9 +396,12 @@
 							<!-- User Logs Section -->
 							<section class="mx-4 border-light">
 								<h4 class="card-title mt-5">
-									LOGS
-									<a href="#" class="float-right mx-3" data-toggle="modal" data-target=".bd-example-modal-lg">
-										<i data-feather="external-link"></i>
+									TASKS
+									<a href="#" class="float-right mx-3" data-toggle="modal" data-target=".bd-example-modal-lg-full-tasks-expand">
+										<i data-feather="maximize"></i>
+									</a>
+									<a href="#" class="float-right mx-3" data-toggle="modal" data-target="#tasks_" data-whatever="@fat">
+										<i data-feather="plus"></i>
 									</a>
 								</h4>
 								<div class="table-responsive card-body-hor ">
@@ -406,38 +411,56 @@
 										<thead class="border-info">
 											<tr>
 												<th>
-													Date
-												</th>
-												<th>
-													User
-												</th>
-												<th>
-													Route
+													Task
 												</th>
 												
+												<th>
+													Status
+												</th>
+												<th>
+
+												</th>
 												
 											</tr>
 										</thead>
 										<tbody>
-											<!-- let i =0; i < 10; i++ -->
-											<% for (i in logs) {%>
-												<tr>
-													<td>
-														<%= logs[i].timestamp%>
-													</td>
+												<% for (i in tasks) { %>
+											<tr>
 
-													<td>
-														<%= logs[i].userName%>
-													</td>
+														<td>
+															<a class="#">
+																<%= tasks[i].title %>
+															</a>
+														</td>
+														<td>
+															<%if (tasks[i].status == 'Active') {%>
+																<span class="text-success"><%= tasks[i].status %></span>
+														
+															<% } else {%>
+																<span class="text-danger"><%= tasks[i].status %></span>
 
-													<td>
-														<%= logs[i].route%>
-													</td>
+																<% }%>
+														<td>
+															<div class="d-flex justify-content-center align-items-center">
+																<a href="" class="mx-2 text-info" data-toggle="modal" data-target=".bd-example-modal-lg-full-tasks<%=[i]%>">
+																	<i class="appIcons" data-feather="edit-2"></i>
+																</a>
+																<a href="" class="mx-2 text-primary" href="#" data-toggle="modal" data-target="#addTaskNote<%=[i]%>" data-whatever="@fat">
+																	<i class="appIcons" data-feather="clipboard"></i>
+																</a>
+																<a href="" class="mx-2 text-danger" data-toggle="modal" data-target="#deleteTask<%=[i]%>" data-whatever="@fat">
+																	<i class="appIcons" data-feather="trash-2"></i>
+																</a>
+															</div>
+															<!-- Full TASKS expand -->
+														<%- include('partials/task') %>
+														</td>
+														
+											</tr>
 													
-												</tr>
-											<% } %>
-											
+												<% } %>
 										</tbody>
+										
 									</table>
 								</div>		
 							</section>
@@ -446,7 +469,8 @@
 						</div>
 						</div>
 
-						
+
+
 					</div>
 				</div>
 				
@@ -466,51 +490,205 @@
 	<%- include('partials/end') %>
 
 
-	<!-- Full Logs expand -->
-			<!--Contact Update Model-->
-			<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
-				  <div class="modal-content card-body-alt">
-					<table class="table table-striped " >
-						<thead class="border-info">
-							<tr>
-								<th>
-									Date
-								</th>
-								<th>
-									User
-								</th>
-								<th>
-									Route
-								</th>
-								
-								
-							</tr>
-						</thead>
-						<tbody>
-							<% for (i in logs) {%>
-								<tr>
-									<td>
-										<%= logs[i].timestamp%>
-									</td>
+	
+<!-- cREATE TASKS -->
+<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open modal for @fat</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button> -->
 
-									<td>
-										<%= logs[i].userName%>
-									</td>
-
-									<td>
-										<%= logs[i].route%>
-									</td>
-								</tr>
-							<% } %>
-							
-						</tbody>
-					</table>
+<div class="modal fade" id="tasks_" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/tasks" method="post">
+          <div class="row">
+			<div class="col">
+				<div class="form-group">
+					<label for="recipient-name" class="col-form-label">Title:</label>
+					<input type="text" class="form-control" name="title" id="recipient-name">
 				  </div>
+			</div>
+			<div class="col">
+				<div class="form-group">
+					<label for="recipient-name" class="col-form-label">Recipient:</label>
+					<select name="taskFor" class="form-control form-control-sm mb-3">
+						<option  selected=""></option>
+						<%for (i in users) {%>
+							<%if (users[i].role != 'Admin') {%>
+								<option  value="<%= users[i].id%>">
+
+									<%= users[i].name%>
+								</option>
+							<% } %>
+						<% } %>
+					</select>
+				  </div>
+			</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="form-group">
+						<label for="recipient-name" class="col-form-label">Ref. Carrier:</label>
+						<select name="reference" class="form-control form-control-sm mb-3">
+							<option  selected=""></option>
+							<%for (i in trackers) {%>
+								<option  value="<%= trackers[i]._id%>">
+
+									<%= trackers[i].Customer_Name%>
+								</option>
+							<% } %>
+						</select>
+					  </div>
 				</div>
-			  </div>
+				<div class="col">
+					<div class="form-group">
+						<label for="recipient-name" class="col-form-label">Deadline:</label>
+						<div class="input-group date datepicker" id="datePickerExample">
+							<input name="deadline" type="text" class="form-control"><span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+						</div>
+					  </div>
+				</div>
+		  </div>
+		  <!-- <%if (trackers[i].documents) {%>
+			<select name="role" class="form-control form-control-sm mb-3">
+				<option  selected=""></option>
+		  <% trackers[i].documents.forEach(doc => { %>
+			<option  value="<%= doc.documentTitle%>"> <%= doc.documentTitle%>"</option>
+			<%  }) %>
+			
+			
+		<% } %> -->
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Description:</label>
+            <textarea class="form-control" id="message-text" name="description"></textarea>
+          </div>
+
+		  <div class=" page-content d-flex justify-content-center align-items-center">
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			  <button type="submit" class="btn btn-primary"><i data-feather="plus"></i> 
+				Task
+			</button>
+		  </div>
+		</div>
+        </form>
+      </div>
+	  
+    </div>
+  </div>
+</div>
+<div class="modal fade tasks" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content card-body-alt">
+		<form action="/add-stats" method="post">
+			<div class="form-group">
+				<div class="row">
+					<div class="col">
+						<label for="recipient-name" class="col-form-label">Carrier:</label>
+						<input disabled name="client" value="" type="text" class="form-control" >
+						<input name="trackerId" value="" type="hidden" class="form-control" >
+					</div>
+					<div class="col">
+						
+						<label for="recipient-name" class="col-form-label">SMS #:</label>
+						<input  name="smsSent" value="" type="text" class="form-control" >
+			
+					</div>
+					<div class="col-md-6">
+						<label for="recipient-name" class="col-form-label">Date:</label>
+						<div class="input-group date datepicker" id="datePickerExample">
+							<input name="date_finished" type="text" class="form-control"><span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+						</div>
+					</div>
+					<input  name="sms" value="SMS" type="hidden" class="form-control" >
+					
+				</div>
+			</div>
+			<div class="modal-footer d-flex page-content justify-content-center align-items-center">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-success">Post Stats</button>
+			</div>
+			</form>
+	  </div>
+	</div>
+  </div>
+<!-- ********************************* -->
+
+<!-- Tasks Modal -->
 
 
+  
+  <!-- Add  Task -->
+  <div class="modal fade" id="tasks_" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">New Task</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  <form action="/tasks" method="post">
+			
+			  <div class="row">
+				  <div class="col">
+					  <div class="form-group">
+						  <label for="recipient-name" class="col-form-label">Ref. Carrier:</label>
+						  <select name="reference" class="form-control form-control-sm mb-3">
+							  <option  selected=""></option>
+							  <%for (i in trackers) {%>
+								  <option  value="<%= trackers[i]._id%>">
+  
+									  <%= trackers[i].Customer_Name%>
+								  </option>
+							  <% } %>
+						  </select>
+						</div>
+				  </div>
+				  <div class="col">
+					  <div class="form-group">
+						  <label for="recipient-name" class="col-form-label">Deadline:</label>
+						  <div class="input-group date datepicker" id="datePickerExample">
+							  <input name="deadline" type="text" class="form-control"><span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+						  </div>
+						</div>
+				  </div>
+			</div>
+			<!-- <%if (trackers[i].documents) {%>
+			  <select name="role" class="form-control form-control-sm mb-3">
+				  <option  selected=""></option>
+			<% trackers[i].documents.forEach(doc => { %>
+			  <option  value="<%= doc.documentTitle%>"> <%= doc.documentTitle%>"</option>
+			  <%  }) %>
+			  
+			  
+		  <% } %> -->
+			<div class="form-group">
+			  <label for="message-text" class="col-form-label">Message:</label>
+			  <textarea class="form-control" id="message-text" name="description"></textarea>
+			</div>
+  
+			<div class=" page-content d-flex justify-content-center align-items-center">
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-primary">Post Task</button>
+			</div>
+		  </div>
+		  </form>
+		</div>
+		
+	  </div>
+	</div>
+  </div>
+
+<!-- ENd tasks Modal -->
 <!-- Modal for Assigned Clients -->
 <div class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
@@ -700,3 +878,73 @@
 	  </div>
 	</div>
   </div>
+
+  <!-- RTasks Expand -->
+  <div class="modal fade bd-example-modal-lg-full-tasks-expand" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content card-body-alt">
+        <div class="modal-body">
+
+			<div class="table-responsive card-body-hor ">
+									
+
+				<table class="table table-striped " >
+					<thead class="border-info">
+						<tr>
+							<th>
+								Task
+							</th>
+							
+							<th>
+								Status
+							</th>
+							<th>
+
+							</th>
+							
+						</tr>
+					</thead>
+					<tbody>
+							<% for (i in tasks) { %>
+						<tr>
+
+									<td>
+										<a class="#">
+											<%= tasks[i].title %>
+										</a>
+									</td>
+									<td>
+										<%if (tasks[i].status == 'Active') {%>
+											<span class="text-success"><%= tasks[i].status %></span>
+									
+										<% } else {%>
+											<span class="text-danger"><%= tasks[i].status %></span>
+
+											<% }%>
+									<td>
+										<div class="d-flex justify-content-center align-items-center">
+											<a href="" class="mx-2 text-info" data-toggle="modal" data-target=".bd-example-modal-lg-full-tasks<%=[i]%>">
+												<i class="appIcons" data-feather="edit-2"></i>
+											</a>
+											<a href="" class="mx-2 text-primary" href="#" data-toggle="modal" data-target="#addTaskNote<%=[i]%>" data-whatever="@fat">
+												<i class="appIcons" data-feather="clipboard"></i>
+											</a>
+											<a href="" class="mx-2 text-danger" data-toggle="modal" data-target="#deleteTask<%=[i]%>" data-whatever="@fat">
+												<i class="appIcons" data-feather="trash-2"></i>
+											</a>
+										</div>
+										<!-- Full TASKS expand -->
+									<%- include('partials/task') %>
+									</td>
+									
+						</tr>
+								
+							<% } %>
+					</tbody>
+					
+				</table>
+			</div>	
+		</div>
+	  </div>
+	  </div>
+</div>

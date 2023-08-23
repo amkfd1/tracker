@@ -13,34 +13,41 @@ const taskSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    description: String,
-    status: String,
+    description:{
+        type: String
+    },
+    status: {
+        type: String
+    },
     files: [{
         filename: String,
         filePath: String,
         uploadedBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User' // Reference to the User model
+            type: String,
         },
         date: {
             type: Date,
             default: Date.now
         }
     }],
-    notes: [String], // Array of notes
+    notes: [{
+        postedBy: String,
+        note: String,
+        date: {
+           type: Date,
+           default: Date.now
+        },
+    }], // Array of notes
     assignedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User' // Reference to the User model
     },
-    reference: {
-        tracker: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Tracker' // Reference to the Tracker model
-        },
-        document: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Document' // Reference to the Tracker model
-        }
+    reference: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tracker' // Reference to the Tracker model
+    },
+    deadline:{
+        type: Date
     }
 });
 

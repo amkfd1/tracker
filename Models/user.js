@@ -65,7 +65,11 @@ const UserSchema = new Schema({
     tasks:[{
         type: Schema.Types.ObjectId,
         ref: 'Task',
-    }]
+    }],
+    cid: {
+        type: String,
+        enum:['M-KEL', 'Servicia']
+    }
 });
 
 const User = mongoose.model('User', UserSchema);

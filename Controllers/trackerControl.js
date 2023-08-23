@@ -665,7 +665,33 @@ const updateTesting = async (req, res) => {
 // Get all customer trackers
 const getAllCustomerTrackers = async (req, res) => {
   try {
+    // let identify =req.user.cid;
     const trackers = await Tracker.find().populate('account_manager');
+    const task = await Task.find().populate('taskFor').populate('assignedBy').populate('reference')
+    let tasks =[]
+    let notes = []
+
+    task.forEach(task => {
+  
+      let task_ = {
+        _id: task._id,
+        title: task.title,
+        description: task.description,
+        taskFor: task.taskFor.name,
+        assignedBy: task.assignedBy.name,
+        reference: {
+          id: task.reference._id,
+          name: task.reference.CustomerName
+        },
+        deadline: (task.deadline).toISOString().slice(0, 10),
+        status: task.status,
+        notes: task.notes
+        ,
+        files: task.files,
+        date: task.date
+      }
+      tasks.push(task_)
+    })
 
     let totalStages = 0;
     let completedStages = 0;
@@ -771,7 +797,7 @@ const getAllCustomerTrackers = async (req, res) => {
 // Get all tasks
 
 
-
+    // print("TASKS: ", tasks)
     let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0] ;
     let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0] 
     // console.log("USERS: ", users)
@@ -795,7 +821,8 @@ const getAllCustomerTrackers = async (req, res) => {
       error,
       trackers,
       reqUsers,
-      isManagement: false
+      isManagement: false,
+      tasks,
     });
   } catch (error) {
     console.error('Error retrieving trackers:', error);

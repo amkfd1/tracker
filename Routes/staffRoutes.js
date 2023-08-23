@@ -43,6 +43,13 @@ router.post('/updateTesting/:id', isAuth, staffController.updateTesting);
 // router.post('/addContact/:id', isAuth, customerTrackerController.addContact);
 router.post('/updateStage/:id', isAuth, staffController.updateTrackerStage);
 
+// Staff Task Management
+router.get('/tasks/task/:taskId', isAuth, staffController.getSingleTask);
+router.post('/tasks/:taskId/file', isAuth, upload.single('document'), staffController.addFileToTask);
+router.post('/tasks/:taskId/note', isAuth, staffController.addNoteToTask);
+router.post('/tasks/:taskId/file/:fileIndex', staffController.deleteFileFromTask);
+
+
 router.post('/update-profile/:id', isAuth, staffController.updateEmergencyContact);
 
 // open Pdf
