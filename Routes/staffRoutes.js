@@ -48,6 +48,7 @@ router.get('/tasks/task/:taskId', isAuth, staffController.getSingleTask);
 router.post('/tasks/:taskId/file', isAuth, upload.single('document'), staffController.addFileToTask);
 router.post('/tasks/:taskId/note', isAuth, staffController.addNoteToTask);
 router.post('/tasks/:taskId/file/:fileIndex', staffController.deleteFileFromTask);
+router.post('/tasks/update-status/:taskId', isAuth, staffController.editTaskStatus);
 
 
 router.post('/update-profile/:id', isAuth, staffController.updateEmergencyContact);

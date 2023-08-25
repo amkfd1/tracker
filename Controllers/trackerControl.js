@@ -670,19 +670,22 @@ const getAllCustomerTrackers = async (req, res) => {
     const task = await Task.find().populate('taskFor').populate('assignedBy').populate('reference')
     let tasks =[]
     let notes = []
-
+    let referencet = {}
     task.forEach(task => {
-  
+     
+      if(task.reference){
+        referencet = {
+          id: task.reference._id,
+          name: task.reference.CustomerName
+        }
+      }else { referencet = null}
       let task_ = {
         _id: task._id,
         title: task.title,
         description: task.description,
         taskFor: task.taskFor.name,
         assignedBy: task.assignedBy.name,
-        reference: {
-          id: task.reference._id,
-          name: task.reference.CustomerName
-        },
+        reference: referencet,
         deadline: (task.deadline).toISOString().slice(0, 10),
         status: task.status,
         notes: task.notes

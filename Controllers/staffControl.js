@@ -273,19 +273,22 @@ const updateTesting = async (req, res) => {
 const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populate('assignedBy').populate('reference')
     let tasks =[]
     let notes = []
- 
+    let referencet = {}
     task.forEach(task => {
       // if (req.user._id == task.taskFor._id) {
+        if(task.reference){
+          referencet = {
+            id: task.reference._id,
+            name: task.reference.CustomerName
+          }
+        }else { referencet = null}
         let task_ = {
           _id: task._id,
           title: task.title,
           description: task.description,
           taskFor: task.taskFor.name,
           assignedBy: task.assignedBy.name,
-          reference: {
-            id: task.reference._id,
-            name: task.reference.CustomerName
-          },
+          reference: referencet,
           deadline: (task.deadline).toISOString().slice(0, 10),
           status: task.status,
           notes: task.notes
@@ -460,19 +463,21 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
         const task = await Task.find({ _id}).populate('taskFor').populate('assignedBy').populate('reference');
         let tasks =[]
         let notes = []
-    
+        let referencet = {}
         task.forEach(task => {
-      
+          if(task.reference){
+            referencet = {
+              id: task.reference._id,
+              name: task.reference.CustomerName
+            }
+          }else { referencet = null}
           let task_ = {
             _id: task._id,
             title: task.title,
             description: task.description,
             taskFor: task.taskFor.name,
             assignedBy: task.assignedBy.name,
-            reference: {
-              id: task.reference._id,
-              name: task.reference.CustomerName
-            },
+            reference: referencet,
             deadline: (task.deadline).toISOString().slice(0, 10),
             status: task.status,
             notes: task.notes
@@ -724,6 +729,31 @@ const deleteFileFromTask = async (req, res) => {
   }
 };
 
+
+const editTaskStatus = async (req, res) => {
+  const taskId = req.params.taskId;
+
+  try {
+    const { status } = req.body;
+
+    console.log("THIS IS THE STATUS: ", status);
+    
+    const updatedTask = await Task.findByIdAndUpdate(taskId, { status }, { new: true });
+    
+    if (!updatedTask) {
+      req.flash('server_error', "Error updating task status. Task not found");
+      return res.status(404).redirect('/tasks/task/' + taskId);
+    }
+
+    req.flash('update_success', "Task status updated successfully");
+    return res.status(200).redirect('/tasks/task/' + taskId);
+  } catch (error) {
+    console.error("Error editing task status:", error.message);
+    req.flash('server_error', "Error updating task status. Please try again");
+    return res.status(500).redirect('/tasks/task/' + taskId);
+  }
+};
+
   module.exports = 
 { 
     updateTesting,
@@ -739,7 +769,8 @@ const deleteFileFromTask = async (req, res) => {
     getSingleTask,
     addNoteToTask,
     addFileToTask,
-    deleteFileFromTask
+    deleteFileFromTask,
+    editTaskStatus
     
     
 };

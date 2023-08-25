@@ -44,7 +44,8 @@ const taskSchema = new mongoose.Schema({
     },
     reference: { 
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tracker' // Reference to the Tracker model
+        ref: 'Tracker', // Reference to the Tracker model
+        default: null
     },
     deadline:{
         type: Date

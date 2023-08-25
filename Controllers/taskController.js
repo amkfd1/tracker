@@ -15,7 +15,12 @@ const Task = require('../Models/task');
 
 exports.createTask = async (req, res) => {
     try {
-        const { title, description,  reference, taskFor, deadline } = req.body;
+        let { title, description,  reference, taskFor, deadline } = req.body;
+        if(reference){
+            reference = req.body.reference;
+        }else {
+            reference = null;
+        }
         let assignedBy = req.user._id;
         const newTask = new Task({
             title,
@@ -34,7 +39,7 @@ exports.createTask = async (req, res) => {
         res.status(201).redirect('/track/home');
         // res.status(201).json(savedTask);
     } catch (error) {
-        // res.status(500).json({ message: 'Error creating task', error: error.message });
+        print({ message: 'Error creating task', error: error.message });
         req.flash('server_error', "Error creating task. Try Again")
         res.status(201).redirect('/track/home');
     }
