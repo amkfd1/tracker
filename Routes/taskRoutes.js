@@ -26,6 +26,7 @@ router.post('/tasks/:taskId/files', isAuth, upload.single('document'), taskContr
 router.post('/tasks/:taskId/notes', isAdmin, taskController.addNoteToTask);
 router.put('/tasks/:taskId', taskController.editTask);
 router.post('/tasks/:taskId', taskController.deleteTask);
+router.post('/tasks/close/:id', taskController.editTaskStatus);
 router.delete('/tasks/:taskId/notes/:noteIndex', taskController.deleteNoteFromTask);
 router.post('/tasks/:taskId/files/:fileIndex', taskController.deleteFileFromTask);
 router.get('/tasks', taskController.getAllTasks);

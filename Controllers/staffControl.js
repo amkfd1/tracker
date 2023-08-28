@@ -483,7 +483,8 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
             notes: task.notes
             ,
             files: task.files,
-            date: task.date
+            date: task.date,
+
           }
           tasks.push(task_)
         })
@@ -498,7 +499,9 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
             message: flash,
             error,
             user: req.user,
-            task: {}
+            task: {},
+            stages: ['Ongoing', 'Complete']
+
 
         });
     } catch (error) {

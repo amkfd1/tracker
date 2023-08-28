@@ -82,6 +82,37 @@ router.post('/register', isAdmin, async (req, res) => {
   }
 });
 
+router.get('/admin/reset/:id', isAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Check if the username is already taken
+    const existingUser = await User.findOne({ _id:id });
+    if (!existingUser) {
+      // return res.status(400).json({ error: 'Username already exists' });
+      req.flash('register_error', 'User not found');
+      return res.status(401).redirect('/track/home');
+    }
+    console.log("This is the user: ", existingUser.password)
+    let password = existingUser.username+"123"
+
+    // Generate a salt and hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+   existingUser.password = hashedPassword;
+    // Save the user to the database
+    await existingUser.save();
+    print("Password: ",existingUser.password, "\n Hashed Password: ", hashedPassword)
+
+    req.flash('register-success', 'User password successfully reset');
+    res.status(200).redirect('/track/home');
+  } catch (error) {
+    console.error('Error registering user:', error);
+    req.flash('server_error','A server error occured. Try Again')
+    res.status(500).redirect('/500')
+  }
+});
+
 router.post('/reset-password/:userId', isAuth, async (req, res) => {
   const userId = req.params.userId;
   try {

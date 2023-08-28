@@ -73,36 +73,33 @@
 																<td>
 																	<%= tasks.deadline %>
 																</td>
-																<form action="/tasks/update-status/<%= tasks._id%>" method="post">
 
-																<td>
-																	<div class="row">
-
-																		<div class="mt-3">
-																				<select required name="status" class="form-control form-control-sm mb-3">
-																		
-																					<option  selected=""><%= tasks.status %></option>
-																					<option  value="Ongoing">Ongoing</option>
-																					<option  value="Complete">Complete</option>
-														
-																				</select>
-																		
+																	<td>
+																		<div class="dropdown w-100">
+                                                                
+																			<button class="btn btn-dark bg-transparent dropdown-toggle w-100" type="button" id="dropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																				      
+																			</button>
+																			<div class="dropdown-menu text-center w-50" aria-labelledby="dropdownMenuButton4">
+					
+																				<%for (j in stages) {%>
+																					
+																					<form action="/tasks/update-status/<%= tasks._id%>" method="post">
+																						<button type="submit"  class="dropdown-item" style="border:none;">
+																							<%= stages[j]%>
+																						</button>
+																						<input type="hidden" name="status" value="<%= stages[j]%>">
+																					</form>
+																				<% } %>
+																				<!-- <div class="dropdown-divider"></div> -->
+																				
+																			</div>
 																		</div>
 																		
-																	</div>
-																		<!-- <div class="dropdown-divider"></div> -->
-																			
-																</td>
-																<td>
-																	<div class="">
-																		<button type="submit" class="btn btn-outline-secondary btn-icon">
-																			<i data-feather="check-square"></i>
-																		</button>
-																	</div>
-
-																</td>
-															</form>
-
+																	
+																		
+																	</td>
+															
 
 															</tr>
 														

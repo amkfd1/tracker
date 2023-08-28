@@ -100,11 +100,12 @@ exports.addNoteToTask = async (req, res) => {
 
 
 exports.editTask = async (req, res) => {
+    let {status} = req.body;
+
     try {
         const taskId = req.params.taskId;
-        const updatedData = req.body;
         
-        const task = await Task.findByIdAndUpdate(taskId, updatedData, { new: true });
+        const task = await Task.findByIdAndUpdate(taskId, { status: status });
         if (!task) {
             print({ message: 'Task not found' });
             req.flash('server_error', "Error adding file to task. Try Again")
@@ -118,6 +119,31 @@ exports.editTask = async (req, res) => {
         res.status(201).redirect('/track/home');
     }
 };
+
+exports. editTaskStatus = async (req, res) => {
+    const taskId = req.params.id;
+  
+    try {
+    //   const { status } = req.body;
+  
+      console.log("THIS IS THE STATUS: ", taskId);
+      
+      const updatedTask = await Task.findByIdAndUpdate(taskId, { status:"Close" }, { new: true });
+      
+      if (!updatedTask) {
+        req.flash('server_error', "Error updating task status. Task not found");
+        return res.status(404).redirect('/track/home/');
+      }
+  
+      req.flash('update_success', "Task status updated successfully");
+      return res.status(200).redirect('/track/home/');
+    } catch (error) {
+      console.error("Error editing task status:", error.message);
+      req.flash('server_error', "Error updating task status. Please try again");
+      return res.status(500).redirect('/track/home/');
+    }
+  };
+
 
 exports.deleteTask = async (req, res) => {
     try {
@@ -252,7 +278,7 @@ exports.getSingleTask = async (req, res) => {
         const _id = req.params.taskId;
         const task = await Task.find({ _id});
 
-        print(task)
+        print("Getting stages")
         let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
         let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0]
         console.log('This is your task ', task)
@@ -262,7 +288,8 @@ exports.getSingleTask = async (req, res) => {
             isAuthenticated: true,//req.user.isLoggedIn,
             message: flash,
             error,
-            user: {_id:''}
+            user: {_id:''},
+            stages: ['Ongoing', 'Complete']
 
         });
     } catch (error) {
