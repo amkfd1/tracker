@@ -398,7 +398,7 @@
 								<h4 class="card-title mt-5">
 									TASKS
 									<a href="#" class="float-right mx-3" data-toggle="modal" data-target=".bd-example-modal-lg-full-tasks-expand">
-										<i data-feather="maximize"></i>
+										<i data-feather="maximize-2"></i>
 									</a>
 									<a href="#" class="float-right mx-3" data-toggle="modal" data-target="#tasks_" data-whatever="@fat">
 										<i data-feather="plus"></i>
@@ -428,7 +428,7 @@
 											<tr>
 
 														<td>
-															<a class="#">
+															<a href="" class="mx-2 " data-toggle="modal" data-target=".bd-example-modal-lg-full-tasks<%=[i]%>">
 																<%= tasks[i].title %>
 															</a>
 														</td>
@@ -447,16 +447,7 @@
 																<a href="" class="mx-2 text-info" data-toggle="modal" data-target=".bd-example-modal-lg-full-tasks<%=[i]%>">
 																	<i class="appIcons" data-feather="edit-2"></i>
 																</a>
-																<a href="" class="mx-2 text-primary" href="#" data-toggle="modal" data-target="#addTaskNote<%=[i]%>" data-whatever="@fat">
-																	<i class="appIcons" data-feather="clipboard"></i>
-																</a>
-																<a href="" class="mx-2 text-warning" data-toggle="modal" data-target="#closeTask<%=[i]%>" data-whatever="@fat">
-																	<i class="appIcons" data-feather="x-square"></i>
-																</a>
-																<a href="" class="mx-2 text-danger" data-toggle="modal" data-target="#deleteTask<%=[i]%>" data-whatever="@fat">
-																	<i class="appIcons" data-feather="trash-2"></i>
-																</a>
-																
+																																
 															</div>
 															<!-- Full TASKS expand -->
 														<%- include('partials/task') %>
@@ -869,72 +860,4 @@
 	</div>
   </div>
 
-  <!-- RTasks Expand -->
-  <div class="modal fade bd-example-modal-lg-full-tasks-expand" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content card-body-alt">
-        <div class="modal-body">
-
-			<div class="table-responsive card-body-hor ">
-									
-
-				<table class="table table-striped " >
-					<thead class="border-info">
-						<tr>
-							<th>
-								Task
-							</th>
-							
-							<th>
-								Status
-							</th>
-							<th>
-
-							</th>
-							
-						</tr>
-					</thead>
-					<tbody>
-							<% for (i in tasks) { %>
-						<tr>
-
-									<td>
-										<a class="#">
-											<%= tasks[i].title %>
-										</a>
-									</td>
-									<td>
-										<%if (tasks[i].status == 'Active') {%>
-											<span class="text-success"><%= tasks[i].status %></span>
-									
-										<% } else {%>
-											<span class="text-danger"><%= tasks[i].status %></span>
-
-											<% }%>
-									<td>
-										<div class="d-flex justify-content-center align-items-center">
-											<a href="" class="mx-2 text-info" data-toggle="modal" data-target=".bd-example-modal-lg-full-tasks<%=[i]%>">
-												<i class="appIcons" data-feather="edit-2"></i>
-											</a>
-											<a href="" class="mx-2 text-primary" href="#" data-toggle="modal" data-target="#addTaskNote<%=[i]%>" data-whatever="@fat">
-												<i class="appIcons" data-feather="clipboard"></i>
-											</a>
-											<a href="" class="mx-2 text-danger" data-toggle="modal" data-target="#deleteTask<%=[i]%>" data-whatever="@fat">
-												<i class="appIcons" data-feather="trash-2"></i>
-											</a>
-										</div>
-										<!-- Full TASKS expand -->
-									<%- include('partials/task') %>
-									</td>
-									
-						</tr>
-								
-							<% } %>
-					</tbody>
-					
-				</table>
-			</div>	
-		</div>
-	  </div>
-	  </div>
-</div>
+ 

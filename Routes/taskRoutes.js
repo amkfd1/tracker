@@ -34,6 +34,9 @@ router.get('/tasks', taskController.getAllTasks);
 router.get('/tasks/user/:userId', taskController.getTasksForUser);
 
 
+router.get('/admin/task/:taskId', isAdmin, taskController.getAdminSingleTask);
+
+
 
 router.get("/tasks/doc/:id", async (req, res) => {
   // var docId = req.query.doc;
@@ -45,7 +48,7 @@ console.log("Task Id: ", req.params.id)
     }
   console.log("This is your receipt Id: ", dpath)
   var stream = fs.createReadStream(dpath);
-  var filename = "samsple.pdf"; 
+  var filename = "samsple.pdf";  
   // Be careful of special characters
   filename = encodeURIComponent(filename);
   // Ideally this should strip them

@@ -30,7 +30,11 @@
                                     <th>
                                         Deadline
                                     </th>
-                                    
+                                    <th>
+                                      <a href="/admin/task/<%=tasks[i]._id%>"class=" text-info  " >
+                                        <i data-feather="maximize-2"></i>
+                                      </a>
+                                  </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,6 +51,7 @@
                                         <td>
                                             <%= tasks[i].deadline %>
                                         </td>
+                                        <td></td>
                                     </tr>
                                 
                             </tbody>
@@ -278,68 +283,83 @@
 	</div>
   </div>
 
-  <div class="modal fade" id="deleteTask<%=[i]%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-	  <div class="modal-content">
-		<div class="modal-header">
-		  <h5 class="modal-title text-danger" id="exampleModalLabel">Delete Task</h5>
-		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		  </button>
-		</div>
-		<div class="modal-body">
-			<!-- < tasks[i]._id> -->
-		  <form action="/tasks/<%= tasks[i]._id%>" method="post">
-            <div class="text-center justify-content-center align-items-center">
-                <h6> Are you sure you want to delete task? </h6>
-                <br>
-                <p class="text-muted"> (Deleting a task also delete all notes and files associated with the task)</p>
-               <br>
-            </div>
-			
-			<div class=" page-content d-flex justify-content-center align-items-center">
-			  <div class="modal-footer">
-				<!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-				<button type="submit" class="btn btn-danger">
-					<i data-feather="trash"></i>Delete File</button>
-			</div>
-		  </div>
-		  </form>
-		</div>
-		
-	  </div>
-	</div>
-  </div>
+  
 
-  <div class="modal fade" id="closeTask<%=[i]%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title text-warning" id="exampleModalLabel">Close Task</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- < tasks[i]._id> -->
-        <form action="/tasks/close/<%= tasks[i]._id%>" method="post">
-              <div class="text-center justify-content-center align-items-center">
-                  <h6> Are you sure you want to close task? </h6>
-                  <br>
-                  <p class="text-muted"> (Closing a task disables all related functions)</p>
-                 <br>
-              </div>
-        
-        <div class=" page-content d-flex justify-content-center align-items-center">
-          <div class="modal-footer">
-          <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-          <button type="submit" class="btn btn-warning">
-            <i data-feather="check"></i>Close Task</button>
-        </div>
-        </div>
-        </form>
-      </div>
-      
-      </div>
-    </div>
-    </div>
+     <!-- RTasks Expand -->
+  <div class="modal fade bd-example-modal-lg-full-tasks-expand" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content card-body-alt">
+        <div class="modal-body">
+
+			<div class="table-responsive card-body-hor ">
+									
+
+				<table class="table table-striped " >
+					<thead class="border-info">
+						<tr>
+							<th>
+								Task
+							</th>
+							
+							<th>
+								Status
+							</th>
+							<th>
+                Assigned By
+							</th>
+              <th>
+                Assigned To
+							</th>
+							<th>
+                Deadline
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+							<% for (i in tasks) { %>
+						<tr>
+
+									<td>
+										<a class="#">
+											<%= tasks[i].title %>
+										</a>
+									</td>
+									<td>
+										<%if (tasks[i].status == 'Active') {%>
+											<span class="text-success"><%= tasks[i].status %></span>
+									
+										<% } else {%>
+											<span class="text-danger"><%= tasks[i].status %></span>
+
+											<% }%>
+                  </td>
+                  <td>
+                    <%= tasks[i].assignedBy %>
+                  </td>
+                  <td>
+                    <%= tasks[i].taskFor %>
+                  </td>
+                  <td>
+                    <%= tasks[i].deadline %>
+                  </td>
+									<td>
+										<div class="d-flex justify-content-center align-items-center">
+											<a href="/admin/task/<%=tasks[i]._id%>" class="mx-2 text-info" >
+												<i class="appIcons" data-feather="maximize-2"></i>
+											</a>
+				
+										</div>
+									
+									</td>
+									
+						</tr>
+								
+							<% } %>
+					</tbody>
+					
+				</table>
+			</div>	
+		</div>
+	  </div>
+	  </div>
+</div>

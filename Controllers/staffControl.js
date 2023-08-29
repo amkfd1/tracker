@@ -488,10 +488,10 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
           }
           tasks.push(task_)
         })
-        print(req.user)
+        // print(req.user)
         let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
         let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0]
-        console.log('This is your task ', task)
+        // console.log('This is your task ', task)
         res.status(200).render('task', {
             pageTitle: tasks[0].title,
             tasks: tasks[0],
@@ -643,8 +643,9 @@ const updateEmergencyContact = async (req, res) => {
 
 
 const addFileToTask = async (req, res) => {
+  const taskId = req.params.taskId;
+console.log("We're getting to add file")
   try {
-      const taskId = req.params.taskId;
       const { filename, originalname } = req.file;
       let uploadedBy = req.user.name;
       const task = await Task.findById(taskId);
@@ -656,7 +657,7 @@ const addFileToTask = async (req, res) => {
       
       task.files.push({ filename:originalname, uploadedBy });
       const updatedTask = await task.save();
-      // print("This is File: ", filename, "\nPath: ", filePath)
+      print("This is File: ", filename,)
       req.flash('update_success', "File Successfully added ")
       res.status(201).redirect('/tasks/task/'+taskId);
   } catch (error) {

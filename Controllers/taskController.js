@@ -52,6 +52,7 @@ exports.addFileToTask = async (req, res) => {
         const { filename } = req.file;
         let uploadedBy = req.user.name;
         const task = await Task.findById(taskId);
+        console.log("This is the task: ", task)
         if (!task) {
             print({ message: 'Task not found' });
             req.flash('server_error', "Error adding file to task. Try Again")
@@ -60,7 +61,7 @@ exports.addFileToTask = async (req, res) => {
         
         task.files.push({ filename, uploadedBy });
         const updatedTask = await task.save();
-        // print("This is File: ", filename, "\nPath: ", filePath)
+        print("This is File: ", filename, "\nPath: ", filePath)
         req.flash('update_success', "File Successfully added ")
         res.status(201).redirect('/track/home');
     } catch (error) {
@@ -132,15 +133,15 @@ exports. editTaskStatus = async (req, res) => {
       
       if (!updatedTask) {
         req.flash('server_error', "Error updating task status. Task not found");
-        return res.status(404).redirect('/track/home/');
+        return res.status(404).redirect('/admin/task/'+taskId);
       }
   
       req.flash('update_success', "Task status updated successfully");
-      return res.status(200).redirect('/track/home/');
+      return res.status(200).redirect('/admin/task/'+taskId);
     } catch (error) {
       console.error("Error editing task status:", error.message);
       req.flash('server_error', "Error updating task status. Please try again");
-      return res.status(500).redirect('/track/home/');
+      return res.status(500).redirect('/admin/task/'+taskId);
     }
   };
 
@@ -210,15 +211,16 @@ exports.deleteNoteFromTask = async (req, res) => {
 
 
 exports.deleteFileFromTask = async (req, res) => {
+    const taskId = req.params.taskId;
+
     try {
-        const taskId = req.params.taskId;
         const fileIndex = req.params.fileIndex;
         
         const task = await Task.findById(taskId);
         if (!task) {
             print({ message: 'Task not found' });
             req.flash('server_error', "Error adding file to task. Try Again")
-            return res.status(201).redirect('/track/home');
+            return res.status(201).redirect('/admin/task/'+taskId);
         }
         let filePath = 'uploads/'+task.files[fileIndex].filename
         task.files.splice(fileIndex, 1);
@@ -234,15 +236,15 @@ exports.deleteFileFromTask = async (req, res) => {
 
         });
         req.flash('update_success', "Task Deleted Successfully ")
-        res.status(201).redirect('/track/home');
+        res.status(201).redirect('/admin/task/'+taskId);
         // res.json(updatedTask);
         console.log("This the file being deleted: ", fileIndex, " from: ", taskId)
         req.flash('update_success', "File Deleted Successfully ")
-        res.status(201).redirect('/track/home');
+        res.status(201).redirect('/admin/task/'+taskId);
     } catch (error) {
         print({ message: 'Error deleting file from task', error: error.message });
         req.flash('server_error', "Error deleting note. Try Again")
-        res.status(201).redirect('/track/home');
+        res.status(201).redirect('/admin/task/'+taskId);
     }
 };
 
@@ -285,7 +287,7 @@ exports.getSingleTask = async (req, res) => {
         res.status(200).render('task', {
             pageTitle: task.title,
             task: task,
-            isAuthenticated: true,//req.user.isLoggedIn,
+            isAuthenticated: req.user.isLoggedIn,
             message: flash,
             error,
             user: {_id:''},
@@ -296,6 +298,45 @@ exports.getSingleTask = async (req, res) => {
         print({ message: 'Error fetching tasks for user', error: error.message });
         req.flash('server_error', "Error fetching Task. Try Again")
         res.status(201).redirect('/');
+    }
+};
+
+exports.getAdminSingleTask = async (req, res) => {
+    try {
+        const _id = req.params.taskId;
+        const tasks = await Task.find({ _id}).populate('taskFor').populate('assignedBy');
+        let task ={
+                _id: tasks[0]._id,
+                title: tasks[0].title,
+                description: tasks[0].description,
+                taskFor: tasks[0].taskFor.name,
+                assignedBy: tasks[0].assignedBy.name,
+                notes: tasks[0].notes,
+                files: tasks[0].files,
+                deadline: (tasks[0].deadline).toISOString().slice([0],[10]),
+                status: tasks[0].status
+            }
+       
+        
+        console.log("Getting Task Notes: ", task)
+        let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
+        let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0]
+        console.log('This is your task ', task)
+        res.status(200).render('a-task', {
+            pageTitle: task.title,
+            tasks: task,
+            isAuthenticated: req.user.isLoggedIn,
+            message: flash,
+            error,
+            user: {_id:''},
+            stages: ['Close', 'Complete'], 
+            isManagement: false
+
+        });
+        } catch (error) {
+        print({ message: 'Error fetching tasks for user', error: error.message });
+        req.flash('server_error', "Error fetching Task. Try Again")
+        res.status(201).redirect('/track/home');
     }
 };
 
