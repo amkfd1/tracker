@@ -644,7 +644,7 @@ const updateEmergencyContact = async (req, res) => {
 
 const addFileToTask = async (req, res) => {
   const taskId = req.params.taskId;
-console.log("We're getting to add file")
+console.log("We're getting to add file", req.file)
   try {
       const { filename, originalname } = req.file;
       let uploadedBy = req.user.name;

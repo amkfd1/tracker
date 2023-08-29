@@ -8,18 +8,16 @@ const adminsettings = require('../Controllers/adminsettings');
 
 const multer = require('multer');
 
-// Set up Multer storage and file upload configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads'); // Specify the destination folder for storing uploaded files
+    cb(null, 'uploads'); // Specify the destination folder
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const filePath = uniqueSuffix + '-' + file.originalname.replace(/\\/g, '/');
-    cb(null, filePath); // Set the filename for the uploaded file with forward slashes
-  },
+    cb(null, file.originalname); // Use the original file name
+  }
 });
 
+// Create the Multer instance with the custom storage
 const upload = multer({ storage: storage });
 
 
