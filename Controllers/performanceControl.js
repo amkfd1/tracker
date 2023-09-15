@@ -268,7 +268,7 @@ const addPerformanceStaff = async (req, res) => {
       // Check if a performance record with the same trackerId and current date already exists
       let existingPerformance = await Performance.findOne({
           tracker: trackerId,
-          date: { $gte: new Date(date), $lt: new Date(date).setDate(new Date(date).getDate() + 1) },
+          date: date //{ $gte: new Date(date), $lt: new Date(date).setDate(new Date(date).getDate() + 1) },
       });
 
       // print("Existing: ")
@@ -294,14 +294,14 @@ const addPerformanceStaff = async (req, res) => {
       console.log("Performance Saved/Updated: ", req.user);
       
         req.flash('update_success', "Stats successfully added")
-        res.status(201).redirect('/client/' + trackerId);
+        res.status(201).redirect('/track/tracker/' + trackerId);
 
       
   } catch (error) {
       console.error('Error creating/updating performance:', error);
       // res.status(500).json({ error: 'Error creating/updating performance' });
       req.flash('server_error', "Error creating/updating performance")
-      res.status(201).redirect('/client/' + trackerId);
+      res.status(201).redirect('/track/tracker/' + trackerId);
 
   }
 };

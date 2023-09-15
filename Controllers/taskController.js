@@ -134,7 +134,7 @@ exports. editTaskStatus = async (req, res) => {
       if (!updatedTask) {
         req.flash('server_error', "Error updating task status. Task not found");
         return res.status(404).redirect('/admin/task/'+taskId);
-      }
+      } 
   
       req.flash('update_success', "Task status updated successfully");
       return res.status(200).redirect('/admin/task/'+taskId);
