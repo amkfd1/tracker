@@ -1284,6 +1284,7 @@ const getManagementDash = async (req, res) => {
       mytasks: [],
       userNotes:[],
       users,
+      designation: req.user.designation,
       dailyMinutesSum: dailyMinutesSum.toLocaleString("en-US"),
       weeklyMinutesSum: weeklyMinutesSum.toLocaleString("en-US"),
       averageWeeklyMinutes: weeklyResult,
