@@ -328,9 +328,10 @@ exports.getAdminSingleTask = async (req, res) => {
             isAuthenticated: req.user.isLoggedIn,
             message: flash,
             error,
-            user: {_id:''},
+            user: req.user,
             stages: ['Close', 'Complete'], 
-            isManagement: false
+            isManagement: false,
+            designation: req.user.designation
 
         });
         } catch (error) {

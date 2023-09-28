@@ -177,7 +177,12 @@
 			</div>
            
 			<!-- Nav Includes -->
-			<%- include('includes/nav') %>
+            <% if (designation === 'NOC-TL' || designation === 'HoIT') { %>
+			    <%- include('partials/mmNav') %>
+            <%} else {%>
+			    <%- include('includes/nav') %>
+            
+            <% } %>
 		</div>
 		
 	</div>

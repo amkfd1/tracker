@@ -48,10 +48,11 @@
 								  <div class="collapse" id="collapseExample2">
 									<div class="card mt-2 card-body">
 										<div class="btn-group" role="group" aria-label="Basic example">
+											<%if (designation === "Admin" ) {%>
 											<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#assign" data-whatever="">
 												Assign
 											</button>
-											
+											<% } %>
 											<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#grantAccess" data-whatever="">
 												Grant Access
 											</button>
@@ -253,6 +254,7 @@
 											<!-- <a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#sendDoc<%=[i]%>" data-whatever="">
 												<i class="smallIcons" data-feather="send" aria-hidden="true"></i>
 											</a> -->
+											<%if (designation === "Admin" ) {%>
 											<a class="float-right mx-2 text-danger" href="" data-toggle="modal" data-target="#deleteDoc<%=[i]%>" data-whatever="">
 												<i class="smallIcons" data-feather="trash" aria-hidden="true"></i>
 											</a>
@@ -262,6 +264,7 @@
 											<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#updateDoc<%=[i]%>" data-whatever="">
 												<i class="smallIcons" data-feather="edit-2" aria-hidden="true"></i>
 											</a>
+											<% } %>
 											
 										</li>
 										
@@ -971,7 +974,12 @@
 				
 			<!--NAVIGATION-->
 			<!-- Nav Includes -->
-			<%- include('partials/nav') %>
+			<% if (designation === 'NOC-TL' || designation === 'HoIT') { %>
+			    <%- include('partials/mmNav') %>
+            <%} else {%>
+			    <%- include('partials/nav') %>
+            
+            <% } %>
 		</div>
 		
 	</div>

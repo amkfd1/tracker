@@ -977,8 +977,10 @@ const getSingleTracker = async (req, res) => {
       notes,
       message: flash,
       error,
+      user: req.user,
+      designation: req.user.designation,
       isAuthenticated: req.user.isLoggedIn,
-      isManagement: req.user.isManagement
+      isManagement: req.user.isManagement || false
     });
   } catch (error) {
     console.log(error)

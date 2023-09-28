@@ -183,6 +183,9 @@ router.post('/login', async (req, res) => {
 
     if (user.designation == 'Management') {
       return res.status(401).redirect('/track/management');
+    }else if (user.designation == 'HoIT' || user.designation == 'NOC-TL'){
+      return res.status(401).redirect('/mm/dashboard');
+
     }
 
     // print("User: ", await req.user)

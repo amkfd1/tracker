@@ -18,10 +18,12 @@
     
                             </div>
                         <%}%>
-                        <div class="text-center text-danger">
-                            <a href="/auth/admin/reset/<%=users[i].id%>" >Reset User Password</a>
+                        <%if (designation === "Admin") {%>
+                            <div class="text-center text-danger">
+                                <a href="/auth/admin/reset/<%=users[i].id%>" >Reset User Password</a>
 
-                        </div>
+                            </div>
+                        <% }%>
                         <div class="border-bottom "></div>
                                 
                          <form action="/track/update-user/<%=users[i].id%>" method="post">
@@ -41,18 +43,19 @@
                              <div class="border-bottom"></div>
                                     
                              <div class="row my-3">
-                                <div class="col-md-5">
+                                <div class="col">
                                     <label class="text-muted" for="department">Department:</label>
                                     <input type="text" class="form-control" name="department" id="exampleInputUsername1" value="<%=users[i].role%>">
                                     
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col">
                                     <label class="text-muted"  for="designation">Designation:</label>
-                                    <input type="text" class="form-control" name="designation" id="exampleInputUsername1" value="<%=users[i].role%>">
+                                    <input type="text" class="form-control" name="designation" id="exampleInputUsername1" value="<%=users[i].designation%>">
                                     
                                 </div>
 
-                                <div class="col-md-2">
+                                <%if (designation === "Admin") {%>
+                                <div class="col">
 
                                     <div class="mt-md-4 float-right">
                                         <button type="submit" class="btn btn-secondary btn-icon">
@@ -60,6 +63,7 @@
                                         </button>
                                      </div>  
                                 </div>
+                                <% } %>
                              </div> 
                              
                          </form>

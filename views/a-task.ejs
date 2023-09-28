@@ -83,16 +83,20 @@
 																<div class="d-flex justify-content-center align-items-center">
 																	
 																	<%if (tasks.status === "Close") {%>
+																		<%if (designation === "Admin") {%>
 																		<a href="" class="mx-2 text-danger" data-toggle="modal" data-target="#deleteTask" data-whatever="@fat">
 																			<i class="appIcons" data-feather="trash-2"></i>
 																		</a>
+																		<% } %>
 																		<% } else {%>
 																		<a href="" class="mx-2 text-warning" data-toggle="modal" data-target="#closeTask" data-whatever="@fat">
 																			<i class="appIcons" data-feather="x-square"></i>
 																		</a>
-																		<a href="" class="mx-2 text-danger" data-toggle="modal" data-target="#deleteTask" data-whatever="@fat">
-																			<i class="appIcons" data-feather="trash-2"></i>
-																		</a>
+																		<%if (designation === "Admin") {%>
+																			<a href="" class="mx-2 text-danger" data-toggle="modal" data-target="#deleteTask" data-whatever="@fat">
+																				<i class="appIcons" data-feather="trash-2"></i>
+																			</a>
+																		<% } %>
 																	<%}%>
 																	
 																</div>
@@ -245,7 +249,11 @@
 
 		
 			<!-- Nav Includes -->
-			<%- include('partials/nav') %>
+			<%if (designation === 'Admin') {%>
+				<%- include('partials/nav') %>
+			<% } else {%>
+				<%- include('partials/mmNav') %>
+			<% } %>
 		</div>
 		
 	</div>

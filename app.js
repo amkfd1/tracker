@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const trackerRoutes = require('./Routes/trackerRoutes');
 const perfRoutes = require('./Routes/performanceRoute');
 const tasksRoutes = require('./Routes/taskRoutes');
+const mmRoutes = require('./Routes/mmRoutes');
 const staffRoutes = require('./Routes/staffRoutes');
 const Log = require('./Models/log');
 const Permission = require('./Models/permission');
@@ -100,7 +101,7 @@ app.get('/500', async (req, res) => {
 app.use('/track', trackerRoutes);
 
 app.use('/auth', authControl);
-
+app.use('/mm', mmRoutes);
 app.use('/', staffRoutes);
 app.use('/', perfRoutes);
 app.use('/', tasksRoutes);

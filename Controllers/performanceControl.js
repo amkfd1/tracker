@@ -208,17 +208,24 @@ const getMonthlyPerformances = async (req, res) => {
 //   };
 
 const addPerformanceAdmin = async (req, res) => {
-  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent, date } = req.body;
-
+  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent, date, date_finished } = req.body;
+console.log('THis is Stats Inputs: ', req.body)
+let currentDate = new Date().toISOString().slice(0, 10);
   try {
-
+    if (!isNaN(date_finished)) {
+      // Save parsedDate to the database
+      currentDate = date_finished
+    } else {
+      console.error('Invalid date format:', date_finished);
+      // Handle the error or provide feedback to the user
+    }
       // Get the current date in 'YYYY-MM-DD' format
-      const currentDate = new Date().toISOString().slice(0, 10);
+      
 
       // Check if a performance record with the same trackerId and current date already exists
       let existingPerformance = await Performance.findOne({
           tracker: trackerId,
-          date: { $gte: new Date(date), $lt: new Date(date).setDate(new Date(date).getDate() + 1) },
+          date:date_finished // { $gte: new Date(date), $lt: new Date(date).setDate(new Date(date).getDate() + 1) },
       });
 
       // print("Existing: ")
@@ -226,7 +233,7 @@ const addPerformanceAdmin = async (req, res) => {
           // Create a new performance record using the 'Performance' model
           existingPerformance = new Performance({
               tracker: trackerId,
-              date,
+              date: date || currentDate ,
           });
       }
 
@@ -236,12 +243,13 @@ const addPerformanceAdmin = async (req, res) => {
           existingPerformance.acd = acd;
           existingPerformance.minutesRoutesTerminated = minutesRoutesTerminated;
       } else if (req.body.sms) {
-          existingPerformance.totalSMS = smsSent;
+          existingPerformance.totalSMS = smsSent
+          existingPerformance.date = currentDate;
       }
 
       // Save the performance record to the database
       const savedPerformance = await existingPerformance.save();
-      console.log("Performance Saved/Updated: ", req.user);
+      console.log("Performance Saved/Updated: ", existingPerformance);
       
         req.flash('update_success', "Stats successfully added")
         res.status(201).redirect('/track/tracker/' + trackerId);
