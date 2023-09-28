@@ -41,7 +41,7 @@ const authenticateUser = async (req, res, next) => {
     const { designation, role } = req.user; // Assuming the user object is available in the request
 
     // console.log("CURRENT USER: ", req.user)
-    if (designation !== 'NOC-TL' && designation !== 'NOC-TL') {
+    if (designation !== 'NOC-TL' && designation !== 'HoIT') {
       return res.redirect('/');
     }
   
