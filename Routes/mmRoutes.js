@@ -47,12 +47,14 @@ router.get('/newClient/', ismm, async function (req, res) {
         pageTitle: "Add New Tracker",
         new: true,
         error,
+        user: req.user,
         message: flash,
         isAuthenticated: req.user.isLoggedIn,
         isManagement: req.user.designation,
         designation: req.user.designation
     });
 });
+router.post('/newClient',ismm, customerTrackerController.addCustomerTracker);
 
 
 

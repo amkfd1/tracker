@@ -23,7 +23,11 @@
 							<i data-feather="x"></i> <strong><%= error%></strong>
 						  </div>
 						  <% } else {}%>
-						<form action="/track/newClient" method="POST" class="forms-sample">
+						<% if (designation == "Admin" ) {%>
+							<form action="/track/newClient" method="POST" class="forms-sample">
+						<% } else {%>
+							<form action="/mm/newClient" method="POST" class="forms-sample">
+						<% } %>
 							<section >
 								
 								<h4 class="card-title text-muted">

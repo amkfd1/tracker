@@ -826,6 +826,7 @@ const getAllCustomerTrackers = async (req, res) => {
       reqUsers,
       isManagement: false,
       tasks,
+      designation: req.user.designation
     });
   } catch (error) {
     console.error('Error retrieving trackers:', error);
