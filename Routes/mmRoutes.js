@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mmController = require('../Controllers/mmController');
 const taskController = require('../Controllers/taskController');
+const performanceControl = require('../Controllers/performanceControl');
 const customerTrackerController = require('../Controllers/trackerControl');
 const fs = require('fs');
 const isAuth = require('../middleware/verifyAuth');
@@ -35,8 +36,21 @@ router.get('/task/:taskId', ismm, taskController.getAdminSingleTask);
 // update stage
 router.post('/updateStage/:id', ismm, customerTrackerController.updateTrackerStage);
 router.get('/tracker/:id', ismm, customerTrackerController.getSingleTracker);
+router.post('/add-stats', ismm, performanceControl.addPerformanceAdmin);
 
-
+// cREATE OR ADD NEW SECTIONS
+router.post('/updateAddress/:id', ismm, customerTrackerController.updateAddress);
+router.post('/updateService/:id', ismm, customerTrackerController.updateService);
+router.post('/updateTechnical/:id', ismm, customerTrackerController.updateTech);
+router.post('/updateTesting/:id', ismm, customerTrackerController.updateTesting);
+router.post('/addContact/:id', ismm, customerTrackerController.addContact);
+router.post('/addNote/', ismm, customerTrackerController.addNote);
+router.post('/tasks', ismm, taskController.createTask);
+router.post('/tasks/:taskId/files', ismm, upload.single('document'), taskController.addFileToTask);
+router.post('/tasks/:taskId/notes', ismm, taskController.addNoteToTask);
+router.put('/tasks/:taskId',ismm, taskController.editTask);
+router.post('/tasks/:taskId', ismm, taskController.deleteTask);
+router.post('/tasks/close/:id', ismm, taskController.editTaskStatus);
 
 router.get('/newClient/', ismm, async function (req, res) {
   let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
@@ -57,7 +71,7 @@ router.get('/newClient/', ismm, async function (req, res) {
 router.post('/newClient',ismm, customerTrackerController.addCustomerTracker);
 
 
-
+ 
 
 // Use the upload middleware in your route handler
 router.post('/upload/:id', ismm, upload.single('document'), customerTrackerController.uploadDocument);

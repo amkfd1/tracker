@@ -223,7 +223,7 @@
 											</button>
 											</div>
 											<div class="modal-body">
-											<form method="post" action="/track/upload/<%= Tracker._id%>" enctype="multipart/form-data">
+											<form method="post" action="/mm/upload/<%= Tracker._id%>" enctype="multipart/form-data">
 												<div class="form-group row ">
 													<div class="col">
 														<label>Title:</label>
@@ -304,7 +304,7 @@
 											</button>
 											</div>
 											<div class="modal-body">
-											<form method="post" action="/track/upload/update/<%= documents[i].documentId%>" enctype="multipart/form-data">
+											<form method="post" action="/mm/upload/update/<%= documents[i].documentId%>" enctype="multipart/form-data">
 												<div class="form-group row ">
 													<div class="col">
 														<label>Title:</label>
@@ -337,7 +337,7 @@
 											</button>
 											</div>
 											<div class="modal-body">
-											<form method="post" action="/track/document/send/<%= documents[i].documentId%>" >
+											<form method="post" action="/mm/document/send/<%= documents[i].documentId%>" >
 												<div class="form-group row ">
 													<div class="col">
 														<label>Title:</label>
@@ -451,7 +451,7 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form method="post" action="/track/addContact/<%= Tracker._id%>">
+						<form method="post" action="/mm/addContact/<%= Tracker._id%>">
 							<div class="form-group row ">
 								<div class="col">
 									<label>Platform:</label>
@@ -486,7 +486,7 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form action="/track/updateAddress/<%= Tracker._id%>" method="post">
+						<form action="/mm/updateAddress/<%= Tracker._id%>" method="post">
 							
 							<div class="form-group row ml-3 mr-3" >
 								
@@ -522,11 +522,11 @@
 									<div class="row mt-4">
 										<div class= "col-md-5">
 											<label>Zip:</label>
-											<input value="<%= Tracker.address.zip%>" class="form-control" name="platform">
+											<input value="<%= Tracker.address.zip%>" class="form-control" name="zip">
 										</div>
 										<div class= "col-md-6">
 											<label>Country: </label>
-											<input value="<%= Tracker.address.country%>" class="form-control" name="contact_link">
+											<input value="<%= Tracker.address.country%>" class="form-control" name="country">
 										</div>
 									</div>
 								</div>
@@ -554,7 +554,7 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form action="/track/updateService/<%= Tracker._id%>" method="post">
+						<form action="/mm/updateService/<%= Tracker._id%>" method="post">
 							<div class="form-group row ">
 								<div class="col-md-6">
 									<label>Service Type:</label>
@@ -609,7 +609,7 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form action="/track/updateTechnical/<%= Tracker._id%>" method="post">
+						<form action="/mm/updateTechnical/<%= Tracker._id%>" method="post">
 							<div class="form-group row ">
 								<div class="col-md-6">
 									<label>Service Type:</label>
@@ -672,7 +672,7 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form action="/track/updateTesting/<%= Tracker._id%>" method="post">
+						<form action="/mm/updateTesting/<%= Tracker._id%>" method="post">
 							<div class="form-group row ">
 								<div class="col-md-4">
 									<label>Routes To Test:</label>
@@ -730,7 +730,7 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form method="post" action="/track/document/grant-access/" >
+						<form method="post" action="/mm/document/grant-access/" >
 							<div class="form-group row ">
 								<div class="col">
 									<label>Document:</label>
@@ -788,7 +788,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form action="/track/addNote" method="post">
+					<form action="/mm/addNote" method="post">
 					<div class="form-group">
 						<div class="row">
 							<div class="col">
@@ -835,7 +835,7 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<form action="/add-stats" method="post">
+						<form action="/mm/add-stats" method="post">
 						<div class="form-group">
 							<div class="row">
 								<div class="col">

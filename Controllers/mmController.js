@@ -282,7 +282,7 @@ const getManagementDash = async (req, res) => {
         let tsk = {
             _id: task._id,
             title : task.title,
-            taskFor: task.taskFor,
+            taskFor: task.taskFor.name,
             date: formatDateToDdMmYyyy(task.date),
             description: task.description,
             status: task.status,

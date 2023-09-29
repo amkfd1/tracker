@@ -498,6 +498,7 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
             isAuthenticated: req.user.isLoggedIn,
             message: flash,
             error,
+            designation: req.user.designation,
             user: req.user,
             task: {},
             stages: ['Ongoing', 'Complete']
@@ -652,8 +653,8 @@ console.log("We're getting to add file", req.file)
       if (!task) {
           print({ message: 'Task not found' });
           req.flash('server_error', "Error adding file to task. Try Again")
-          return res.status(201).redirect('/tasks/task/'+taskId);
-      }
+          return res.status(201).redirect('/mm/task/'+taskId);
+      } 
       
       task.files.push({ filename:originalname, uploadedBy });
       const updatedTask = await task.save();

@@ -252,14 +252,24 @@ let currentDate = new Date().toISOString().slice(0, 10);
       console.log("Performance Saved/Updated: ", existingPerformance);
       
         req.flash('update_success', "Stats successfully added")
-        res.status(201).redirect('/track/tracker/' + trackerId);
-
+        // res.status(201).redirect('/track/tracker/' + trackerId);
+        if (req.user.designation === "Admin" || req.user.designation === "Management"){
+          return res.status(200).redirect('/track/tracker/'+trackerId)
+        }else {
+          return res.status(200).redirect('/mm/tracker/'+trackerId)
+        }
       
   } catch (error) {
       console.error('Error creating/updating performance:', error);
       // res.status(500).json({ error: 'Error creating/updating performance' });
       req.flash('server_error', "Error creating/updating performance")
-      res.status(201).redirect('/track/tracker/' + trackerId);
+      // res.status(201).redirect('/track/tracker/' + trackerId);
+      if (req.user.designation === "Admin" || req.user.designation === "Management"){
+        return res.status(200).redirect('/track/tracker/'+trackerId)
+      }else {
+        return res.status(200).redirect('/mm/tracker/'+trackerId)
+      }
+    
 
   }
 };

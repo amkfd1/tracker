@@ -25,7 +25,7 @@ let currency = new Intl.NumberFormat('en-US', {
 
 
 
-const uploadDocument = async (req, res) => {
+const uploadDocument = async (req, res) => {333
   try {
     const { documentTitle } = req.body;
     const userId = req.user._id;
@@ -59,14 +59,18 @@ print(req.file)
 
     await tracker.save();
 
-    if (req.user.role != "Admin"){
+    if (req.user.role != "Admin" ||req.user.role != "Management" || req.user.role != "HoIT" || req.user.role != "NOC-TL"){
       req.flash('update_success','Document Uploaded');
 
-      res.status(200).redirect('/client/' + customerRefId);
-    } else {
+      return res.status(200).redirect('/client/' + customerRefId);
+    } else if (req.user.role != "HoIT" || req.user.role != "NOC-TL"){
       req.flash('update_success','Document Uploaded');
 
-      res.status(200).redirect('/track/tracker/' + customerRefId);
+      return res.status(200).redirect('/track/tracker/' + customerRefId);
+    }else {
+      req.flash('update_success','Document Uploaded');
+
+      return res.status(200).redirect('/mm/tracker/' + customerRefId);
     }
   } catch (error) {
     console.error('Error uploading document:', error);
@@ -366,11 +370,21 @@ const addContact = async (req, res) => {
     // Save the updated Tracker document
     await tracker.save();
     req.flash('update_success','New contact has been added successfully')
-    res.status(200).redirect('/track/tracker/'+customerRefId);
+    // res.status(200).redirect('/track/tracker/'+customerRefId);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(200).redirect('/track/tracker/'+customerRefId)
+    }else {
+      return res.status(200).redirect('/mm/tracker/'+customerRefId)
+    }
   } catch (error) {
     console.error('Error uploading document:', error);
     req.flash('server_error','A server error occured. Try Again')
-    res.status(500).redirect('/track/tracker/'+customerRefId)
+    // res.status(500).redirect('/track/tracker/'+customerRefId)
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(200).redirect('/track/tracker/'+customerRefId)
+    }else {
+      return res.status(200).redirect('/mm/tracker/'+customerRefId)
+    }
   }
 };
 
@@ -504,12 +518,20 @@ const addCustomerTracker = async (req, res) => {
     
     const savedTracker = await customerTracker.save();
     req.flash('update_success', 'Client registered successfully');
-    res.redirect('/track/home')
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.redirect('/track/home')
+    }else {
+      return res.redirect('/mm/dashboard')
+    }
 } catch (error) {
     console.error(error);
     // throw new Error('Failed to add customer tracker');
     req.flash('server_error','One or more field(s) are required. Try Again')
-    res.status(500).redirect('/track/Newclient')
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(500).redirect('/track/Newclient')
+    }else {
+      return res.redirect('/mm/dashboard')
+    }
 }
 };
 
@@ -528,7 +550,7 @@ const updateAddress = async (req, res) => {
   try {
     const { id } = req.params; // Get the tracker ID from the request params
     const { building_number, street, city, zip, country } = req.body; // Get the updated address from the request body
-    console.log("Body: ", req.body.street)
+    console.log("This ", req.user.designation, "Updating: ", req.body)
     // Find the Tracker document by ID
     const tracker = await Tracker.findById(id);
 
@@ -548,11 +570,20 @@ const updateAddress = async (req, res) => {
     await tracker.save();
     // console.log("Changing: ", req.body)
     req.flash('update_success','Address Updated')
-    res.status(200).redirect('/track/tracker/'+req.params.id);
+    // res.status(200).redirect('/track/tracker/'+req.params.id);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(200).redirect('/track/tracker/'+req.params.id)
+    }else {
+      return res.status(200).redirect('/mm/tracker/'+req.params.id)
+    }
   } catch (error) {
     console.error('Error updating address:', error);
     req.flash('server_error','A server error occured. Try Again')
-    res.status(500).redirect('/track/tracker'+id);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(500).redirect('/track/tracker/'+req.params.id)
+    }else {
+      return res.status(500).redirect('/mm/tracker/'+req.params.id)
+    }
   }
 
 };
@@ -582,11 +613,21 @@ const updateService = async (req, res) => {
     await tracker.save();
     // console.log("Changing: ", req.body)
     req.flash('update_success','Services Updated')
-    res.status(200).redirect('/track/tracker/'+req.params.id);
+    // res.status(200).redirect('/track/tracker/'+req.params.id);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(200).redirect('/track/tracker/'+req.params.id)
+    }else {
+      return res.status(200).redirect('/mm/tracker/'+req.params.id)
+    }
     } catch (error) {
     console.error('Error updating Service Info:', error);
     req.flash('server_error','A server error occured. Try Again')
-    res.status(500).redirect('/track/tracker'+id);
+    // res.status(500).redirect('/track/tracker'+id);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(500).redirect('/track/tracker/'+req.params.id)
+    }else {
+      return res.status(500).redirect('/mm/tracker/'+req.params.id)
+    }
   }
 
 };
@@ -617,11 +658,21 @@ const updateTech = async (req, res) => {
     await tracker.save();
     // console.log("Changing: ", req.body)
     req.flash('update_success','Technical Info Updated')
-    res.status(200).redirect('/track/tracker/'+req.params.id);
+    // res.status(200).redirect('/track/tracker/'+req.params.id);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(200).redirect('/track/tracker/'+req.params.id)
+    }else {
+      return res.status(200).redirect('/mm/tracker/'+req.params.id)
+    }
   } catch (error) {
     console.error('Error updating Technical Info:', error);
     req.flash('server_error','A server error occured. Try Again')
-    res.status(500).redirect('/track/tracker'+id);
+    // res.status(500).redirect('/track/tracker'+id);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(500).redirect('/track/tracker/'+req.params.id)
+    }else {
+      return res.status(500).redirect('/mm/tracker/'+req.params.id)
+    }
   }
 
 };
@@ -652,11 +703,21 @@ const updateTesting = async (req, res) => {
     await tracker.save();
     // console.log("Changing: ", req.body)
     req.flash('update_success','Testing Updated')
-    res.status(200).redirect('/track/tracker/'+req.params.id);
+    // res.status(200).redirect('/track/tracker/'+req.params.id);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(200).redirect('/track/tracker/'+req.params.id)
+    }else {
+      return res.status(200).redirect('/mm/tracker/'+req.params.id)
+    }
   } catch (error) {
     console.error('Error updating Technical Info:', error);
     req.flash('server_error','A server error occured. Try Again');
-    res.status(500).redirect('/track/tracker/'+id);
+    // res.status(500).redirect('/track/tracker/'+id);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(500).redirect('/track/tracker/'+req.params.id)
+    }else {
+      return res.status(500).redirect('/mm/tracker/'+req.params.id)
+    }
   }
 
 };
@@ -897,11 +958,22 @@ const updateTrackerStage = async (req, res) => {
       const stage = await tracker.save();
       console.log("Updates: ", stage.stage)
       req.flash('update_success','Stage status Updated')
-      res.status(200).redirect('/track/home');
+      // res.status(200).redirect('/track/home');
+      if (req.user.designation === "Admin" || req.user.designation === "Management"){
+        return res.status(200).redirect('/track/home/')
+      }else {
+        return res.status(200).redirect('/mm/dashboard/')
+      }
     } catch (error) {
       console.error('Error updating tracker stage process:', error);
       req.flash('server_error','A server error occured. Try Again');
-      res.status(500).redirect('/track/home/');    }
+      // res.status(500).redirect('/track/home/');    
+      if (req.user.designation === "Admin" || req.user.designation === "Management"){
+        return res.status(500).redirect('/track/home/')
+      }else {
+        return res.status(500).redirect('/mm/dashboard/')
+      }
+    }
 };
 
 
@@ -986,7 +1058,12 @@ const getSingleTracker = async (req, res) => {
   } catch (error) {
     console.log(error)
     req.flash('server_error','A server error occured. Try Again')
-    res.status(500).redirect('/track/home')
+    // res.status(500).redirect('/track/home')
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(200).redirect('/track/home/')
+    }else {
+      return res.status(200).redirect('/mm/dashboard/')
+    }
   }
 };
 
@@ -1304,8 +1381,9 @@ const getManagementDash = async (req, res) => {
 
 
 const addPerformance = async (req, res) => {
+  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent } = req.body;
+
   try {
-      const { trackerId, asr, acd, minutesRoutesTerminated, smsSent } = req.body;
 
       // Get the current date in 'YYYY-MM-DD' format
       const currentDate = new Date().toISOString().slice(0, 10);
@@ -1338,10 +1416,20 @@ const addPerformance = async (req, res) => {
       const savedPerformance = await existingPerformance.save();
       console.log("Performance Saved/Updated: ", savedPerformance);
       req.flash('server_error', "Today's Carrier minutes are already uploaded")
-      res.status(201).redirect('/client/' + trackerId);
+      // res.status(201).redirect('/client/' + trackerId);
+      if (req.user.designation === "Admin" || req.user.designation === "Management"){
+        return res.status(200).redirect('/track/'+trackerId)
+      }else {
+        return res.status(200).redirect('/mm/track/'+trackerId)
+      }
   } catch (error) {
       console.error('Error creating/updating performance:', error);
       res.status(500).json({ error: 'Error creating/updating performance' });
+      if (req.user.designation === "Admin" || req.user.designation === "Management"){
+        return res.status(500).redirect('/track/tracker/'+trackerId)
+      }else {
+        return res.status(500).redirect('/mm/track/'+trackerId)
+      }
   }
 };
 

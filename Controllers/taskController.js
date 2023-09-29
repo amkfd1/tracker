@@ -36,12 +36,21 @@ exports.createTask = async (req, res) => {
         print('Body: ', newTask)
         print('USER', assignedBy)
         req.flash('update_success', "Task Successfully created ")
-        res.status(201).redirect('/track/home');
+        // res.status(201).redirect('/track/home');
         // res.status(201).json(savedTask);
+        if (req.user.designation === "Admin" || req.user.designation === "Management"){
+            return res.status(200).redirect('/track/home')
+          }else {
+            return res.status(200).redirect('/mm/dashboard')
+          }
     } catch (error) {
         print({ message: 'Error creating task', error: error.message });
         req.flash('server_error', "Error creating task. Try Again")
-        res.status(201).redirect('/track/home');
+        if (req.user.designation === "Admin" || req.user.designation === "Management"){
+            return res.status(500).redirect('/track/home')
+          }else {
+            return res.status(500).redirect('/mm/dashboard')
+          }
     }
 };
 
@@ -63,11 +72,22 @@ exports.addFileToTask = async (req, res) => {
         const updatedTask = await task.save();
         print("This is File: ", filename, "\nPath: ", filePath)
         req.flash('update_success', "File Successfully added ")
-        res.status(201).redirect('/track/home');
+        // res.status(201).redirect('/track/home');
+        if (req.user.designation === "Admin" || req.user.designation === "Management"){
+            return res.status(200).redirect('/track/home')
+          }else {
+            return res.status(200).redirect('/mm/task'+req.params.taskId)
+          }
     } catch (error) {
         print({ message: 'Error adding file to task', error: error.message });
         req.flash('server_error', "Error adding file to task. Try Again")
-        res.status(201).redirect('/track/home');
+        // res.status(201).redirect('/track/home');
+        if (req.user.designation === "Admin" || req.user.designation === "Management"){
+            return res.status(500).redirect('/track/home')
+          }else {
+            return res.status(200).redirect('/mm/task'+req.params.taskId)
+
+          }
     }
 };
 
@@ -88,14 +108,26 @@ exports.addNoteToTask = async (req, res) => {
         task.notes.push({note,postedBy});
         const updatedTask = await task.save();
         req.flash('update_success', "Note Successfully added ")
-        res.status(201).redirect('/track/home');
+        // res.status(201).redirect('/track/home');
         // res.json(updatedTask);
         print('The body: ', postedBy, "\n Body: ", req.body)
+        if (req.user.designation === "Admin" || req.user.designation === "Management"){
+            return res.status(200).redirect('/track/home')
+          }else {
+            return res.status(200).redirect('/mm/task/'+req.params.taskId)
+
+          }
 
     } catch (error) {
         print({ message: 'Error adding note to task', error: error.message });
         req.flash('server_error', "Error adding note to task. Try Again")
-        res.status(201).redirect('/track/home');
+        // res.status(201).redirect('/track/home');
+        if (req.user.designation === "Admin" || req.user.designation === "Management"){
+            return res.status(500).redirect('/track/home')
+          }else {
+            return res.status(500).redirect('/mm/task/'+req.params.taskId)
+
+          }
     }
 };
 
@@ -113,11 +145,21 @@ exports.editTask = async (req, res) => {
             return res.status(201).redirect('/track/home');
         }
         
-        res.json(task);
+        // res.json(task);
+        if (req.user.designation === "Admin" || req.user.designation === "Management"){
+            return res.status(200).redirect('/track/home')
+          }else {
+            return res.status(200).redirect('/mm/dashboard')
+          }
     } catch (error) {
         print({ message: 'Error editing task', error: error.message });
         req.flash('server_error', "Error adding note to task. Try Again")
-        res.status(201).redirect('/track/home');
+        // res.status(201).redirect('/track/home');
+        if (req.user.designation === "Admin" || req.user.designation === "Management"){
+            return res.status(500).redirect('/track/home')
+          }else {
+            return res.status(500).redirect('/mm/dashboard')
+          }
     }
 };
 
@@ -137,11 +179,21 @@ exports. editTaskStatus = async (req, res) => {
       } 
   
       req.flash('update_success', "Task status updated successfully");
-      return res.status(200).redirect('/admin/task/'+taskId);
+    //   return res.status(200).redirect('/admin/task/'+taskId);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+        return res.status(200).redirect('/admin/task/'+taskId)
+      }else {
+        return res.status(200).redirect('/mm/task/'+taskId)
+      }
     } catch (error) {
       console.error("Error editing task status:", error.message);
       req.flash('server_error', "Error updating task status. Please try again");
-      return res.status(500).redirect('/admin/task/'+taskId);
+    //   return res.status(500).redirect('/admin/task/'+taskId);
+      if (req.user.designation === "Admin" || req.user.designation === "Management"){
+        return res.status(500).redirect('/admin/task/'+taskId)
+      }else {
+        return res.status(500).redirect('/mm/task/'+taskId)
+      }
     }
   };
 
@@ -290,6 +342,7 @@ exports.getSingleTask = async (req, res) => {
             isAuthenticated: req.user.isLoggedIn,
             message: flash,
             error,
+            designation: req.user.designation,
             user: {_id:''},
             stages: ['Ongoing', 'Complete']
 
@@ -311,6 +364,7 @@ exports.getAdminSingleTask = async (req, res) => {
                 description: tasks[0].description,
                 taskFor: tasks[0].taskFor.name,
                 assignedBy: tasks[0].assignedBy.name,
+                designation:req.user.designation,
                 notes: tasks[0].notes,
                 files: tasks[0].files,
                 deadline: (tasks[0].deadline).toISOString().slice([0],[10]),

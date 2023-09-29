@@ -85,4 +85,4 @@ router.get("/client/doc/:id", async (req, res) => {
 });
 
  router.get('/user/user-record/:userId', isAuth, adminsettings.getUserById)
-module.exports = router;
+module.exports = router; 

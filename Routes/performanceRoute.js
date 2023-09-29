@@ -4,6 +4,7 @@ const performanceControl = require('../Controllers/performanceControl');
 const fs = require('fs');
 const isAuth = require('../middleware/verifyAuth');
 const isAdmin = require('../middleware/isAdmin');
+const ismm = require('../middleware/ismm');
 
 
 router.get('/management-summary',  performanceControl.getVoipPerformances);
