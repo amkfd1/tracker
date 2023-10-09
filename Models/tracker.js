@@ -97,6 +97,14 @@ const TrackerSchema = new Schema({
     ref: 'Note',
     default: []
   }],
+  CB: {
+    type: Number,
+    default: null
+  },
+  CL: {
+    type: Number,
+    default: null
+  },
 
 },{ versionKey: false } );
 
