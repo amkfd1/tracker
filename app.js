@@ -8,6 +8,7 @@ const perfRoutes = require('./Routes/performanceRoute');
 const tasksRoutes = require('./Routes/taskRoutes');
 const mmRoutes = require('./Routes/mmRoutes');
 const staffRoutes = require('./Routes/staffRoutes');
+const weeklyRoutes = require('./Routes/wrRoutes');
 const Log = require('./Models/log');
 const Permission = require('./Models/permission');
 const authControl = require('./Controllers/authControl');
@@ -105,7 +106,7 @@ app.use('/mm', mmRoutes);
 app.use('/', staffRoutes);
 app.use('/', perfRoutes);
 app.use('/', tasksRoutes);
-
+app.use('/', weeklyRoutes);
 
 
 

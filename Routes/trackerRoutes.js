@@ -74,7 +74,8 @@ router.get('/newClient/', isAdmin, async function (req, res) {
         error,
         message: flash,
         isAuthenticated: req.user.isLoggedIn,
-        isManagement: req.user.designation
+        isManagement: req.user.designation,
+        designation: req.user.designation
     });
 });
 
