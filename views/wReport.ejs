@@ -3,6 +3,23 @@
 		max-width: 15px;
 		max-height: 15px;
 	}
+
+	@media print{
+    body *:not(#my-section):not(#my-section *){
+        visibility:hidden;
+    }
+    #my-section{
+        position: absolute;
+        top: 0;
+        left: 0;
+		visibility: visible;
+		align-items: center;
+		justify-content: center;
+		min-width: 120%;
+		min-height: 500%;
+		zoom: 1.2;
+    }
+}
 </style>
 <%- include('includes/head') %>
 
@@ -15,246 +32,249 @@
 				<div class="card " style=" width: 90% ">
 					<div class="card-body card-body-alt px-5" >
 						<div class="row">
-							<div class="col-md-10">
-								<div class="card-" style="min-height: 700px;">
-									<!-- Carrier weekly Activity minutes/Balance/Threshold -->
-									<div class="card-title mt-3  px-2">
-										Carrier Activity Summary
-									</div>
-									<table class="table table-dark mt-3 mx-2">
-										<thead>
-											<tr>
-												<th>
-													#
-												</th>
-												<th>
-													Carrier
-												</th>
-												<th>
-													Credit Balance
-												</th>
-												<th>
-													Credit Limit
-												</th>
-												<th>
-													Weekly Minutes
-												</th>
-												<th>
-													Alert Active
-												</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>
-													1
-												</td>
-												<td>
-													Ventel
-												</td>
-												<td>
-													$46,548
-												</td>
-												<td>
-													$50,000
-												</td>
-												<td>
-													20,048
-												</td>
-												<td class="text-success">
-													True
-												</td>
-											</tr>
-											<tr>
-												<td>
-													1
-												</td>
-												<td>
-													Qatama
-												</td>
-												<td>
-													$66,153
-												</td>
-												<td>
-													$100,000
-												</td>
-												<td>
-													51,978
-												</td>
-												<td class="text-success">
-													True
-												</td>
-											</tr>
-											
-										</tbody>
-									</table>
-
-									<!-- Customer Tickets -->
-								<div class="card-title mt-3 px-2">
-									Tickets Summary
-								</div>
-								
-									<table class="table table-dark mx-2">
-										<thead>
-											<tr>
-												<th>
-													#
-												</th>
-												<th>
-													Carrier
-												</th>
-												<th>
-													Logged Issue
-												</th>
-												<th>
-													Dates
-												</th>
-												<th>
-													Status
-												</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>
-													1
-												</td>
-												<td>
-													Voxbridge
-												</td>
-												<td>
-													FAS on Eritrea Route 
-												</td>
-												<td>
-													October 3, 2023
-												</td>
-												<td class="text-green">
-													Resolved
-												</td>
-											</tr>
-											<tr>
-												<td>
-													2
-												</td>
-												<td>
-													Quickcom
-												</td>
-												<td>
-													Unstable Route/high PDD 
-												</td>
-												<td>
-													October 5, 2023
-												</td>
-												<td class="text-green">
-													Resolved
-												</td>
-											</tr>
-										
-										</tbody>
-									</table>
-									<!-- End tickets -->
-
-									<div class="card-title mt-2 px-2">
-										Rate Notification
-									</div>
-									<div class="table-responsive ">
-										<table class="table table-bordered">
+							<div class="col-md-10" >
+								<section id= "my-section">
+									<div class="card-" style="min-height: 700px;" >
+										<!-- Carrier weekly Activity minutes/Balance/Threshold -->
+										<div class="card-title mt-3  px-2" >
+											Carrier Activity Summary
+										</div>
+										<table class="table table-dark mt-3 mx-2" >
 											<thead>
 												<tr>
 													<th>
 														#
 													</th>
 													<th>
-														Supplier 
+														Carrier
 													</th>
 													<th>
-														Product
+														Credit Balance
 													</th>
-													
+													<th>
+														Credit Limit
+													</th>
+													<th>
+														Weekly Minutes
+													</th>
+													<th>
+														Alert Active
+													</th>
 												</tr>
 											</thead>
 											<tbody>
-												<tr class="table-warning text-dark">
+												<tr>
 													<td>
 														1
 													</td>
 													<td>
-														Cedric Kelly
+														Ventel
 													</td>
 													<td>
-														Photoshop
+														$46,548
 													</td>
-													
+													<td>
+														$50,000
+													</td>
+													<td>
+														20,048
+													</td>
+													<td class="text-success">
+														True
+													</td>
 												</tr>
-												<tr class="table-warning text-dark">
+												<tr>
+													<td>
+														1
+													</td>
+													<td>
+														Qatama
+													</td>
+													<td>
+														$66,153
+													</td>
+													<td>
+														$100,000
+													</td>
+													<td>
+														51,978
+													</td>
+													<td class="text-success">
+														True
+													</td>
+												</tr>
+												
+											</tbody>
+										</table>
+	
+										<!-- Customer Tickets -->
+									<div class="card-title mt-3 px-2" >
+										Tickets Summary
+									</div>
+									
+										<table class="table table-dark mx-2" >
+											<thead>
+												<tr>
+													<th>
+														#
+													</th>
+													<th>
+														Carrier
+													</th>
+													<th>
+														Logged Issue
+													</th>
+													<th>
+														Dates
+													</th>
+													<th>
+														Status
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>
+														1
+													</td>
+													<td>
+														Voxbridge
+													</td>
+													<td>
+														FAS on Eritrea Route 
+													</td>
+													<td>
+														October 3, 2023
+													</td>
+													<td class="text-green">
+														Resolved
+													</td>
+												</tr>
+												<tr>
 													<td>
 														2
 													</td>
 													<td>
-														Haley Kennedy
+														Quickcom
 													</td>
 													<td>
-														Flash
+														Unstable Route/high PDD 
 													</td>
-													
+													<td>
+														October 5, 2023
+													</td>
+													<td class="text-green">
+														Resolved
+													</td>
 												</tr>
 											
 											</tbody>
 										</table>
-									</div>
+										<!-- End tickets -->
 	
-									<!-- Other Updates -->
-									<div class="card-title mt-3 px-2">
-										Other Updates
-									</div>
-									<div class="table-responsive pt-3">
-										<table class="table table-bordered">
-											<thead>
-												<tr>
-													<th>
-														By:
-													</th>
-													<th>
-														Other Update
-													</th>
-													<th>
-
-													</th>
-													
-												</tr>
-											</thead>
-											<tbody>
-												<style>
-													#containerSide {
-														position: relative;
-													}
-													.copyright {
-														position: absolute;
-														bottom: 0;
-													}
-												</style>
+										<div class="card-title mt-2 px-2" >
+											Rate Notification
+										</div>
+										<div class="table-responsive ">
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th>
+															#
+														</th>
+														<th>
+															Supplier 
+														</th>
+														<th>
+															Product
+														</th>
+														
+													</tr>
+												</thead>
+												<tbody>
+													<tr class="table-warning text-dark">
+														<td>
+															1
+														</td>
+														<td>
+															Cedric Kelly
+														</td>
+														<td>
+															Photoshop
+														</td>
+														
+													</tr>
+													<tr class="table-warning text-dark">
+														<td>
+															2
+														</td>
+														<td>
+															Haley Kennedy
+														</td>
+														<td>
+															Flash
+														</td>
+														
+													</tr>
 												
-												<tr class="table-primary text-dark">
+												</tbody>
+											</table>
+										</div>
+		
+										<!-- Other Updates -->
+										<div class="card-title mt-3 px-2">
+											Other Updates
+										</div>
+										<div class="table-responsive pt-3">
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th>
+															By:
+														</th>
+														<th>
+															Other Update
+														</th>
+														<th>
+	
+														</th>
+														
+													</tr>
+												</thead>
+												<tbody>
+													<style>
+														#containerSide {
+															position: relative;
+														}
+														.copyright {
+															position: absolute;
+															bottom: 0;
+														}
+													</style>
 													
-													<td>
-														Other Update
-													</td>
-													
-													<td>
-														Updates to be added here for future reference.
-													</td>
-													<td>
-														<a href="#" >
-															<i class="appIcons text-muted" data-feather="edit-2" ></i>
-														</a>
-													</td>
-												</tr>
-											</tbody>
-										</table>
+													<tr class="table-primary text-dark">
+														
+														<td>
+															Other Update
+														</td>
+														
+														<td>
+															Updates to be added here for future reference.
+														</td>
+														<td>
+															<a href="#" >
+																<i class="appIcons text-muted" data-feather="edit-2" ></i>
+															</a>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+	
+	
 									</div>
-
-
-								</div>
+								</section>
+								
 								<!-- Rates -->
 								
 
@@ -270,7 +290,7 @@
 
 									<div  class="flex-end" >
 										<div style="flex: end;">
-											<button type="button" class="btn mt-2 btn-outline-info">Print</button>
+											<button type="button" class="btn mt-2 btn-outline-info" onclick="window.print()" >Print</button>
 											<button type="button" class="btn mt-2 btn-outline-secondary">Edit</button>
 											<button type="button" class="btn mt-2 btn-outline-primary">Submit</button>
 										</div>
@@ -302,7 +322,7 @@
 		
 	</div>
 
-<!-- Nav Includes -->
+	
 <script>
     // Add an event listener to the element with the ID "sendNotes"
     document.getElementById("sendNote").addEventListener("click", function() {
@@ -310,4 +330,6 @@
         $("#Notes").modal("close");
     });
 </script>
+
+
 <%- include('includes/end') %>

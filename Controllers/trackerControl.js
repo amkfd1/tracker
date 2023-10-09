@@ -1287,11 +1287,11 @@ const getManagementDash = async (req, res) => {
     print("COMPLETED PERCENTILE:  ", completedPercentile )
     // Fetch data from the Performance schema
     const performances = await Performance.find().populate('tracker');
-    // console.log("PERFORMANCES: ", performances)
+    console.log("PERFORMANCES: ", performances)
     minutesGraph = []
    for (i in performances){
     let performance = [
-      performances[i].tracker.Customer_Name,
+      performances[i].tracker.Customer_Name || '',
       performances[i].minutesRoutesTerminated
       
     ]
