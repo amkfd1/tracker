@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title><%= pageTitle%></title>
+	<!-- core:css -->
+	<link rel="stylesheet" href="../../../assets/vendors/core/core.css">
+    <link rel="stylesheet" href="../../../assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../../assets/vendors/jquery-tags-input/jquery.tagsinput.min.css">
+	<link rel="stylesheet" href="../../../assets/vendors/dropzone/dropzone.min.css">
+	<link rel="stylesheet" href="../../../assets/vendors/dropify/dist/dropify.min.css">
+    <link rel="stylesheet" href="../../../assets/css/hover.css">	
+    
+	<!-- endinject -->
+  <!-- plugin css for this page -->
+  <link rel="stylesheet" href="../../../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+	<!-- end plugin css for this page -->
+	<!-- inject:css -->
+	<link rel="stylesheet" href="../../../assets/fonts/feather-font/css/iconfont.css">
+	<link rel="stylesheet" href="../../../assets/vendors/flag-icon-css/css/flag-icon.min.css">
+	<!-- endinject -->
+  <!-- Layout styles -->  
+	<link rel="stylesheet" href="../../../assets/css/demo_2/style.css">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="../../../assets/images/favicon.png" />
+</head>
+<body>
+	<div class="main-wrapper">
+
+        <%- include('../includes/_sidebar.ejs') %>
+		<div class="page-wrapper">
+            <div class="card-header w-100 bg-dark">
+
+            </div>
+		
+			<div class="page-content mt-0">
+                
+
+        
+                <!-- Activities Form  -->
+                
+                <div class="">
+                    
+                    <div class="card">
+                    
+                        <div class="card-header bg-dark">
+                            <h5 class="cart-title text-light">Create New Support Ticket</h5>
+                            <div class=" mt-2 ml-1 mb-2" style="float: right;">
+                                <a href="/" class="btn btn-outline-primary " >
+                                    <i class="mdi mdi-view-list"></i>
+                                    Tickets List</a>
+                                <br>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form class="cmxform"  method="post" action="/new-ticket" novalidate="novalidate" enctype='multipart/form-data'>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group ">
+                                                <label for="exampleFormControlSelect1"><h5>Priority</h5></label>
+                                                <select name="priority" class="form-control w-100" id="exampleFormControlSelect1">
+                                                    <option selected="" disabled="">--</option>
+                                                    <% for (i in priority) { %>
+                                                        <option><%= priority[i] %></option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlSelect1"><h5>Nature of the problem: </h5></label>
+                                                <select name="nop" class="form-control" id="exampleFormControlSelect1">
+                                                    <option selected="" disabled="">--</option>
+                                                    <% for (i in nop) { %>
+                                                        <option><%= nop[i] %></option>
+                                                    <% } %>
+                                                    
+                                                
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlSelect1"><h5>Type: </h5></label>
+                                                <select name="type" class="form-control" id="exampleFormControlSelect1">
+                                                    <option selected="" disabled="">--</option>
+                                                    <% for (i in type) { %>
+                                                        <option><%= type[i] %></option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlSelect1"><h5>Department</h5></label>
+                                                <select name="department" class="form-control" id="exampleFormControlSelect1">
+                                                    <option selected="" disabled=""><%= department[0] %></option>
+                                                    <% for (i in department) { %>
+                                                        <option><%= department[i] %></option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputText1">Subject </label>
+                                    <input type="text" name="subject" class="form-control mx-5 " id="exampleInputText1" placeholder="Subject" style="width:91%;">
+                                </div>
+                                <label class="col-form-label">Note:</label>
+                                <div class="form-group mb-0 row text-center">
+                                    <div class="w-100 ">
+                                        <textarea name="note" id="maxlength-textarea" class="form-control w-90 mx-5" maxlength="100" rows="10" placeholder="Enter Note here..."></textarea>
+                                    </div>
+                                </div>
+                                <div class=" row w-100 h-40">
+                                    <div class="form-group col-md-12 px-2 ">
+                                        <label>Attach File: <span>
+                                            <button class="hvr-icon-hang border-none bg-transparent" style="border:none;" type="button" data-toggle="collapse" data-target="#collapse-attach" aria-expanded="false" aria-controls="collapse-attach">
+                                                <i class="  link-arrow mdi mdi-arrow-down hvr-icon"></i>
+                                            </button>
+                                        </span></label>
+                                        <div class="collapse multi-collapse" id="collapse-attach">
+                                            <div class="dropify-wrapper w-90 mx-5"><div class="dropify-message"><span class="file-icon"> <p>Drag and drop a file here or click</p></span><p class="dropify-error">Ooops, something wrong appended.</p></div><div class="dropify-loader"></div><div class="dropify-errors-container"><ul></ul></div>
+                                            <input type="file" name="file" id="myDropify" class="border">
+                                            <button type="button" class="dropify-clear">Remove</button>
+                                            <div class="dropify-preview"><span class="dropify-render"></span><div class="dropify-infos"><div class="dropify-infos-inner"><p class="dropify-filename">
+                                                <span class="file-icon"></span> <span class="dropify-filename-inner"></span></p><p class="dropify-infos-message">Drag and drop or click to replace</p></div></div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="ticket" value="">
+                                <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
+        
+                            </form>
+                        </div>
+                    </div>
+                </div>
+        
+
+
+			</div>
+
+			<!-- partial:../../partials/_footer.html -->
+			<footer class="footer d-flex flex-column flex-md-row align-items-center justify-content-between">
+				<p class="text-muted text-center text-md-left">Copyright © 2020 <a href="https://www.nobleui.com" target="_blank">NobleUI</a>. All rights reserved</p>
+				<p class="text-muted text-center text-md-left mb-0 d-none d-md-block">Handcrafted With <i class="mb-1 text-primary ml-1 icon-small" data-feather="heart"></i></p>
+			</footer>
+			<!-- partial -->
+	
+		</div>
+	</div>
+
+	<!-- core:js -->
+	<script src="../../../assets/vendors/core/core.js"></script>
+	<!-- endinject -->
+  <!-- plugin js for this page -->
+  <!-- <script src="../../../assets/vendors/datatables.net/jquery.dataTables.js"></script> -->
+  <!-- <script src="../../../assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script> -->
+  <!-- <script src="../../../assets/vendors/tinymce/tinymce.min.js"></script> -->
+  <script src="../../../assets/vendors/jquery-validation/jquery.validate.min.js"></script>
+	<script src="../../../assets/vendors/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+	<script src="../../../assets/vendors/inputmask/jquery.inputmask.min.js"></script>
+  <script src="../../../assets/vendors/dropzone/dropzone.min.js"></script>
+	<script src="../../../assets/vendors/dropify/dist/dropify.min.js"></script>
+  <script src="../../../assets/js/bootstrap-maxlength.js"></script>
+	<!-- end plugin js for this page -->
+	<!-- inject:js -->
+	<script src="../../../assets/vendors/feather-icons/feather.min.js"></script>
+	<!-- <script src="../../../assets/js/template.js"></script> -->
+    <script src="../../../assets/js/tinymce.js"></script>
+	<!-- endinject -->
+  <!-- custom js for this page -->
+  <script src="../../../assets/js/data-table.js"></script>
+	<!-- end custom js for this page -->
+</body>
+</html>

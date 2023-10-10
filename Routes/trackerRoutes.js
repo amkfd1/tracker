@@ -4,8 +4,10 @@ const customerTrackerController = require('../Controllers/trackerControl');
 const fs = require('fs');
 const isAuth = require('../middleware/verifyAuth');
 const isAdmin = require('../middleware/isAdmin');
-const isManagement = require('../middleware/isManagement');
+const ismm = require('../middleware/ismm');
 
+const isManagement = require('../middleware/isManagement');
+isPass = isAdmin | ismm
 const multer = require('multer');
 
 // const storage = multer.memoryStorage();

@@ -1,0 +1,217 @@
+<style>
+	.smallIcons{
+		max-width: 15px;
+		max-height: 15px;
+	}
+
+	@media print{
+    body *:not(#my-section):not(#my-section *){
+        visibility:hidden;
+    }
+    #my-section{
+        position: absolute;
+        top: 0;
+        left: 0;
+		visibility: visible;
+		align-items: center;
+		justify-content: center;
+		min-width: 120%;
+		min-height: 500%;
+		zoom: 1.2;
+    }
+}
+</style>
+<%- include('../includes/head') %>
+
+<body class="sidebar-dark">
+	<div class="main-wrapper">
+		<div class="page-wrapper full-page ">
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				
+				<div class="card " style=" width: 90% ">
+					<div class="card-body card-body-alt px-5">
+            
+
+                        <div class="card-header bg-dark">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="cart-title text-light">Create New Support Ticket</h5>
+
+                                </div>
+                                <div class="col">
+                                    <div class=" " style="float: right;">
+                                        <a href="/tickets" class="btn btn-outline-primary float-right" >
+                                        <i class="mdi mdi-view-list"></i>
+                                        Tickets List</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" action="/tickets/new-ticket" >
+                                
+                                    <div class="row">
+                                        <div class="col">
+
+                                        </div>
+                                        <div class="col">
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for=""><h5>Priority: </h5></label>
+                                                <select name="priority" class="form-control" >
+                                                    <option selected="" disabled="">--</option>
+                                                    <% for (i in priority) { %>
+                                                        <option><%= priority[i] %></option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for=""><h5>Nature of the problem: </h5></label>
+                                                <select name="nop" class="form-control" >
+                                                    <option selected="" disabled=""><%= nop[0] %></option>
+                                                    <% for (i in nop) { %>
+                                                        <option><%= nop[i] %></option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlSelect1"><h5>Type: </h5></label>
+                                                <select name="type" class="form-control" id="exampleFormControlSelect1">
+                                                    <option selected="" disabled="">--</option>
+                                                    <% for (i in type) { %>
+                                                        <option><%= type[i] %></option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlSelect1"><h5>Department</h5></label>
+                                                <select name="department" class="form-control" id="exampleFormControlSelect1">
+                                                    <option selected="" disabled=""><%= department[0] %></option>
+                                                    <% for (i in department) { %>
+                                                        <option><%= department[i] %></option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                    <div class="form-group">
+                                        <label for="exampleInputText1">Subject </label>
+                                        <input type="text" name="subject" class="form-control " id="exampleInputText1" placeholder="Subject" >
+                                    </div>
+                                    <label class="col-form-label">Note:</label>
+                                    <div class="form-group mb-0 row text-center">
+                                        <div class="w-100 ">
+                                            <textarea name="note" id="maxlength-textarea" class="form-control" maxlength="100" rows="10" placeholder="Enter Note here..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class=" row ">
+                                        <div class="form-group col-md-12 ">
+                                            <label>Attach File: <span>
+                                                <button class="hvr-icon-hang border-none bg-transparent" style="border:none;" type="button" data-toggle="collapse" data-target="#collapse-attach" aria-expanded="false" aria-controls="collapse-attach">
+                                                    <i class="  link-arrow mdi mdi-arrow-down hvr-icon"></i>
+                                                </button>
+                                            </span></label>
+                                            <div class="" id="">
+                                                <input type="file" name="file" id="myDropify" class="border">
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                    <button class="btn btn-primary" type="submit">Submit</button>
+        
+                            </form>
+                        </div>
+
+
+
+
+
+                    </div>
+					
+				
+				
+				</div>
+				
+				
+
+			</div>
+
+
+				
+			<!--NAVIGATION-->
+			<!-- Nav Includes -->
+			<% if (designation === 'NOC-TL' || designation === 'HoIT') { %>
+			    <%- include('../partials/mmNav') %>
+            <%} else {%>
+			    <%- include('../includes/nav') %>
+            
+            <% } %>
+		</div>
+		
+	</div>
+
+	
+<script>
+    // Add an event listener to the element with the ID "sendNotes"
+    document.getElementById("sendNote").addEventListener("click", function() {
+        // Close the modal with the ID "Notes"
+        $("#Notes").modal("close");
+    });
+</script>
+
+
+<%- include('../includes/end') %>
+
+   <!-- Add  edit updates -->
+   <div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Edit Updates</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  <form action="/mm/tasks" method="post">
+			<script>
+				new FroalaEditor('#textarea');
+			  </script>
+			<div class="row">
+				<div class="col-md-12 grid-margin stretch-card">
+						<div class="card-body">
+							<textarea class="form-control" id="textarea" name="tiny"></textarea>
+						</div>
+				</div>
+			</div>
+  
+		<div class=" page-content d-flex justify-content-center align-items-center">
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		  <button type="submit" class="btn btn-primary"><i data-feather="plus"></i> 
+		  Update
+		</button>
+		</div>
+	  </div>
+		  </form>
+		</div>
+	  
+	  </div>
+	</div>

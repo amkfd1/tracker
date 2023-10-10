@@ -63,6 +63,7 @@ const createWeeklyReport = async (req, res) => {
   try {
     const { updates, cWeeklyActivities } = req.body;
 
+    console.log("")
     const newWeeklyReport = new WeeklyReport({
       updates,
       cWeeklyActivities,
@@ -84,13 +85,13 @@ const updateWeeklyReport = async (req, res) => {
       const { id } = req.params;
       const { updates, cWeeklyActivities } = req.body;
   
-      const updatedWeeklyReport = await WeeklyReport.findByIdAndUpdate(
-        id,
-        { updates, cWeeklyActivities },
-        { new: true }
-      );
+      // const updatedWeeklyReport = await WeeklyReport.findByIdAndUpdate(
+      //   id,
+      //   { updates, cWeeklyActivities },
+      //   { new: true }
+      // );
   
-      res.json(updatedWeeklyReport);
+      res.json(req.body)//(updatedWeeklyReport);
     } catch (error) {
       console.error('Error updating WeeklyReport:', error);
       res.status(500).json({ error: 'Server error' });

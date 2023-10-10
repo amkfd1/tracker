@@ -29,7 +29,7 @@ const ticketsSchema = new Schema({
   },
   raisedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Assuming you have a User model for the raisedBy field
+    ref: 'Tracker', // Assuming you have a User model for the raisedBy field
   },
   tUpdates: String,
   Status: String,

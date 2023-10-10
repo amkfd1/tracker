@@ -276,17 +276,17 @@ let currentDate = new Date().toISOString().slice(0, 10);
 
 
 const addPerformanceStaff = async (req, res) => {
-  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent, date } = req.body;
+  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent, date_finished } = req.body;
 
   try {
-
+console.log(req.body)
       // Get the current date in 'YYYY-MM-DD' format
       // const currentDate = new Date().toISOString().slice(0, 10);
 
       // Check if a performance record with the same trackerId and current date already exists
       let existingPerformance = await Performance.findOne({
           tracker: trackerId,
-          date: date //{ $gte: new Date(date), $lt: new Date(date).setDate(new Date(date).getDate() + 1) },
+          date: date_finished //{ $gte: new Date(date), $lt: new Date(date).setDate(new Date(date).getDate() + 1) },
       });
 
       // print("Existing: ")
@@ -294,7 +294,7 @@ const addPerformanceStaff = async (req, res) => {
           // Create a new performance record using the 'Performance' model
           existingPerformance = new Performance({
               tracker: trackerId,
-              date: date,
+              date: date_finished,
           });
       }
 

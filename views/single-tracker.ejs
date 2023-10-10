@@ -15,7 +15,7 @@
 					
 					<div class="card-body card-body-alt px-5" >
 						<div class="row">
-							<div class="col">
+							<div class="col-md-4">
 								<h4 class="card-title mb-3"><%= Tracker.Customer_Name %> 
 									<span>
 										<i class="mdi mdi-grease-pencil ml-2" ></i>
@@ -35,7 +35,7 @@
 								  <% } else {}%>
 							</div>
 							
-							<div class="col">
+							<div class="col-md-4">
 								<p>
 									<div class="btn-group" role="group" aria-label="Basic example">	
 										
@@ -87,13 +87,17 @@
 									</div>
 								  </div>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-4">
 								<div class="float-right">
 									<a class="btn btn-outline-dark text-muted " data-toggle="modal" data-target="#Notes" data-whatever="@fat">
 										<i data-feather="clipboard"></i>
 									</a>
 								</div>
-
+								<div class="float-right">
+									<a class="btn btn-outline-dark text-muted " data-toggle="modal" data-target="#credit-card" data-whatever="@fat">
+										<i data-feather="credit-card"></i>
+									</a>
+								</div>
 								<%if (Tracker.service_interest.service_name == 'VoIP') {%>
 									<a class="btn btn-outline-dark text-muted " data-toggle="modal" href="#" data-target="#performance" data-whatever="">
 										<i data-feather="activity"></i>
@@ -554,7 +558,7 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form action="/mm/updateService/<%= Tracker._id%>" method="post">
+						<form action="/track/updateService/<%= Tracker._id%>" method="post">
 							<div class="form-group row ">
 								<div class="col-md-6">
 									<label>Service Type:</label>
@@ -609,7 +613,7 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form action="/mm/updateTechnical/<%= Tracker._id%>" method="post">
+						<form action="/track/updateTechnical/<%= Tracker._id%>" method="post">
 							<div class="form-group row ">
 								<div class="col-md-6">
 									<label>Service Type:</label>
@@ -672,7 +676,7 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form action="/mm/updateTesting/<%= Tracker._id%>" method="post">
+						<form action="/track/updateTesting/<%= Tracker._id%>" method="post">
 							<div class="form-group row ">
 								<div class="col-md-4">
 									<label>Routes To Test:</label>
@@ -969,6 +973,73 @@
 				</div>
 			</div>
 
+			<div class="modal fade " id="credit-card" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div >
+					<div class="modal-dialog " >
+					<div class="modal-content ">
+						<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">Credit Profile <span class="ml-2">
+							
+						</span></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						
+						</div>
+						<div class="modal-body card-body-hor">
+							
+							
+								<ul class="list-group">
+									<li class="list-group-item disabled" aria-disabled="true">
+										<div class="row">
+											<div class="col">
+												<label for="">Credit Limit: </label>
+											</div>
+											<div class="col">
+												<h5>$<%= Tracker.CL%></h5>
+
+											</div>
+										</div>
+									</li>
+									<li class="list-group-item " >
+										<div class="row">
+											<div class="col">
+												<label >Credit Balance: </label>
+											</div>
+											<div class="col">
+												<h5>$<%= Tracker.CB%></h5>
+
+											</div>
+										</div>
+									</li>
+									
+								  </ul>
+							<form action="">
+								<div class="row mt-2">
+									<div class="col">
+										<label class="text-muted" for="">Credit Balance: </label>
+
+										<input  name="CB" type="text" class="form-control" >
+
+									</div>
+									<div class="col">
+										<label class="text-muted" for="">Credit Limit: </label>
+
+										<input  name="CL" type="text" class="form-control" >
+
+									</div>
+								</div>
+
+								<div class="d-flex align-items-center justify-content-center mt-2">
+									<button class="btn btn-outline-secondary"> Save </button>
+								</div>
+							</form>
+						</div>
+						
+					</div>
+					</div>
+				</div>
+			</div>
 
 
 				

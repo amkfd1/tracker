@@ -610,15 +610,18 @@ const updateService = async (req, res) => {
     tracker.service_interest.status = status;
 
     // Save the updated Tracker document
-    await tracker.save();
+    await tracker.save(); 
     // console.log("Changing: ", req.body)
     req.flash('update_success','Services Updated')
     // res.status(200).redirect('/track/tracker/'+req.params.id);
+    print("Redirecting you back Home");
+
     if (req.user.designation === "Admin" || req.user.designation === "Management"){
       return res.status(200).redirect('/track/tracker/'+req.params.id)
-    }else {
+    }else if (req.user.designation === "Admin" ) {
       return res.status(200).redirect('/mm/tracker/'+req.params.id)
     }
+
     } catch (error) {
     console.error('Error updating Service Info:', error);
     req.flash('server_error','A server error occured. Try Again')
@@ -1322,6 +1325,96 @@ const getManagementDash = async (req, res) => {
       const weeklySMS = await weeklySMSCount()
       const dailySMS = await dailySMSCount()
 
+
+     // Fetch data from the Performance schema
+    //  const performances = await Performance.find().populate('tracker');
+    //  console.log("PERFORMANCES: ", performances);
+     
+     // Calculate the date range for this week and last week
+     const today = new Date();
+     const yesterday = new Date(today); // Declare 'yesterday' here
+     const lastWeekStart = new Date(today);
+     lastWeekStart.setDate(today.getDate() - 7);
+     yesterday.setDate(today.getDate() - 1);
+
+     const thisWeekStart = new Date(today);
+     thisWeekStart.setDate(today.getDate() - today.getDay()); // Assuming Sunday is the first day of the week
+ 
+       // Initialize variables for VoIP and SMS differences
+    let lastWeekMinutesDiffVoIP = 0;
+    let thisWeekMinutesDiffVoIP = 0;
+    let yesterdayMinutesDiffVoIP = 0;
+    let todayMinutesDiffVoIP = 0;
+
+    let lastWeekMinutesDiffSMS = 0;
+    let thisWeekMinutesDiffSMS = 0;
+    let yesterdayMinutesDiffSMS = 0;
+    let todayMinutesDiffSMS = 0;
+
+    // ... (your existing code)
+
+    // Iterate through performances and calculate differences
+    for (const performance of performances) {
+      const performanceDate = new Date(performance.date); // Replace 'date' with the actual date field in your Performance schema
+      const minutesRoutesTerminated = performance.minutesRoutesTerminated;
+      const totalSMS = performance.totalSMS; // Add this line to get the totalSMS
+
+      if (minutesRoutesTerminated !== null && !isNaN(minutesRoutesTerminated)) {
+        // Check if totalMinutes is not empty
+        if (performanceDate >= lastWeekStart && performanceDate < thisWeekStart) {
+          // Calculate difference for last week's VoIP minutes
+          lastWeekMinutesDiffVoIP += minutesRoutesTerminated;
+        } else if (performanceDate >= thisWeekStart && performanceDate <= today) {
+          // Calculate difference for this week's VoIP minutes
+          thisWeekMinutesDiffVoIP += minutesRoutesTerminated;
+        }
+
+        // Calculate difference for yesterday's VoIP minutes
+        if (performanceDate.toDateString() === yesterday.toDateString()) {
+          yesterdayMinutesDiffVoIP += minutesRoutesTerminated;
+        }
+
+        // Calculate difference for today's VoIP minutes
+        if (performanceDate.toDateString() === today.toDateString()) {
+          todayMinutesDiffVoIP += minutesRoutesTerminated;
+        }
+      }
+
+      if (totalSMS !== null && !isNaN(totalSMS)) {
+        // Check if totalSMS is not empty
+        if (performanceDate >= lastWeekStart && performanceDate < thisWeekStart) {
+          // Calculate difference for last week's SMS minutes
+          lastWeekMinutesDiffSMS += totalSMS;
+        } else if (performanceDate >= thisWeekStart && performanceDate <= today) {
+          // Calculate difference for this week's SMS minutes
+          thisWeekMinutesDiffSMS += totalSMS;
+        }
+
+        // Calculate difference for yesterday's SMS minutes
+        if (performanceDate.toDateString() === yesterday.toDateString()) {
+          yesterdayMinutesDiffSMS += totalSMS;
+        }
+
+        // Calculate difference for today's SMS minutes
+        if (performanceDate.toDateString() === today.toDateString()) {
+          todayMinutesDiffSMS += totalSMS;
+        }
+      }
+    }
+    
+
+    print('Last week diff VOIP: ', lastWeekMinutesDiffVoIP)
+    print('this week diff: VOIP', thisWeekMinutesDiffVoIP)
+    print('yesterdays diff: VOIP', yesterdayMinutesDiffVoIP)
+    print('yesterdays diff: VOIP', todayMinutesDiffVoIP)
+
+    print('Last week diff: SMS', lastWeekMinutesDiffSMS)
+    print('this week diff: SMS', thisWeekMinutesDiffSMS)
+    print('yesterdays diff: SMS', yesterdayMinutesDiffSMS)
+    print('yesterdays diff: SMS', todayMinutesDiffSMS)
+
+ //do the calculation. subtract yesterday's from today to get the percent difference
+
     //  console.log("this is your Daily SMS data: ",dailySMS )
     let users = [];
     const reqUsers = await User.find().populate('assignedTasks');
@@ -1338,8 +1431,10 @@ const getManagementDash = async (req, res) => {
         profile: reqUser.profile
       };
       users.push(user);
-      console.log("COMPLETION PERCENTILE: ",overallCompletion )
+      // console.log("COMPLETION PERCENTILE: ",overallCompletion )
     }
+
+    const tasks = await Task.find().populate('reference').populate('assignedBy').populate('taskFor');
     // console.log("GET YOUR WEEKLY SUM: ", weeklyMinutesSum)
     // Render the management dashboard view
     res.status(200).render('management-dashboard', {
@@ -1361,6 +1456,8 @@ const getManagementDash = async (req, res) => {
       mytasks: [],
       userNotes:[],
       users,
+      tasks,
+      trackers,
       designation: req.user.designation,
       dailyMinutesSum: dailyMinutesSum.toLocaleString("en-US"),
       weeklyMinutesSum: weeklyMinutesSum.toLocaleString("en-US"),

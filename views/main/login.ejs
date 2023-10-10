@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Login</title>
+	<!-- core:css -->
+	<link rel="stylesheet" href="../../../assets/vendors/core/core.css">
+	<!-- endinject -->
+  <!-- plugin css for this page -->
+	<!-- end plugin css for this page -->
+	<!-- inject:css -->
+	<link rel="stylesheet" href="../../../assets/fonts/feather-font/css/iconfont.css">
+	<link rel="stylesheet" href="../../../assets/vendors/flag-icon-css/css/flag-icon.min.css">
+	<!-- endinject -->
+  <!-- Layout styles -->  
+	<link rel="stylesheet" href="../../../assets/css/demo_2/style.css">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="../../../assets/images/favicon.png" />
+</head>
+<body>
+	<div class="main-wrapper">
+		<div class="page-wrapper full-page">
+			<div class="page-content d-flex align-items-center justify-content-center">
+
+				<div class="row w-60 mx-0 auth-page">
+					<div class="col-md-8 col-xl-6 mx-auto">
+						<div class="card">
+							<div class="row">
+              
+                <div class="col">
+                  <div class="auth-form-wrapper px-4 py-5">
+                    <a href="#" class="noble-ui-logo d-block mb-2"><img src="/images/logo.png" style="max-width: 45px; max-width: 90px;"> <span> Support</span></a>
+                    <h5 class="text-muted font-weight-normal mb-4">Welcome back! Log in to your account.</h5>
+                    <form action="/signin" method="post" class="forms-sample" >
+                      <div class="form-group">
+                        <label for="">Email address</label>
+                        <input type="email" name="email" class="form-control" placeholder="Email">
+                      </div>
+                      <div class="form-group">
+                        <label for="">Password</label>
+                        <input type="password" name="password" class="form-control" autocomplete="current-password" placeholder="Password">
+                      </div>
+                      <div class="form-check form-check-flat form-check-primary">
+                        <label class="form-check-label">
+                          <input type="checkbox" class="form-check-input border-dark">
+                          Remember me
+                        </label>
+                      </div>
+                      <div class="mt-3">
+                        <button type="submit" class="btn btn-primary mr-2 mb-2 mb-md-0 text-white">Login</button>
+                        <!-- <a type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0">
+                          <i class="btn-icon-prepend" data-feather="twitter"></i>
+                          Login with twitter
+                        </a> -->
+                      </div>
+                      <a href="/register" class="d-block mt-3 text-muted">Not a user? Sign up</a>
+                    </form>
+                  </div>
+                </div>
+                
+              </div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- core:js -->
+	<script src="../../../assets/vendors/core/core.js"></script>
+	<!-- endinject -->
+  <!-- plugin js for this page -->
+	<!-- end plugin js for this page -->
+	<!-- inject:js -->
+	<script src="../../../assets/vendors/feather-icons/feather.min.js"></script>
+	<script src="../../../assets/js/template.js"></script>
+	<!-- endinject -->
+  <!-- custom js for this page -->
+	<!-- end custom js for this page -->
+</body>
+</html>
