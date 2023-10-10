@@ -65,7 +65,7 @@
                             <% for( i in tickets ) {%>
                                 <tr>
                                     <td >
-                                        <a href="/tickets/<%=tickets[i].ticketId %>" style="color: cyan;">ST-<%=tickets[i].ticketId %></a>
+                                        <a href="/ticket/<%=tickets[i]._id %>" style="color: cyan;">ST-<%=tickets[i]._id %></a>
                                     </td>
                                     <td>
                                         <p class="<%if (tickets[i].priority == 'Low') {%>

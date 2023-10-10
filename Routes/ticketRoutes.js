@@ -14,5 +14,10 @@ router.get('/tickets/form', tController.getNewTicket);
 
 router.post('/tickets/new-ticket', isAuth, tController.createTicket);
 
+router.get('/ticket/:id', tController.getTicket);
+
+router.post('/tickets/new-activity/:id', isAuth, tController.postActivity);
+
+
 
 module.exports = router;

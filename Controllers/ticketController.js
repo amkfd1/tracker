@@ -7,13 +7,25 @@ const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
 const { Types } = require('mongoose');
-const Note = require('../Models/note');
+const Activity = require('../Models/activity');
 const mongoose = require('mongoose');
 const Performance = require('../Models/performance');
 const Task = require('../Models/task');
 
 const print = console.log
 
+
+// Function to format date as "YYYY-MM-DD HH:MM:SS"
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add 1 to month since it's zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}`;
+  }
 
 // Create a new ticket entry
 const createTicket = async (req, res) => {
@@ -148,10 +160,95 @@ async function getNewTicket(req, res) {
       return res.status(500).json({ error: 'An error occurred while fetching data.' });
     }
   }
+
+
+  async function getTicket(req, res) {
+    try {
+      // Extract the ticket ID from the request parameters
+      const { id } = req.params;
   
+      // Use the Ticket model to find the ticket by its ID
+      const ticket = await Ticket.findById(id);
+      const activity = await Activity.find({ticketId:id});
+  
+      if (!ticket) {
+        return res.status(404).json({ error: 'Ticket not found' });
+      }
+  
+      // Format the date to display only date and time
+      const formattedDate = formatDate(ticket.date);
+  
+      // Replace the original ticket.date with the formatted date
+      ticket.date = (ticket.date).toISOString().slice(0, 19).replace('T', ' ');;
+  
+      res.render('main/ticket-details', {
+        ticket,
+        designation: 'NOC',
+        isAuthenticated: true,
+        pageTitle: 'Tickets',
+        user: {},
+        activities: activity,
+  
+
+
+        })
+
+      } catch (error) {
+      // Handle any errors that occur during the fetch
+      return res.status(500).json({ error: 'An error occurred while fetching data.' });
+    }
+  }
+  
+
+  async function postActivity(req, res) {
+    const { id } = req.params;
+
+    try {
+      // Extract the ticket ID from the request parameters
+      const { ticketId, note, activity_File, date } = req.body;
+
+      // Use the Ticket model to find the ticket by its ID
+      const ticket = await Ticket.findById(id);
+  
+      if (!ticket) {
+        return res.status(404).json({ error: 'Ticket not found' });
+      }
+  
+      
+        let file ;
+        if (!req.file){
+            file = " "
+        } else {file = req.file.filename;}
+        let contact = req.user.name;
+        // const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+        // Extract data from the request body
+
+    // Create a new Activity document
+    const activity = new Activity({
+      ticketId: id,
+      note,
+      activity_File,
+      date,
+      contact,
+    });
+
+    // Save the activity to the database
+    const savedActivity = await activity.save();
+    console.log("This is activity: ", savedActivity)
+  
+      res.redirect(`/ticket/${id}`)
+
+      } catch (error) {
+      // Handle any errors that occur during the fetch
+      return res.status(500).json({ error: 'An error occurred while fetching data.' });
+    }
+  }
 
 module.exports = { 
 getAllData,
 getNewTicket,
-createTicket
+createTicket,
+getTicket,
+postActivity
 };
