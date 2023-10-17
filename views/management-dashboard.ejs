@@ -1,5 +1,6 @@
 
-<%- include('partials/head') %>
+<%- include('includes/head') %>
+
 <style>
     .appIcons{
         width: 15px;
@@ -9,12 +10,17 @@
       color: #63D2FF;
     }
 </style>
-<body class="sidebar-dark">
+
+<body class="sidebar-dark"> 
 	<div class="main-wrapper">
+		<%- include('includes/_sidebar') %>
+
+		<div class="page-wrapper ">
+			<%- include('includes/_navbar') %>
 		<div class="page-wrapper full-page ">
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
-				<div class="card " style=" width: 90% ">
+				<div class="card " style=" width: 100% ">
                     
 					<div class="card-body card-body-alt px-5" >
 						
@@ -373,8 +379,7 @@
 				  </div>
 				</div>
 			  </div>
-			<!-- Nav Includes -->
-			<%- include('partials/nav') %>
+		
 		</div>
 		
 	</div>

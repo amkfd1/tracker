@@ -12,29 +12,56 @@
         position: absolute;
         top: 0;
         left: 0;
+		/* page: 1; */
+		margin-left: -25%;
 		visibility: visible;
 		align-items: center;
 		justify-content: center;
 		min-width: 120%;
 		min-height: 500%;
-		zoom: 1.2;
+		zoom: 1;
     }
 }
 </style>
 <%- include('includes/head') %>
-
 <body class="sidebar-dark">
+
 	<div class="main-wrapper">
-		<div class="page-wrapper full-page ">
+	<%- include('includes/_sidebar') %>
+
+		<div class="page-wrapper">
+			<%- include('includes/_navbar.ejs') %>
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
 				
-				<div class="card " style=" width: 90% ">
+				<div class="card " style=" width: 100% ">
 					<div class="card-body card-body-alt px-5" >
 						<div class="row">
-							<div class="col-md-10" >
-								<section id= "my-section">
-									<div class="card-" style="min-height: 700px;" >
+							<div class="col-md-11" id= "my-section">
+								<section id= "">
+									<div class="card-" style="min-height: 100%;" ><div class="table-responsive ">
+										<table class="table table-bordered table-dark my-4">
+											
+											<tbody>
+												
+												<tr class="">
+													
+													<td class="card-title text-center">
+														Weekly Operation Report
+													</td>
+													<td class="text-muted text-center">
+														<%= weeklyReports.dateGenerated %>
+													</td>
+													
+												</tr>
+
+												
+											
+											</tbody>
+										</table>
+									</div>
+
+
 										<!-- Carrier weekly Activity minutes/Balance/Threshold -->
 										<div class="card-title mt-3  px-2" >
 											Carrier Activity Summary
@@ -133,41 +160,40 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<td>
-														1
-													</td>
-													<td>
-														Voxbridge
-													</td>
-													<td>
-														FAS on Eritrea Route 
-													</td>
-													<td>
-														October 3, 2023
-													</td>
-													<td class="text-green">
-														Resolved
-													</td>
-												</tr>
-												<tr>
-													<td>
-														2
-													</td>
-													<td>
-														Quickcom
-													</td>
-													<td>
-														Unstable Route/high PDD 
-													</td>
-													<td>
-														October 5, 2023
-													</td>
-													<td class="text-green">
-														Resolved
-													</td>
-												</tr>
-											
+												<%for (i in tickets) {%>
+													<tr>
+														<td>
+															<%= i%>
+														</td>
+														<td>
+															<%= tickets[i].type%>
+														</td>
+														<td>
+															<%= tickets[i].subject%>
+														</td>
+														<td>
+															<%= tickets[i].date%>
+														</td>
+														<td class="text-green">
+															<%= tickets[i].status%>
+														</td>
+													</tr>
+												<% } %>
+												
+													<tr>
+														<td>
+															<%= %>
+														</td>
+														<td>
+															<%= %>
+														</td>
+														<td>
+															<%= %>
+														</td>
+														<td>
+															<%= %>
+														</td>
+													</tr>
 											</tbody>
 										</table>
 										<!-- End tickets -->
@@ -282,17 +308,30 @@
 							</div>
 							
 	
-							<div class="col-md-2">
-								<div class="card px-3 py-3" style="min-height: 500px; width:12rem; position: fixed; background-color: darkslategrey;">
-									<label class="my-3" for="">Weekly Minutes: </label>
+							<div class="col-md-1">
+								<div class=" bg-transparent" >
 									
-									<label class="my-3" for="">Best Route: </label>
 
-									<div  class="flex-end" >
-										<div style="flex: end;">
-											<button type="button" class="btn my-3 w-100 btn-outline-info" onclick="window.print()" >Print</button>
+									<div  class="float-right mr-4" >
+										<div style="position: fixed;" class="text-muted">
+											<a href="#" class="nav-link" >
+												<i class="link-icon" data-feather="printer"  onclick="window.print()"> </i>
+											</a>
+											<a href="/reports" class="nav-link">
+												<i class="link-icon text-info" data-feather="refresh-ccw"></i>
+											</a>
+											<form action="/wr/reports/report/submission/652c4b1990319fc2ae508af0" method="post">
+												<button type="submit" class="btn bg-Transparent">
+													
+														<i class="btn-icon text-success" data-feather="check"></i>
+													
+												</button>
+											</form>
+											
+											
+											<!-- <button type="button" class="btn my-3 w-100 btn-outline-info" " >Print</button>
 											<button type="button" class="btn my-3 w-100 btn-outline-secondary">Sync Report</button>
-											<button type="button" class="btn my-3 w-100 btn-outline-primary">Submit</button>
+											<button type="button" class="btn my-3 w-100 btn-outline-primary">Submit</button> -->
 										</div>
 									</div>
 								</div>
@@ -310,14 +349,7 @@
 
 
 				
-			<!--NAVIGATION-->
-			<!-- Nav Includes -->
-			<% if (designation === 'NOC-TL' || designation === 'HoIT') { %>
-			    <%- include('partials/mmNav') %>
-            <%} else {%>
-			    <%- include('includes/nav') %>
-            
-            <% } %>
+			
 		</div>
 		
 	</div>
@@ -345,14 +377,14 @@
 		  </button>
 		</div>
 		<div class="modal-body">
-		  <form action="/mm/tasks" method="post">
+		  <form action="/w/updates/652c3fd967240a7ebd93c39c" method="post">
 			<script>
 				new FroalaEditor('#textarea');
 			  </script>
 			<div class="row">
 				<div class="col-md-12 grid-margin stretch-card">
 						<div class="card-body">
-							<textarea class="form-control" id="textarea" name="tiny"></textarea>
+							<textarea class="form-control" id="textarea" name="update"></textarea>
 						</div>
 				</div>
 			</div>

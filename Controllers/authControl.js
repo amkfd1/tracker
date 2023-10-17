@@ -82,6 +82,15 @@ router.post('/register', isAdmin, async (req, res) => {
   }
 });
 
+router.get('/register', isAdmin, async (req, res) => {
+
+
+
+  return res.render('auth/addUser', {
+    pageTitle: 'Add User'
+  })
+})
+
 router.get('/admin/reset/:id', isAdmin, async (req, res) => {
   try {
     const { id } = req.params;

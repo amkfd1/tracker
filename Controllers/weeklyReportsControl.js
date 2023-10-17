@@ -6,24 +6,229 @@ const Log = require('../Models/log');
 const Note = require('../Models/note');
 const User = require('../Models/user');
 const fs = require('fs');
-const Task = require('../Models/task');
+const Ticket = require('../Models/ticket');
+const Update = require('../Models/update');
+const Performance = require('../Models/performance');
 
 const path = require('path');
 const print = console.log
 
+ // Calculate the date of the last Monday
+ const today = new Date();
+ const monday = new Date(today);
+
+ const lastMonday = new Date(today);
+ lastMonday.setDate(today.getDate() - ((today.getDay() - 1 + 7) % 7));
+ monday.setDate(today.getDate() - ((today.getDay() - 1 + 7) % 7));
+  // Format lastMonday and today to display date and time (without seconds)
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  };
+  const startR = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    
+  };
+
+// Define the controller function
+async function fetchLastMondayData(req, res) {
+  try {
+     
+      // 88888888888888888888888888888888888
+
+      // Calculate the date range for the current week (from Monday)
+      //  const today = new Date();
+      //  const monday = new Date(today);
+      //  monday.setDate(today.getDate() - ((today.getDay() - 1 + 7) % 7));
+
+      // Check if a report already exists for the current week
+      const existingReport = await WeeklyReport.findOne({
+        dateGenerated: { $gte: lastMonday, $lt: new Date() }
+      });
+
+      if (existingReport) {
+          // Redirect to the existing report if it exists
+          return res.redirect(`/wr/reports/report/${existingReport._id}`);
+          // return console.log("Report Found: ")
+      }
+
+      // Create a new report for the current week
+      const newReport = new WeeklyReport({ date: monday });
+      console.log("Creating new Report: ", newReport)
+      // Fetch performances from last Monday
+      const performances = await Performance.find({
+        date: { $gte: lastMonday, $lt: today }
+      }).populate('tracker', 'Customer_Name CB CL _id');
+
+      // Initialize an object to store carrier performances
+      const carrierPerformances = {};
+
+      // Iterate through performances and organize them by carrier
+      performances.forEach((performance) => {
+        const carrierId = performance.tracker._id.toString();
+
+        // Initialize carrier if it doesn't exist in the object
+        if (!carrierPerformances[carrierId]) {
+            carrierPerformances[carrierId] = {
+                carrier: {
+                    _id: carrierId,
+                    Customer_Name: performance.tracker.Customer_Name,
+                    CB: performance.tracker.CB,
+                    CL: performance.tracker.CL,
+                },
+                totalMinutesRoutesTerminated: 0,
+            };
+        }
+
+        // Add the minutesRoutesTerminated to the carrier's total
+        carrierPerformances[carrierId].totalMinutesRoutesTerminated += performance.minutesRoutesTerminated;
+      });
+
+      // Convert the object of carrier performances to an array
+      const carrierPerformanceArray = Object.values(carrierPerformances);
+
+      // console.log("Performances from Active carriers: ", carrierPerformanceArray)
+      // Fetch tickets from last Monday
+      const tickets = await Ticket.find({
+        date: { $gte: lastMonday, $lt: today }
+      }).populate('client', '_id Customer_Name').populate('assignee', '_id name');
+
+      // console.log("TICKETS: ", tickets)
+      // Fetch all weekly reports from the database
+   
+
+      const formattedLastMonday = lastMonday.toLocaleString(undefined, startR);
+      const formattedToday = today.toLocaleString(undefined, options);
+
+      // Combine the formatted dates into ReportDateRange
+      const ReportDateRange = `${formattedLastMonday} - ${formattedToday}`;
+
+      const updates = await Update.find({
+        dateCreated: { $gte: lastMonday, $lt: new Date() }
+      }).populate('postedBy', 'name _id');
+
+      // print("Performance: ", performances)
+      // print("Tickets: ", tickets)
+      // print("weeklyReports: ", weeklyReports)
+
+      // console.log("Updates: ", updates)
+
+      newReport.update = updates/* Add the updates data */;
+      newReport.dateGenerated = new Date();
+      newReport.tickets = tickets/* Add the tickets data */;
+
+      print("Your Weekly Report: ", tickets)
+      // Save the newReport to the database
+      await newReport.save();
+
+        return res.redirect(`/wr/reports/report/${newReport._id}`);
+
+
+      // Respond with the fetched data
+      // return res.status(200).render('wReport',{
+      //     performances: carrierPerformanceArray,
+      //     tickets,
+      //     updates,
+      //     report: newReport,
+      //     pageTitle: "Reports",
+      //     designation: 'NOC-TL',
+      //     isAuthenticated: true,
+      //     user: req.user,
+      //     ReportDateRange
+      // });
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      return res.status(500).json({ error: 'Server error' });
+  }
+}
+
+
+
 // Controller function to render the "wReport" HTML template and fetch all weekly reports
 const renderWReport = async (req, res) => {
+  // Fetch all weekly reports from the database
+  const weeklyReports = await WeeklyReport.findById(req.params.id);
+  // print("One Report: ", weeklyReports)
+
+  const now = new Date();
+  const dayOfWeek = now.getDay(); // 0 (Sunday) to 6 (Saturday)
+  const daysUntilMonday = (dayOfWeek === 0) ? 1 : (8 - dayOfWeek);
+
+  const firstMonday = new Date(now);
+  firstMonday.setDate(now.getDate() + daysUntilMonday);
     try {
-      // Fetch all weekly reports from the database
-      const weeklyReports = await WeeklyReport.find();
-  
-      // Render the "wReport" template with the fetched data
+      const updates = await Update.find({
+        dateCreated: { $gte: lastMonday, $lt: new Date() }
+      }).populate('postedBy', 'name _id');
+      
+      const formattedLastMonday = lastMonday.toLocaleString(undefined, startR);
+      const formattedToday = today.toLocaleString(undefined, options);
+
+      // Combine the formatted dates into ReportDateRange
+      const ReportDateRange = `${formattedLastMonday} - ${formattedToday}`;
+
+      const tickets = await Ticket.find({
+        date: { $gte: lastMonday, $lt: today }
+      }).populate('client', '_id Customer_Name').populate('assignee', '_id name');
+
+      print("This is ticket: ", tickets)
+      console.log("First Monday: ", lastMonday);
+      console.log("Now: ", today);
+      console.log("This is ticket: ", tickets);
+
+      const performances = await Performance.find({
+        date: { $gte: lastMonday, $lt: today }
+      }).populate('tracker', 'Customer_Name CB CL _id');
+
+      // Initialize an object to store carrier performances
+      const carrierPerformances = {};
+
+      // Iterate through performances and organize them by carrier
+      performances.forEach((performance) => {
+        const carrierId = performance.tracker._id.toString();
+
+        // Initialize carrier if it doesn't exist in the object
+        if (!carrierPerformances[carrierId]) {
+            carrierPerformances[carrierId] = {
+                carrier: {
+                    _id: carrierId,
+                    Customer_Name: performance.tracker.Customer_Name,
+                    CB: performance.tracker.CB,
+                    CL: performance.tracker.CL,
+                },
+                totalMinutesRoutesTerminated: 0,
+            };
+        }
+
+        // Add the minutesRoutesTerminated to the carrier's total
+        carrierPerformances[carrierId].totalMinutesRoutesTerminated += performance.minutesRoutesTerminated;
+      });
+
+      // Convert the object of carrier performances to an array
+      const carrierPerformanceArray = Object.values(carrierPerformances);
+
+
+      weeklyReports.update = updates/* Add the updates data */;
+      // weeklyReports.dateGenerated = new Date();
+      weeklyReports.tickets = tickets/* Add the tickets data */;
+
+      weeklyReports.save();
+      print("Performance: ", weeklyReports)
       res.render('wReport', { 
         weeklyReports,
+        performance: carrierPerformanceArray,
+        tickets: weeklyReports.tickets,
+        updates: weeklyReports.update,
         pageTitle: "Reports",
         designation: 'NOC-TL',
         isAuthenticated: true,
         user: req.user,
+        ReportDateRange
      });
     } catch (error) {
       // Handle errors, e.g., database connection issues
@@ -80,18 +285,19 @@ const createWeeklyReport = async (req, res) => {
 
 
 // Update a WeeklyReport by ID
-const updateWeeklyReport = async (req, res) => {
+const submitWeeklyReport = async (req, res) => {
     try {
       const { id } = req.params;
-      const { updates, cWeeklyActivities } = req.body;
+      // const { updates, cWeeklyActivities } = req.body;
   
-      // const updatedWeeklyReport = await WeeklyReport.findByIdAndUpdate(
-      //   id,
-      //   { updates, cWeeklyActivities },
-      //   { new: true }
-      // );
-  
-      res.json(req.body)//(updatedWeeklyReport);
+      const updatedWeeklyReport = await WeeklyReport.findByIdAndUpdate(
+        id,
+      );
+      updatedWeeklyReport.isSubmitted.submitted = true
+      updatedWeeklyReport.isSubmitted.dateSubmitted = new Date()
+      updatedWeeklyReport.save()
+      print("Your new SUB: ", updatedWeeklyReport.isSubmitted)
+      res.redirect(`/wr/reports/report/${id}`)
     } catch (error) {
       console.error('Error updating WeeklyReport:', error);
       res.status(500).json({ error: 'Server error' });
@@ -178,13 +384,16 @@ const updateStatus = async (req, res) => {
 
 module.exports = { 
     createWeeklyReport,
-    updateWeeklyReport,
+    // updateWeeklyReport,
     updateUpdates,
     deleteUpdate,
     deleteWeeklyReport,
     updateStatus,
     renderWReport,
-    renderWReportSingle
+    renderWReportSingle,
+    fetchLastMondayData,
+    submitWeeklyReport
+
 
 };
 

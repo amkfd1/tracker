@@ -47,11 +47,10 @@ const createTicket = async (req, res) => {
       let client = '652414077961d760b4f81f55' //req.cookies.user.company_name;
       let contact = "64e87f6a797988027a4570fe" //req.cookies.user.name;
     let {priority, nop, type, department, subject, note } = req.body;
-      print(req.body)
       // Create a new Ticket instance with the extracted data
       const newTicket = new Ticket({
         
-        date: '10/10/2023',
+        date: new Date(),
         priority,
         type,
         contact,
@@ -66,7 +65,10 @@ const createTicket = async (req, res) => {
       
       
       // Save the new ticket entry to the database
+
       await newTicket.save();
+      print("Ticket created: ", newTicket)
+
       req.flash('update_success', "Ticket posted")
       res.status(201).redirect('/tickets');
     } catch (error) {
@@ -164,13 +166,14 @@ async function getNewTicket(req, res) {
 
   async function getTicket(req, res) {
     try {
-      // Extract the ticket ID from the request parameters
+      //Get the ticket ID from the request parameters
       const { id } = req.params;
   
       // Use the Ticket model to find the ticket by its ID
-      const ticket = await Ticket.findById(id);
-      const activity = await Activity.find({ticketId:id});
+      const ticket = await Ticket.findById(id).populate('client').populate('assignee');
+      const activity = await Activity.find({ticketId:id}).populate('ticketId');
   
+      console.log('Tickets')
       if (!ticket) {
         return res.status(404).json({ error: 'Ticket not found' });
       }

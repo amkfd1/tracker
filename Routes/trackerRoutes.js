@@ -81,6 +81,9 @@ router.get('/newClient/', isAdmin, async function (req, res) {
     });
 });
 
+router.get('/sms/carriers', isAdmin, customerTrackerController.getSmsCarriers);
+router.get('/voip/carriers', isAdmin, customerTrackerController.getVoipCarriers);
+
 
 
 

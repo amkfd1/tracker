@@ -1,12 +1,14 @@
 <!-- head Includes -->
-<%- include('partials/head') %>
+<%- include('includes/head') %>
 
 <body class="sidebar-dark">
 	<div class="main-wrapper">
-		<div class="page-wrapper full-page ">
+		<div class="page-wrapper ">
+			<%- include('includes/_navbar.ejs') %>
+
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
-				<div class="card " style=" width: 90% ">
+				<div class="card " style=" width: 100% ">
 					
 					<div class="card-body card-body-alt px-5" >
 						<h5 class="card-title mb-3">Create New Customer</h5>
@@ -255,7 +257,7 @@
 			<!-- Nav Includes -->
 			
 			<%if (designation === "Admin") {%>
-				<%- include('partials/nav') %>
+				<%- include('includes/_sidebar') %>
 			<% } else {%>
 				<%- include('partials/mmNav') %>
 			<% } %>

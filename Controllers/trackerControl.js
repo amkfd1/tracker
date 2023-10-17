@@ -1635,6 +1635,157 @@ const updateUser = async (req, res) => {
 }; 
     
 
+const getVoipCarriers = async (req, res) => {
+
+  try {
+      
+    const trackers = await Tracker.find().populate('account_manager');
+
+    let totalStages = 0;
+    let completedStages = 0;
+    let assignedClients = 0;
+    let unassignedClients = 0;
+
+    for (const tracker of trackers) {
+      const serviceName = tracker.service_interest.service_name;
+
+      if (tracker.service_interest && tracker.service_interest.status === 'Complete') {
+        completedStages++;
+      }
+
+      if (tracker.Tech_info && tracker.Tech_info.status === 'Complete') {
+        completedStages++;
+      }
+
+      if (tracker.testing && tracker.testing.testing_status === 'Completed') {
+        completedStages++;
+      }
+
+      totalStages += 3;
+
+      if (tracker.account_manager) {
+        assignedClients++;
+      } else {
+        unassignedClients++;
+      }
+    }
+
+    const overallCompletion = ((completedStages / totalStages) * 100).toFixed(2);
+
+    const voip = [];
+    const sms = [];
+    const stages = ['Overall Completion', 'Service Subscription', 'Technical Info', 'Registration & Testing'];
+
+    for (const tracker of trackers) {
+      const serviceName = tracker.service_interest.service_name;
+      const trackerCompletedStages = (tracker.service_interest?.status === 'Complete' ? 1 : 0) +
+        (tracker.Tech_info?.status === 'Complete' ? 1 : 0) +
+        (tracker.testing?.testing_status === 'Completed' ? 1 : 0);
+      const trackerTotalStages = 3;
+      const trackerCompletionPercentage = (trackerCompletedStages / trackerTotalStages) * 100;
+
+      tracker.completionPercentage = trackerCompletionPercentage.toFixed(2);
+      tracker.overallCompletion = trackerCompletionPercentage.toFixed(2);
+
+      if (serviceName === 'VoIP') {
+        voip.push(tracker);
+      } else if (serviceName === 'SMS') {
+        sms.push(tracker);
+      }
+    }
+
+      return res.render('voip-carriers', {
+        pageTitle: 'List | Carriers',
+        user: req.user,
+        voip,
+        sms,
+        stages,
+        users:[],
+        trackers,
+        designation: req.user.designation,
+        isAuthenticated: req.user.isAuthenticated,
+        // overallCompletion
+      });
+  } catch (error) {
+      res.status(500).json({ message: 'Error updating emergency contact', error: error.message });
+  }
+}; 
+const getSmsCarriers = async (req, res) => {
+
+  try {
+      
+    const trackers = await Tracker.find().populate('account_manager');
+
+    let totalStages = 0;
+    let completedStages = 0;
+    let assignedClients = 0;
+    let unassignedClients = 0;
+
+    for (const tracker of trackers) {
+      const serviceName = tracker.service_interest.service_name;
+
+      if (tracker.service_interest && tracker.service_interest.status === 'Complete') {
+        completedStages++;
+      }
+
+      if (tracker.Tech_info && tracker.Tech_info.status === 'Complete') {
+        completedStages++;
+      }
+
+      if (tracker.testing && tracker.testing.testing_status === 'Completed') {
+        completedStages++;
+      }
+
+      totalStages += 3;
+
+      if (tracker.account_manager) {
+        assignedClients++;
+      } else {
+        unassignedClients++;
+      }
+    }
+
+    const overallCompletion = ((completedStages / totalStages) * 100).toFixed(2);
+
+    const voip = [];
+    const sms = [];
+    const stages = ['Overall Completion', 'Service Subscription', 'Technical Info', 'Registration & Testing'];
+
+    for (const tracker of trackers) {
+      const serviceName = tracker.service_interest.service_name;
+      const trackerCompletedStages = (tracker.service_interest?.status === 'Complete' ? 1 : 0) +
+        (tracker.Tech_info?.status === 'Complete' ? 1 : 0) +
+        (tracker.testing?.testing_status === 'Completed' ? 1 : 0);
+      const trackerTotalStages = 3;
+      const trackerCompletionPercentage = (trackerCompletedStages / trackerTotalStages) * 100;
+
+      tracker.completionPercentage = trackerCompletionPercentage.toFixed(2);
+      tracker.overallCompletion = trackerCompletionPercentage.toFixed(2);
+
+      if (serviceName === 'VoIP') {
+        voip.push(tracker);
+      } else if (serviceName === 'SMS') {
+        sms.push(tracker);
+      }
+    }
+
+      return res.render('sms-carriers', {
+        pageTitle: 'List | Carriers',
+        user: req.user,
+        voip,
+        sms,
+        stages,
+        users:[],
+        trackers,
+        designation: req.user.designation,
+        isAuthenticated: req.user.isAuthenticated,
+        // overallCompletion
+      });
+  } catch (error) {
+      res.status(500).json({ message: 'Error updating emergency contact', error: error.message });
+  }
+}; 
+
 module.exports = 
 { addCustomerTracker, 
     updateTracker, 
@@ -1644,6 +1795,8 @@ module.exports =
     getSingleTracker,
     uploadDocument,
     updateService,
+    getSmsCarriers,
+    getVoipCarriers,
     updateTech,
     updateTesting,
     addContact,

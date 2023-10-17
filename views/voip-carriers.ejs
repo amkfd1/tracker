@@ -1,0 +1,382 @@
+<style>
+	.smallIcons{
+		max-width: 15px;
+		max-height: 15px;
+	}
+
+	@media print{
+    body *:not(#my-section):not(#my-section *){
+        visibility:hidden;
+    }
+    #my-section{
+        position: absolute;
+        top: 0;
+        left: 0;
+		/* page: 1; */
+		margin-left: -25%;
+		visibility: visible;
+		align-items: center;
+		justify-content: center;
+		min-width: 120%;
+		min-height: 500%;
+		zoom: 1;
+    }
+}
+</style>
+<%- include('includes/head') %>
+<body class="sidebar-dark">
+
+	<div class="main-wrapper">
+	<%- include('includes/_sidebar') %>
+
+		<div class="page-wrapper">
+			<%- include('includes/_navbar.ejs') %>
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				
+				<div class="card " style=" width: 100% ">
+					<div class="card-body card-body-alt px-5" >
+						<!-- MAin car END -->
+						<h5 class="card-title mb-3">VoIP SERVICE</h5>
+		
+									<section class="">
+										<div class="table-responsive ">
+											<table class="table table-striped " id="voipTable">
+												<thead class="border-info text-center">
+													<tr>
+														<th>
+															Company
+														</th>
+														<th>
+															Stage
+														</th>
+														
+														<th>
+															Status
+														</th>
+														<th>
+															Service
+														</th>
+														<th>
+															A.M.
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<% for (i in voip) {%>
+		
+														<tr>
+															<td class="py-1">
+																<a href="/track/tracker/<%= voip[i]._id%>"><%= voip[i].Customer_Name%></a>
+															</td>
+															<td>
+																<div class="dropdown">
+																	
+																	<button class="btn btn-dark bg-transparent dropdown-toggle" type="button" id="dropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																		<%= voip[i].stage.process_stage%>
+																	</button>
+																	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
+																		<%for (j in stages) {%>
+																			
+																			<form action="/track/updateStage/<%= voip[i]._id%>" method="post">
+																				<button type="submit"  class="dropdown-item" style="border:none;">
+																					<%= stages[j]%>
+																				</button>
+																				<input type="hidden" name="stage" value="<%= stages[j]%>">
+																			</form>
+																		<% } %>
+																		<div class="dropdown-divider"></div>
+																		
+																	</div>
+																</div>
+																
+		
+															</td>
+															
+															<td>
+																<div class="progress">
+																	<% if (voip[i].stage.status === '' || voip[i].stage.status === 'NA'){%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 5%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+																			<%= voip[i].stage.status%>
+																		
+																		</div>
+																	<%} else if (voip[i].stage.status === 'Initiated') {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
+																			<%= voip[i].stage.status%>
+																		
+																		</div>
+																	<% } else if (voip[i].stage.status === 'Ongoing' || voip[i].stage.status === 'Incomplete'  ) {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 60%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+																			<%= voip[i].stage.status%>
+																		
+																		</div>
+																	<% } else if (voip[i].stage.status === 'Complete' || voip[i].stage.status === 'Completed'  ) {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 100%;"  role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+																			<%= voip[i].stage.status%>
+																		
+																		</div>
+																	<% } else { %>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated
+																		<%if (voip[i].completionPercentage <40 ){%> bg-danger  %>
+																		<%}else if (voip[i].completionPercentage > 30 && voip[i].completionPercentage <= 60) {%>
+																			 bg-warning																
+																		<%}else %> bg-success " role="progressbar"  style="width: 100%;"  aria-valuenow="<%= voip[i].completionPercentage%>" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+																			<%= voip[i].completionPercentage%>
+																		
+																		</div>
+																	<% } %>
+																</div>
+															</td>
+															<td>
+																<%= voip[i].service_interest.service_name%>
+		
+															</td>
+															
+															<td>
+																<% if (voip[i].account_manager) {%>
+
+																	<%=voip[i].account_manager.name%>
+																<% } else { %>
+																	NA
+																<% } %>
+
+															</td>
+																
+															
+														</tr>
+													
+													<% } %>
+												</tbody>
+											</table>
+										</div>		
+									</section>
+									
+									<div class="border-top my-5">
+										<div class="border-bottom"></div>
+									</div>
+			
+			
+									
+									<!--SMS Section Table-->
+									<section class="">
+										<h5 class="card-title ">SMS SERVICE</h5>
+		
+										<div class="table-responsive ">
+											<table class="table table-striped" id="smsTable">
+												<thead class="text-center">
+													<tr>
+														<th>
+															Company
+														</th>
+														<th>
+															Stage
+														</th>
+														
+														<th>
+															Status
+														</th>
+														<th>
+															Service
+														</th>
+														<th>
+															A.M.
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<% for (i in sms) {%>
+		
+														<tr>
+															<td class="py-1">
+																<a href="/track/tracker/<%= sms[i]._id%>"><%= sms[i].Customer_Name%></a>
+															</td>
+															<td>
+																<div class="dropdown">
+																	
+																	<button class="btn btn-dark bg-transparent dropdown-toggle" type="button" id="dropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																		<%= sms[i].stage.process_stage%>
+																	</button>
+																	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
+																		<%for (j in stages) {%>
+																			
+																			<form action="/track/updateStage/<%= sms[i]._id%>" method="post">
+																				<button type="submit"  class="dropdown-item" style="border:none;">
+																					<%= stages[j]%>
+																				</button>
+																				<input type="hidden" name="stage" value="<%= stages[j]%>">
+																			</form>
+																		<% } %>
+																		<div class="dropdown-divider"></div>
+																		
+																	</div>
+																</div>
+																
+		
+															</td>
+															
+															<td>
+																<div class="progress">
+																	<% if (sms[i].stage.status === '' || sms[i].stage.status === 'NA'){%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 5%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+																			<%= sms[i].stage.status%>
+																		
+																		</div>
+																	<%} else if (sms[i].stage.status === 'Initiated') {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
+																			<%= sms[i].stage.status%>
+																		
+																		</div>
+																	<% } else if (sms[i].stage.status === 'Ongoing' || sms[i].stage.status === 'Incomplete'  ) {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 60%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+																			<%= sms[i].stage.status%>
+																		
+																		</div>
+																	<% } else if (sms[i].stage.status === 'Complete' || sms[i].stage.status === 'Completed'  ) {%>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+																			<%= sms[i].stage.status%>
+																		
+																		</div>
+																	<% } else { %>
+																		<div class="progress-bar progress-bar-striped progress-bar-animated
+																		<%if (sms[i].completionPercentage <40 ){%> bg-danger  %>
+																		<%}else if (sms[i].completionPercentage > 30 && sms[i].completionPercentage <= 60) {%>
+																			 bg-warning																
+																		<%}else %> bg-success " role="progressbar"  style="width: 100%;"  aria-valuenow="<%= sms[i].completionPercentage%>" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+																			<%= sms[i].completionPercentage%>
+																	
+																		</div>
+																	<% } %>
+																</div>
+															</td>
+															<td>
+																<%= sms[i].service_interest.service_name%>
+		
+															</td>
+															<td>
+																<% if (sms[i].account_manager) {%>
+
+																	<%=sms[i].account_manager.name%>
+																<% } else { %>
+																	NA
+																<% } %>
+															</td>
+														</tr>
+														<!-- Assign account manager  -->
+														<div class="modal fade " id="assign<%= sms[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+															<div  style="">
+																<div class="modal-dialog " >
+																<div class="modal-content ">
+																	<div class="modal-header">
+																	<h4 class="modal-title" id="exampleModalLabel">Assign Client to Account Manager <code><%=voip[i]._Customer_Name %> </code></h4>
+																	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																		<span aria-hidden="true">&times;</span>
+																	</button>
+																	</div>
+																	<div class="modal-body">
+																	<form method="post" action="/track/assign/account-manager/<%= voip[i]._id%>" >
+																		<div class="form-group row ">
+																			<div class="col">
+																				<label>Title:</label>
+																				<input disabled value="<%=voip[i].Customer_Name %>" class="form-control mb-4 mb-md-0" name="documentTitle">
+																			</div>
+																			<div class="col">
+																				<label>Assign Account Manager: </label>
+																				<select name="userId" class="form-control form-control-sm mb-3">
+																					<option  selected=""></option>
+																					<%for (i in users) {%>
+																						<option value="<%= users[i].id%>"><%= users[i].name%></option>
+																					<% } %>				
+																				</select>
+																			</div>
+																												
+																		</div>
+																		</div>
+																		
+																		<div class="modal-footer moveModal">
+																			<button type="submit" class="btn btn-info">Assign</button>
+																			</div>
+																	</form>
+																	</div>
+																	
+																</div>
+																</div>
+															</div>
+													<% } %>
+												</tbody>
+											</table>
+										</div>					
+									</section>		
+						
+
+
+
+
+
+
+
+						<!-- MAin car END -->
+					</div>
+					
+				
+				
+				</div>
+				
+				
+
+			</div>
+
+
+				
+			
+		</div>
+		
+	</div>
+
+	
+<script>
+    // Add an event listener to the element with the ID "sendNotes"
+    document.getElementById("sendNote").addEventListener("click", function() {
+        // Close the modal with the ID "Notes"
+        $("#Notes").modal("close");
+    });
+</script>
+
+
+<%- include('includes/end') %>
+
+   <!-- Add  edit updates -->
+   <div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Edit Updates</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  <form action="/w/updates/652c3fd967240a7ebd93c39c" method="post">
+			<script>
+				new FroalaEditor('#textarea');
+			  </script>
+			<div class="row">
+				<div class="col-md-12 grid-margin stretch-card">
+						<div class="card-body">
+							<textarea class="form-control" id="textarea" name="update"></textarea>
+						</div>
+				</div>
+			</div>
+  
+		<div class=" page-content d-flex justify-content-center align-items-center">
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		  <button type="submit" class="btn btn-primary"><i data-feather="plus"></i> 
+		  Update
+		</button>
+		</div>
+	  </div>
+		  </form>
+		</div>
+	  
+	  </div>
+	</div>

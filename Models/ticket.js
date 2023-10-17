@@ -9,6 +9,7 @@ const ticketSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
+    default: Date.now()
 
   },
   priority: {

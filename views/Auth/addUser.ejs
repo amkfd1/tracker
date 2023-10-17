@@ -1,0 +1,161 @@
+<style>
+	.smallIcons{
+		max-width: 15px;
+		max-height: 15px;
+	}
+
+	@media print{
+    body *:not(#my-section):not(#my-section *){
+        visibility:hidden;
+    }
+    #my-section{
+        position: absolute;
+        top: 0;
+        left: 0;
+		/* page: 1; */
+		margin-left: -25%;
+		visibility: visible;
+		align-items: center;
+		justify-content: center;
+		min-width: 120%;
+		min-height: 500%;
+		zoom: 1;
+    }
+}
+</style>
+<%- include('../includes/head') %>
+<body class="sidebar-dark">
+
+	<div class="main-wrapper">
+	<%- include('../includes/_sidebar') %>
+
+		<div class="page-wrapper">
+			<%- include('../includes/_navbar.ejs') %>
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				
+				<div class="card " style=" width: 100% ">
+					<div class="card-body card-body-alt px-5" >
+						<!-- MAin car END -->
+						
+						<div class="d-flex align-items-center justify-content-center">
+							<div class="auth-form-wrapper px-4 py-5">
+							<h5 class="text-muted font-weight-normal mb-4">Create a user account.</h5>
+							<form class="forms-sample" action="/auth/register" method="post">
+								<div class="form-group">
+									<label for="exampleInputUsername1">FUll Name</label>
+									<input type="text" class="form-control" name="name" id="exampleInputUsername1" placeholder="Full Name">
+									</div>
+								<div class="form-group">
+								<label for="exampleInputUsername1">Username</label>
+								<input type="text" class="form-control" name="username" id="exampleInputUsername1" autocomplete="Username" placeholder="Username">
+								</div>
+								<div class="form-group">
+									<div class="justify-content-center">
+										<label>Role: </label>
+										<select name="role" class="form-control form-control-sm mb-3">
+											<option  selected=""></option>
+											<option  value="Admin">Admin</option>
+											<option  value="Legal">Legal</option>
+											<option  value="NOC">NOC</option>
+											<option  value="IT">IT</option>
+											<option  value="Technical">Technical</option>
+										</select>
+									</div>	
+								</div>
+								<div class="form-group">
+									<label for="exampleInputEmail1">Designation:</label>
+									<select name="designation" class="form-control form-control-sm mb-3">
+										<option  selected=""></option>
+										
+										<option  value="Technical">Technical</option>
+										<option  value="NOC-TL">NOC TL</option>
+										<option  value="HoIT">HoIT</option>
+										<option  value="Legal">Legal</option>
+										<option  value="Support">Support</option>
+										<option  value="Management">Management</option>
+				
+									</select>		
+								</div>
+								
+								<div class="form-check form-check-flat form-check-primary">
+								</div>
+								<div class="d-flex  justify-content-center">
+								<button type="submit" class="btn btn-secondary text-white mt-4 mr-2 mb-md-0">
+									<i data-feather="user-check"></i>
+									Register User</button>
+								</div>
+							</form>
+							</div>
+						</div>
+
+
+
+
+
+						<!-- MAin car END -->
+					</div>
+					
+				
+				
+				</div>
+				
+				
+
+			</div>
+
+
+				
+			
+		</div>
+		
+	</div>
+
+	
+<script>
+    // Add an event listener to the element with the ID "sendNotes"
+    document.getElementById("sendNote").addEventListener("click", function() {
+        // Close the modal with the ID "Notes"
+        $("#Notes").modal("close");
+    });
+</script>
+
+
+<%- include('../includes/end') %>
+
+   <!-- Add  edit updates -->
+   <div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Edit Updates</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  <form action="/w/updates/652c3fd967240a7ebd93c39c" method="post">
+			<script>
+				new FroalaEditor('#textarea');
+			  </script>
+			<div class="row">
+				<div class="col-md-12 grid-margin stretch-card">
+						<div class="card-body">
+							<textarea class="form-control" id="textarea" name="update"></textarea>
+						</div>
+				</div>
+			</div>
+  
+		<div class=" page-content d-flex justify-content-center align-items-center">
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		  <button type="submit" class="btn btn-primary"><i data-feather="plus"></i> 
+		  Update
+		</button>
+		</div>
+	  </div>
+		  </form>
+		</div>
+	  
+	  </div>
+	</div>

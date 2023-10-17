@@ -1,11 +1,15 @@
-<%- include('partials/head') %>
+<%- include('includes/head') %>
 
 <body class="sidebar-dark"> 
 	<div class="main-wrapper">
-		<div class="page-wrapper full-page ">
+		<%- include('includes/_sidebar') %>
+
+		<div class="page-wrapper ">
+			<%- include('includes/_navbar') %>
+
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
-				<div class="card " style=" width: 90% ">
+				<div class="card " style=" width: 100% ">
 					<div class="card-body card-body-alt px-5" >
 					<div class="row">
 						<div class="col-md-8">
@@ -476,8 +480,7 @@
 
 			</div>
 			
-			<!-- Nav Includes -->
-			<%- include('partials/nav') %>
+			
 			
 		</div>
 		
