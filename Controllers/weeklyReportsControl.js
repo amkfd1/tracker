@@ -251,7 +251,12 @@ const renderWReport = async (req, res) => {
       }
   
       // Render the "wReport-Single" template with the fetched data
-      res.render('wReport-Single', { weeklyReport });
+      res.render('wReport-Single', { 
+        weeklyReport,  
+        user: req.user,
+        pageTitle: "Weekly Report"
+      
+      });
     } catch (error) {
       // Handle errors, e.g., database connection issues
       console.error('Error fetching weekly report:', error);

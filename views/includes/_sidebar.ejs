@@ -1,8 +1,13 @@
 <nav class="sidebar">
       <div class="sidebar-header">
-        <a href="/dashboard" class="sidebar-brand">
-          TRACKER<span> APP</span>
-        </a>
+        <div class="d-flex">
+          <a href="/dashboard" class="sidebar-brand ">
+            <img src="../../../assets/images/mkel-logo.png"  width="30px"  height="20px">
+          </a>
+          <h6 class="pl-2 pt-2 mt-1">TRACKER  <span class="ml-2 text-primary">APP</span></h6>  
+
+        </div>
+        
         <div class="sidebar-toggler not-active">
           <span></span>
           <span></span>
@@ -25,8 +30,30 @@
               <span class="link-title">Monitor</span>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="/tickets" class="nav-link">
+              <i class="link-icon " data-feather="list"></i>
+              <span class="link-title">TT</span>
+            </a>
+          </li>
           
             
+
+          <li class="nav-item nav-category">Tasks</li>
+          <li class="nav-item">
+            <a href="/track/tasks" class="nav-link">
+              <i class="link-icon" data-feather="clipboard"></i>
+              <span class="link-title">All Tasks</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="link-icon " data-feather="file-plus"></i> 
+              <span class="link-title">Create Task</span>
+            </a>
+          </li>
+          
+
           
           <li class="nav-item nav-category">Carriers</li>
           <li class="nav-item">
@@ -80,7 +107,9 @@
                 </a>
               </li>
 
-              
+              <div class="border-top mt-2">
+                <div class="border-bottom"></div>
+              </div>
           <!-- <li class="nav-item nav-category">Docs</li>
           <li class="nav-item">
             <a href="https://www.nobleui.com/html/documentation/docs.html" target="_blank" class="nav-link">

@@ -875,6 +875,7 @@ const getAllCustomerTrackers = async (req, res) => {
       pageTitle: "Home",
       logs: logs,
       users,
+      user: req.user,
       flash: req.flash('Login-success'),
       completionPercentage: overallCompletion,
       assignedClients,
@@ -1050,6 +1051,7 @@ const getSingleTracker = async (req, res) => {
       documents: documents,
       more_contacts: tracker.alternative_contact,
       users: users,
+      user: req.user,
       notes,
       message: flash,
       error,
@@ -1456,6 +1458,7 @@ const getManagementDash = async (req, res) => {
       mytasks: [],
       userNotes:[],
       users,
+      user: req.user,
       tasks,
       trackers,
       designation: req.user.designation,
@@ -1786,6 +1789,36 @@ const getSmsCarriers = async (req, res) => {
   }
 }; 
 
+const getTasks = async (req, res) => {
+  const atasks = await Task.find().populate('reference').populate('assignedBy').populate('taskFor');
+ print("This is one task: ", atasks[0].assignedBy.name)
+  let tasks = []
+  atasks.forEach(task => {
+    let taskk = {
+      title: task.title,
+      taskFor: task.taskFor.name,
+      date: (task.date).toISOString().split('T')[0],
+      description: task.description,
+      status: task.status,
+      files: task.files,
+      notes: task.notes,
+      assignedBy: task.assignedBy.name,
+      reference: task.reference,
+      deadline: (task.deadline).toISOString().split('T')[0],
+    }
+    tasks.push(taskk)
+  })
+
+  console.log(" tasks: ", tasks)
+  res.render('tasks', {
+    tasks,
+    pageTitle: "Admin | Tasks",
+    user: req.user,
+    designation: req.user.designation
+
+  })
+}
+
 module.exports = 
 { addCustomerTracker, 
     updateTracker, 
@@ -1810,7 +1843,8 @@ module.exports =
     getPerformances,
     addPerformance,
     updateUser,
-    deleteAndUpdateDocument
+    deleteAndUpdateDocument,
+    getTasks
     
 };
 

@@ -87,7 +87,9 @@ router.get('/register', isAdmin, async (req, res) => {
 
 
   return res.render('Auth/addUser', {
-    pageTitle: 'Add User'
+    pageTitle: 'Add User',
+    user: req.user,
+    
   })
 })
 

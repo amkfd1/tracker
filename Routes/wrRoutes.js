@@ -33,7 +33,7 @@ router.post('/wr/reports/report/submission/:id', submitWeeklyReport);
 router.post('/create', createWeeklyReport);
 
 // Update a WeeklyReport by ID
-router.get('/wr/reports/report/:id', renderWReport);
+router.get('/wr/reports/report/:id', isAuth, renderWReport);
 
 // Update Updates schema within a WeeklyReport
 router.put('/update-updates/:weeklyReportId', updateUpdates);

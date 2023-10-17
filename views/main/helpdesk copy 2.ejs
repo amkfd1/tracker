@@ -23,15 +23,13 @@
 </style>
 <%- include('../includes/head') %>
 
-<div class="main-wrapper">
-	<%- include('../includes/_sidebar') %>
-
-		<div class="page-wrapper">
-			<%- include('../includes/_navbar.ejs') %>
+<body class="sidebar-dark">
+	<div class="main-wrapper">
+		<div class="page-wrapper full-page ">
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
 				
-				<div class="card " >
+				<div class="card " style=" width: 90% ">
 					<div class="card-body card-body-alt px-5">
             <div class="row ">
               <div class="col-md-12 grid-margin stretch-card">
@@ -110,9 +108,9 @@
 			<!--NAVIGATION-->
 			<!-- Nav Includes -->
 			<% if (designation === 'NOC-TL' || designation === 'HoIT') { %>
-			    <%- include('../includes/_navbar') %>
+			    <%- include('../partials/mmNav') %>
             <%} else {%>
-			    <%- include('../includes/_navbar') %>
+			    <%- include('../includes/nav') %>
             
             <% } %>
 		</div>

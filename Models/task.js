@@ -16,7 +16,7 @@ const taskSchema = new mongoose.Schema({
     description:{
         type: String
     },
-    status: {
+    status: { 
         type: String
     },
     files: [{
