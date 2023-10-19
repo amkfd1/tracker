@@ -8,10 +8,15 @@
 </style>
 <body class="sidebar-dark">
 	<div class="main-wrapper">
-		<div class="page-wrapper full-page ">
+        <%- include('includes/_sidebar_Staff') %>
+	    <link rel="stylesheet" href="../../../assets/css/hover.css" media="all">
+        
+		<div class="page-wrapper ">
+            <%- include('includes/_navbar') %>
+
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
-				<div class="card " style=" width: 90% ">
+				<div class="card " style=" width: 100% ">
                     
 					<div class="card-body card-body-alt px-5" >
 						
@@ -38,56 +43,7 @@
                                </div>
                                <div class="col-md-4">   
                                 <!--  -->
-                                <div class="card bg-transparent"  style="height: 10rem;">
-                                    <ul class="list-group list-group-flush card-body-hor py-2">
-                                        <li class="list-group-item">
-                                            <div class="row">
-                                                <div class="col-md-6 ">
-                                                    <label class="text-muted">My Clients:
-                                                    </label>
-                                                    <span class="float-right">
-                                                        <a href="#" data-toggle="modal" data-target=".myClients">
-                                                            <i class="appIcons text-muted" data-feather="maximize-2" ></i>
-                                                    
-                                                        </a>
-                                                    </span>
-                                                    
-                                                    <h5 class="text-info"><%= mytasks.length %></h5>
-                                                </div>
-                                                <div class="col-md-6 ">
-                                                    <label class="text-muted">Tasks:
-                                                    </label>
-                                                    <span class="float-right">
-                                                       <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg">
-                                                            <i class="appIcons text-muted" data-feather="maximize-2" ></i>
-                                                        </a>
-                                                    </span>
-                                                        <h5 class="text-warning"><%= tasks.length%></h5>
-                                                </div>
-                                            </div>						
-                                        </li>
-                                        
-                                        <li class="list-group-item">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <label class="text-muted">Completed:
-                                                    </label>
-                                                 
-                                                    <a><h5 class="text-success"><%= completedPercentile%>%</h5></a>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="text-muted">Incomplete:
-                                                    </label>
-                                                    
-                                                    <a><h5 class="text-danger"><%= incompletePercentile%>%</h5></a>
-                                                    
-                                                </div>
-                                            </div>	
-                                        </li>
-                                        
-                                    </ul>
-                                </div>
-                                
+                               
                                 </div>
                             </div>
                             
@@ -313,7 +269,6 @@
 				</div>
 			  </div>
 			<!-- Nav Includes -->
-			<%- include('includes/nav') %>
 		</div>
 		
 	</div>

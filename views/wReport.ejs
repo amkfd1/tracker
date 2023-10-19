@@ -23,7 +23,9 @@
     }
 }
 </style>
+
 <%- include('includes/head') %>
+
 <body class="sidebar-dark">
 
 	<div class="main-wrapper">
@@ -312,21 +314,27 @@
 								<div class=" bg-transparent" >
 									
 
-									<div  class="float-right mr-4" >
+									<div  class="float-right mr-4 " >
 										<div style="position: fixed;" class="text-muted">
-											<a href="#" class="nav-link" >
-												<i class="link-icon" data-feather="printer"  onclick="window.print()"> </i>
-											</a>
-											<a href="/reports" class="nav-link">
-												<i class="link-icon text-info" data-feather="refresh-ccw"></i>
-											</a>
+											
+												<button type="button" class="btn btn-secondary btn-icon hvr-bounce-in animate__animated animate__backInDown ">
+													<i class="link-icon" data-feather="printer"  onclick="window.print()"> </i>
+												</button>
+										<br>
+											
+											<button type="button" class="btn btn-info btn-icon my-3 hvr-bounce-in animate__animated animate__backInDown">
+												<i data-feather="refresh-ccw"></i>
+											</button>
+											<br>
 											<form action="/wr/reports/report/submission/652c4b1990319fc2ae508af0" method="post">
-												<button type="submit" class="btn bg-Transparent">
+												<button type="submit" class="btn btn-success hvr-bounce-in btn-icon animate__animated animate__backInDown">
 													
-														<i class="btn-icon text-success" data-feather="check"></i>
+														<i  data-feather="check"></i>
 													
 												</button>
 											</form>
+											
+											
 											
 											
 											<!-- <button type="button" class="btn my-3 w-100 btn-outline-info" " >Print</button>

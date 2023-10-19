@@ -7,6 +7,8 @@ const Note = require('../Models/note');
 const User = require('../Models/user');
 const fs = require('fs');
 const Ticket = require('../Models/ticket');
+const Task = require('../Models/task');
+
 const Update = require('../Models/update');
 const Performance = require('../Models/performance');
 
@@ -217,8 +219,17 @@ const renderWReport = async (req, res) => {
       // weeklyReports.dateGenerated = new Date();
       weeklyReports.tickets = tickets/* Add the tickets data */;
 
+      const mytask = await Task.find({taskFor: req.user._id}).populate('assignedBy', 'name');
+      let UnopenedTask = []
+      mytask.forEach( (task) => {
+
+        if (task.isOpened){
+          UnopenedTask.push(task)
+        }
+      })
+      print("Your Tasks: ", mytask)
       weeklyReports.save();
-      print("Performance: ", weeklyReports)
+      // print("Performance: ", weeklyReports)
       res.render('wReport', { 
         weeklyReports,
         performance: carrierPerformanceArray,
@@ -228,7 +239,9 @@ const renderWReport = async (req, res) => {
         designation: 'NOC-TL',
         isAuthenticated: true,
         user: req.user,
-        ReportDateRange
+        ReportDateRange,
+        mytask,
+        UnopenedTask
      });
     } catch (error) {
       // Handle errors, e.g., database connection issues

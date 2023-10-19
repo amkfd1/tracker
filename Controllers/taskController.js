@@ -12,7 +12,6 @@ const print = console.log
 const Task = require('../Models/task');
 // const { Console } = require('console');
 
-
 exports.createTask = async (req, res) => {
     try {
         let { title, description,  reference, taskFor, deadline } = req.body;
@@ -331,8 +330,9 @@ exports.getSingleTask = async (req, res) => {
     try {
         const _id = req.params.taskId;
         const task = await Task.find({ _id});
-
-        print("Getting stages")
+        task.isOpened = true;
+        task.save();
+        print("Getting task: ", task)
         let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
         let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0]
         console.log('This is your task ', task)

@@ -1,0 +1,171 @@
+<nav class="sidebar">
+      <div class="sidebar-header">
+        <div class="d-flex">
+          <a href="/dashboard" class="sidebar-brand ">
+            <img src="../../../assets/images/mkel-logo.png"  width="30px"  height="20px">
+          </a>
+          <h6 class="pl-2 pt-2 mt-1">TRACKER  <span class="ml-2 text-primary">APP</span></h6>  
+
+        </div>
+        <div class="sidebar-toggler not-active">
+          <span></span>
+          <span></span>
+          <span></span> 
+        </div>
+      </div>
+      <div class="sidebar-body">
+        <ul class="nav">
+          <li class="nav-item nav-category">Tasks</li>
+          
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-toggle="modal" data-target=".bd-example-modal-lg">
+              <i class="link-icon" data-feather="clipboard"></i>
+              <span class="link-title">My Tasks</span>
+            </a>
+          </li>  
+          
+          <li class="nav-item nav-category">Carriers</li>
+          <li class="nav-item">
+            <a href="/track/voip/carriers" class="nav-link">
+              <i class="link-icon" data-feather="voicemail"></i>
+              <span class="link-title">VoIP Carriers</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/track/sms/carriers" class="nav-link">
+              <i class="link-icon mdi mdi-message-text-outline" ></i>
+              <span class="link-title">SMS Carriers</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/track/newClient" class="nav-link">
+              <i class="link-icon" data-feather="plus"></i>
+              <span class="link-title">Add Carrier</span>
+            </a>
+          </li>
+
+            <!-- <li class="nav-item nav-category">Users</li>
+            <li class="nav-item">
+              <a href="/auth/register" class="nav-link">
+                <i class="link-icon" data-feather="user-plus"></i>
+                <span class="link-title">Add User</span>
+              </a>
+            </li> -->
+           
+            
+            <li class="nav-item">
+              <!-- <input type="text" name="subject" class="form-control " id="exampleInputText1" placeholder="Subject User" > -->
+              <a href="" class="nav-link">
+                <i class="link-icon" data-feather="search"></i>
+                <span class="link-title">Browse User</span>
+              </a>
+            </li>
+          
+              <li class="nav-item nav-category">Weekly Report</li>
+              <li class="nav-item">
+                <a href="/reports" class="nav-link">
+                  <i class="link-icon mdi mdi-checkbox-multiple-blank" ></i>
+                  <span class="link-title">All Reports</span>
+                </a>
+              </li>
+           
+              <li class="nav-item">
+                <a href="/reports" class="nav-link">
+                  <i class="link-icon mdi mdi-file-tree" ></i>
+                  <span class="link-title">Generate Report</span>
+                </a>
+              </li>
+              
+
+              
+          <!-- <li class="nav-item nav-category">Docs</li>
+          <li class="nav-item">
+            <a href="https://www.nobleui.com/html/documentation/docs.html" target="_blank" class="nav-link">
+              <i class="link-icon" data-feather="hash"></i>
+              <span class="link-title">Documentation</span>
+            </a>
+          </li> -->
+          <!-- <div class=" mt-4 w-100" style="height: 10rem; width: 15rem; margin: 0;">
+            <ul class="list-group list-group-flush card-body-hor py-2 ">
+                <li class="list-group-ite bg-dark w-100">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label class="text-muted">My Clients:
+                            </label>
+                            <span class="float-right">
+                                <a href="#" data-toggle="modal" data-target=".myClients">
+                                    <i class="appIcons text-muted" data-feather="maximize-2" ></i>
+                            
+                                </a>
+                            </span>
+                            
+                            <h5 class="text-info"><%= mytasks.length %></h5>
+                        </div> 
+                        <div class="col-md-6 ">
+                            <label class="text-muted">Tasks:
+                            </label>
+                            <span class="float-right">
+                               <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg">
+                                    <i class="appIcons text-muted" data-feather="maximize-2" ></i>
+                                </a>
+                            </span>
+                                <h5 class="text-warning"><%= tasks.length%></h5>
+                        </div>
+                    </div>						
+                </li>
+                
+                <li class="list-group-item bg-dark">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="text-muted">Completed:
+                            </label>
+                         
+                            <a><h5 class="text-success"><%= completedPercentile%>%</h5></a>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted">Incomplete:
+                            </label>
+                            
+                            <a><h5 class="text-danger"><%= incompletePercentile%>%</h5></a>
+                            
+                        </div>
+                    </div>	
+                </li>
+                
+            </ul>
+        </div> -->
+        <div class="list-group mt-5">
+          
+          <a href="#" class="list-group-item list-group-item-action mt-5 d-flex" data-toggle="modal" data-target=".myClients">
+            <i class="mdi mdi-face-profile mx-2"></i>
+            My Accounts <span class="ml-3 float-right">
+              <h6><%= mytasks.length %></h6>
+            </span>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action d-flex" data-toggle="modal" data-target=".myClients">
+            <i class="mdi mdi-bell-ring-outline mx-2"></i>
+            
+            My Tasks <span class="ml-3 float-right">
+             <h6><%= mytasks.length %></h6> 
+            </span>
+          </a>
+          
+        </div>  
+      </ul>
+      </div>
+    </nav>
+    <!-- <nav class="settings-sidebar">
+      <div class="sidebar-body">
+        
+        <div class="theme-wrapper">
+          <h6 class="text-muted mb-2">Light Theme:</h6>
+          <a class="theme-item" href="demo_1/dashboard-one.html">
+            <img src="assets/images/screenshots/light.jpg" alt="light theme">
+          </a>
+          <h6 class="text-muted mb-2">Dark Theme:</h6>
+          <a class="theme-item active" href="demo_2/dashboard-one.html">
+            <img src="assets/images/screenshots/dark.jpg" alt="light theme">
+          </a>
+        </div>
+      </div>
+    </nav> -->
