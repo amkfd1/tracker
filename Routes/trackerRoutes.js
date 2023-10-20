@@ -74,6 +74,7 @@ router.get('/newClient/', isAdmin, async function (req, res) {
         pageTitle: "Add New Tracker",
         new: true,
         error,
+        user: req.user,
         message: flash,
         isAuthenticated: req.user.isLoggedIn,
         isManagement: req.user.designation,
