@@ -1,0 +1,176 @@
+<style>
+	.smallIcons{
+		max-width: 15px;
+		max-height: 15px;
+	}
+
+	@media print{
+    body *:not(#my-section):not(#my-section *){
+        visibility:hidden;
+    }
+    #my-section{
+        position: absolute;
+        top: 0;
+        left: 0;
+		/* page: 1; */
+		margin-left: -25%;
+		visibility: visible;
+		align-items: center;
+		justify-content: center;
+		min-width: 120%;
+		min-height: 500%;
+		zoom: 1;
+    }
+}
+</style>
+<%- include('includes/head') %>
+<body class="sidebar-dark">
+
+	<div class="main-wrapper">
+	<%- include('includes/_sidebar') %>
+
+		<div class="page-wrapper">
+			<%- include('includes/_navbar.ejs') %>
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				
+				<div class="card bodycard ">
+					<div class="card-body card-body-alt px-5 mt-5" >
+						<div class="card-header">
+              <h3 class="card-title"> Create a Task</h3>
+            </div>
+              <div class="page-content align-items-center  w-100">
+                <form action="/tasks" method="post">
+                  <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Title:</label>
+                            <input type="text" class="form-control" name="title" id="recipient-name">
+                          </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Recipient:</label>
+                            <select name="taskFor" class="form-control form-control-sm mb-3">
+                                <option  selected=""></option>
+                                <%for (i in users) {%>
+                                    <%if (users[i].role != 'Admin') {%>
+                                        <option  value="<%= users[i].id%>">
+        
+                                            <%= users[i].name%>
+                                        </option>
+                                    <% } %>
+                                <% } %>
+                            </select>
+                          </div>
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Ref. Carrier:</label>
+                                <select name="reference" class="form-control form-control-sm mb-3">
+                                    <option  selected=""></option>
+                                    <%for (i in trackers) {%>
+                                        <option  value="<%= trackers[i]._id%>">
+        
+                                            <%= trackers[i].Customer_Name%>
+                                        </option>
+                                    <% } %>
+                                </select>
+                              </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Deadline:</label>
+                                <div class="input-group date datepicker" id="datePickerExample">
+                                    <input name="deadline" type="text" class="form-control"><span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+                                </div>
+                              </div>
+                        </div>
+                  </div>
+                 
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Description:</label>
+                    <textarea class="form-control" id="message-text" rows="10" name="description"></textarea>
+                  </div>
+        
+                  <div class=" page-content d-flex justify-content-center align-items-center">
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary" style="width: 15rem;"><i data-feather="plus"></i> 
+                        Task
+                    </button>
+                  </div>
+                </div>
+                </form>
+
+              </div>
+
+
+
+						<!-- MAin car END -->
+					</div>
+					
+				
+				
+				</div>
+				
+				
+
+			</div>
+
+
+				
+			
+		</div>
+		
+	</div>
+
+	
+<script>
+    // Add an event listener to the element with the ID "sendNotes"
+    document.getElementById("sendNote").addEventListener("click", function() {
+        // Close the modal with the ID "Notes"
+        $("#Notes").modal("close");
+    });
+</script>
+
+
+<%- include('includes/end') %>
+
+   <!-- Add  edit updates -->
+   <div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Edit Updates</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  <form action="/w/updates/652c3fd967240a7ebd93c39c" method="post">
+			<script>
+				new FroalaEditor('#textarea');
+			  </script>
+			<div class="row">
+				<div class="col-md-12 grid-margin stretch-card">
+						<div class="card-body">
+							<textarea class="form-control" id="textarea" name="update"></textarea>
+						</div>
+				</div>
+			</div>
+  
+		<div class=" page-content d-flex justify-content-center align-items-center">
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		  <button type="submit" class="btn btn-primary"><i data-feather="plus"></i> 
+		  Update
+		</button>
+		</div>
+	  </div>
+		  </form>
+		</div>
+	  
+	  </div>
+	</div>

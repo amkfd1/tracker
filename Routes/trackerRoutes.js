@@ -5,7 +5,8 @@ const fs = require('fs');
 const isAuth = require('../middleware/verifyAuth');
 const isAdmin = require('../middleware/isAdmin');
 const ismm = require('../middleware/ismm');
-
+const User = require('../Models/user');
+const Tracker = require('../Models/tracker');
 const isManagement = require('../middleware/isManagement');
 isPass = isAdmin | ismm
 const multer = require('multer');
@@ -66,6 +67,7 @@ router.post('/updateStage/:id', isAdmin, customerTrackerController.updateTracker
 
 
 router.get('/newClient/', isAdmin, async function (req, res) {
+  
   let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
   let error = req.flash('tracker_404' )[0] || req.flash('unauthorized')[0] || req.flash('server_error')[0]; 
 
@@ -87,7 +89,28 @@ router.get('/voip/carriers', isAdmin, customerTrackerController.getVoipCarriers)
 
 router.get('/tasks', isAdmin, customerTrackerController.getTasks);
 
+router.get('/tasks/new-task', isAdmin, async function (req, res) {
 
+  const trackers = await Tracker.find().populate('account_manager');
+  const users = await User.find().populate('assignedTasks');
+
+  let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
+  let error = req.flash('tracker_404' )[0] || req.flash('unauthorized')[0] || req.flash('server_error')[0]; 
+
+    console.log(error, flash)
+    res.render('new-task', {
+        pageTitle: "Add New Tracker",
+        trackers,
+        users,
+        new: true,
+        error,
+        user: req.user,
+        message: flash,
+        isAuthenticated: req.user.isLoggedIn,
+        isManagement: req.user.designation,
+        designation: req.user.designation
+    });
+});
 
 // Use the upload middleware in your route handler
 router.post('/upload/:id', isAuth, upload.single('document'), customerTrackerController.uploadDocument);

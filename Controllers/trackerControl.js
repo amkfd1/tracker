@@ -1795,6 +1795,7 @@ const getTasks = async (req, res) => {
   let tasks = []
   atasks.forEach(task => {
     let taskk = {
+      _id: task._id,
       title: task.title,
       taskFor: task.taskFor.name,
       date: (task.date).toISOString().split('T')[0],
