@@ -25,11 +25,14 @@
 
 <body class="sidebar-dark">
 	<div class="main-wrapper">
-		<div class="page-wrapper full-page ">
+		<%- include('../includes/_sidebar') %>
+	
+			<div class="page-wrapper">
+				<%- include('../includes/_navbar.ejs') %>
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
 				
-				<div class="card " style=" width: 90% ">
+				<div class="card " style=" width: 100%; height: 100vh; ">
 					<div class="card-body card-body-alt px-5">
             
 						<div class="page-content mt-0">
@@ -42,7 +45,7 @@
 									</h6>
 								</div>
 							</div>
-							<div class="row mt-2">
+							<div class="row mt-2" style="width: 100%; height: 100vh;">
 								<!-- Activities card -->
 								<div class="col-md-8 grid-margin stretch-card">
 									<div class="card">
@@ -80,7 +83,7 @@
 														</div>
 														<div class="col-lg-6">
 																<span> 
-																	<%= ticket.date%>
+																	<%= date%>
 																</span>
 														</div>
 													</div>
@@ -128,7 +131,7 @@
 														</div>
 														<div class="col-lg-6">
 																<span> 
-																	<%= ticket.client%>
+																	<%= ticket.client.Customer_Name%>
 																</span>
 														</div>
 													</div>
@@ -140,7 +143,7 @@
 														</div>
 														<div class="col-lg-6">
 																<span> 
-																	<%= ticket.contact%>
+																	<%= ticket.contact.name%>
 																</span>
 														</div>
 													</div>
@@ -152,7 +155,7 @@
 														</div>
 														<div class="col-lg-6">
 																<span> 
-																	<%= ticket.assignee%>
+																	<%= ticket.assignee.name%>
 																</span>
 														</div>
 													</div>
@@ -271,14 +274,7 @@
 
 
 				
-			<!--NAVIGATION-->
-			<!-- Nav Includes -->
-			<% if (designation === 'NOC-TL' || designation === 'HoIT') { %>
-			    <%- include('../partials/mmNav') %>
-            <%} else {%>
-			    <%- include('../includes/nav') %>
-            
-            <% } %>
+
 		</div>
 		
 	</div>

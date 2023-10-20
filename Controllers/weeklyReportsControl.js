@@ -396,7 +396,24 @@ const updateStatus = async (req, res) => {
   };
   
   
-  
+  // Function to get all weekly reports
+async function getAllWeeklyReports(req, res) {
+  try {
+    // Find all weekly reports in the collection
+    const weeklyReports = await WeeklyReport.find({});
+    console.log("REPORTS: ", weeklyReports)
+    return res.render('WeeklyReportsList', {
+      pageTitle: 'Weekly Reports',
+      user: req.user,
+      wkReports: weeklyReports
+
+    });
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    return res.status(500).json({ error: 'An error occurred while fetching weekly reports.' });
+  }
+}
+
   
   
 
@@ -410,7 +427,8 @@ module.exports = {
     renderWReport,
     renderWReportSingle,
     fetchLastMondayData,
-    submitWeeklyReport
+    submitWeeklyReport,
+    getAllWeeklyReports
 
 
 };

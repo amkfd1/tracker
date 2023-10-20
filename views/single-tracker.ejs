@@ -8,10 +8,13 @@
 
 <body class="sidebar-dark">
 	<div class="main-wrapper">
-		<div class="page-wrapper full-page ">
+		<%- include('includes/_sidebar') %>
+	
+			<div class="page-wrapper">
+				<%- include('includes/_navbar.ejs') %>
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
-				<div class="card " style=" width: 90% ">
+				<div class="card bodycard">
 					
 					<div class="card-body card-body-alt px-5" >
 						<div class="row">
@@ -1043,14 +1046,7 @@
 
 
 				
-			<!--NAVIGATION-->
-			<!-- Nav Includes -->
-			<% if (designation === 'NOC-TL' || designation === 'HoIT') { %>
-			    <%- include('partials/mmNav') %>
-            <%} else {%>
-			    <%- include('partials/nav') %>
-            
-            <% } %>
+	
 		</div>
 		
 	</div>

@@ -3,13 +3,13 @@
 <body class="sidebar-dark"> 
 	<div class="main-wrapper">
 		<%- include('includes/_sidebar') %>
-
-		<div class="page-wrapper ">
-			<%- include('includes/_navbar') %>
+	
+			<div class="page-wrapper">
+				<%- include('includes/_navbar.ejs') %>
 
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
-				<div class="card " style=" width: 100% ">
+				<div class="card bodycard" >
 					<div class="card-body card-body-alt px-5" >
 					<div class="row">
 						<div class="col-md-8">
@@ -75,7 +75,7 @@
 																				<button type="submit"  class="dropdown-item" style="border:none;">
 																					<%= stages[j]%>
 																				</button>
-																				<input type="hidden" name="stage" value="<%= stages[j]%>">
+																				<input type="hidden" name="newAssigneeId" value="<%= stages[j]%>">
 																			</form>
 																		<% } %>
 																		<div class="dropdown-divider"></div>

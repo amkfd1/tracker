@@ -34,73 +34,66 @@
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
 				
-				<div class="card cardbody mt-4" style="height: 100vh;">
-					<div class="card-body cardbody card-body-alt px-5" >
+				<div class="card bodycard">
+					<div class="card-body card-body-alt px-5" >
 						
 									<!--SMS Section Table-->
 									<section class="">
-										<h5 class="card-title ">All Tasks </h5>
-                                        <div class="table-responsive ">
-											<table class="table table-striped card-body-alt" id="smsTable">
+										<h5 class="card-title ">Weekly Reports</h5>
+		
+										<div class="table-responsive ">
+											<table class="table table-striped" id="smsTable">
 												<thead class="text-center">
 													<tr>
 														<th>
-															Created
+															#
 														</th>
-														<th>
-															Title
-														</th>
-														
-														<th>
-															Raised By
+                                                        <th>
+															Date
 														</th>
 														<th>
 															Status
 														</th>
 														<th>
-															Assignee
-														</th>
+                                                            Tickets
+                                                        </th>
                                                         <th>
-															Deadline
-														</th>
+                                                            Updates
+                                                        </th>											
 													</tr>
 												</thead>
 												<tbody>
-                                                    <% for (i in tasks) {%>
-                                                        <tr>
-                                                            <td>
-                                                                <%= tasks[i].date%>
-                                                            </td>
-                                                            <td>
-                                                               <a href="/admin/task/<%= tasks[i]._id%>">
-																<%= tasks[i].title%>
-															   </a> 
-        
-                                                            </td>
-                                                            <td>
-                                                                <%= tasks[i].assignedBy.name%>
-        
-                                                            </td>
-                                                            <td>
-                                                                <%= tasks[i].status%>
-                                                                
-                                                            </td>
-                                                            <td>
-                                                                <%= tasks[i].taskFor.name%>
-                                                            </td>
-                                                            <td>
-                                                                <%= tasks[i].deadline%>
-                                                            </td>
-                                                            
-                                                        </tr>
+                                                    <% let counter = 0%>
+                                                   <%for (i in wkReports) {%>
+                                                    <tr>
+                                                        <%counter = counter + 1%>
+                                                        <td>
+                                                            <%= counter%>
+                                                        </td>
+                                                        <td>
+                                                          <a href="/reports/<%= wkReports[i]._id%>"> 
+                                                            <%= wkReports[i].dateGenerated.toISOString().slice(0, 10)%>
+                                                        </a> 
+                                                        </td>
+                                                        <td>
+                                                            <%= wkReports[i].isSubmitted.submitted%>
+                                                        </td>
+                                                        <td>
+                                                            <%= (wkReports[i].tickets).length%>
+                                                        </td>
+                                                        <td>
+                                                            <%= (wkReports[i].update).length%>
+                                                        </td>
+                                                    </tr>
+                                                   
                                                     <% } %>
                                                 </tbody>
-                                            </table>
-                                        </div>
-														
+											</table>
+										</div>					
 									</section>		
 						
-                                    
+
+
 
 
 

@@ -12,7 +12,8 @@ const {
   renderWReport,
   renderWReportSingle,
   fetchLastMondayData,
-  submitWeeklyReport
+  submitWeeklyReport,
+  getAllWeeklyReports
 } = require('../Controllers/weeklyReportsControl');
 const {
   createUpdate,
@@ -23,9 +24,11 @@ const {
   updateUserUpdate
 }= require("../Controllers/UpdatesController");
 //get report
-router.get('/reports', isAuth, fetchLastMondayData);
+router.get('/reports', isAuth, getAllWeeklyReports);
 
-router.get('/reports/:id', renderWReportSingle);
+router.get('/reports/generate', isAuth, fetchLastMondayData);
+
+router.get('/reports/:id', fetchLastMondayData);
 
 router.post('/wr/reports/report/submission/:id', submitWeeklyReport);
 

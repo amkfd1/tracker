@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title> <%= pageTitle%></title>
+	<title><%= pageTitle%></title>
 	<!-- core:css -->
 	<link rel="stylesheet" href="../../../assets/vendors/core/core.css">
 	<!-- endinject -->
@@ -15,15 +15,23 @@
   <link rel="stylesheet" href="../../../assets/vendors/sweetalert2/sweetalert2.min.css">
 	<!-- end plugin css for this page -->
 	<!-- inject:css -->
+	<link rel="stylesheet" href="../../../assets/vendors/mdi/css/materialdesignicons.min.css">
 	<link rel="stylesheet" href="../../../assets/fonts/feather-font/css/iconfont.css">
+	<link rel="stylesheet" href="../../../assets/vendors/simplemde/simplemde.min.css">
+	<!-- <link rel="stylesheet" href="../../../assets/vendors/flag-icon-css/css/flag-icon.min.css"> -->
 	<!-- endinject -->
   <!-- Layout styles -->  
-	<link rel="stylesheet" href="../../../assets/css/additional.css">
 	<link rel="stylesheet" href="../../../assets/css/demo_2/style.css">
+	<link rel="stylesheet" href="../../../assets/css/additional.css">
+	<link rel="stylesheet" href="../../../assets/css/hover.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+	
+	<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <!-- End layout styles -->
   <link rel="shortcut icon" href="../../../assets/images/mkel-logo.png" />
-</head> 
-<style>
+</head>
+<style> 
 	
 	 .moveModal{
 		display: flex;
@@ -45,7 +53,7 @@
 		background: transparent;
 		box-shadow: 0 12px 8px rgb(0 0 0 / 8%);
 		overflow: hidden;
-		width: 100%;
+		width: 40%;
 		justify-content:center;
 	  }
 	  
@@ -56,7 +64,7 @@
 	  .menu a {
 		position: relative;
 		display: grid;
-		padding: 40px ;
+		padding: 40px 20px;
 		font-size: 14px;
 		font-weight: bold;
 		text-transform: uppercase;
@@ -69,8 +77,6 @@
 	  }
 	  
 	  .menu a span {
-		justify-content: center;
-		align-content: center;
 		transform: translateY(-60px);
 	  }
 	  
@@ -79,15 +85,20 @@
 	  }
 	  
 	  .menu a:hover span {
-		color: #E3ECF3;
+		color: black;
 		transform: translateY(-20px);
 	  }
 	  
 	  .menu a:hover i {
-		color: #E3ECF3;
+		color: var(--black);
 		transform: translateY(10px);
 	  }
 
 
 	.noBorder{border:none;}
+	.bodycard{
+		margin-top: 2rem;
+		width: 100%; 
+		height: 100vh;
+	}
 </style>

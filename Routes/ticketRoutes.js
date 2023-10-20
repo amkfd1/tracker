@@ -8,11 +8,14 @@ const Task = require('../Models/task');
 const fs = require('fs');
 
 
-router.get('/tickets', tController.getAllData);
+router.get('/tickets', isAuth, tController.getAllData);
 
 router.get('/tickets/form', tController.getNewTicket);
 
 router.post('/tickets/new-ticket', isAuth, tController.createTicket);
+
+router.post('/tickets/assign-ticket/:id', isAuth, tController.updateTicketAssigneeAndDate);
+
 
 router.get('/ticket/:id', tController.getTicket);
 

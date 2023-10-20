@@ -25,8 +25,8 @@ const ticketSchema = new mongoose.Schema({
 
   },
   contact: {
-    type: String,
-
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
   subject: {
     type: String,

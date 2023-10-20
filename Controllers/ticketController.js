@@ -82,20 +82,25 @@ const createTicket = async (req, res) => {
 // Controller method to fetch all data from Tracker, Tick, and Performances
 async function getAllData(req, res) {
   try {
-    const trackerData = await Tracker.find({}).exec();
-    const tickData = await Ticket.find({}).exec();
-    const performanceData = await Performance.find({}).exec();
+  
+    const tickets = await Ticket.find()
+    .populate('client', 'Customer_Name _id')
+    .populate('assignee', 'name')
+    .populate('contact', 'name _id');
+ 
+    const users = await User.find()
 
-    // console.log(tickData)
+    // let formattedTickets =[]
+
+    // console.log(tickets)
     // You can return the data in the response
-    return res.status(200).render("main/helpdesk",{
-      trackerData,
-      tickets: tickData,
-      performanceData,
-      designation: 'NOC',
+    res.status(200).render("main/helpdesk",{
+      tickets,
+      users,
+      designation: req.user.designation,
       isAuthenticated: true,
       pageTitle: 'Tickets',
-      user: {}
+      user: req.user
     });
   } catch (error) {
     // Handle any errors that occur during the fetch
@@ -170,22 +175,33 @@ async function getNewTicket(req, res) {
       const { id } = req.params;
   
       // Use the Ticket model to find the ticket by its ID
-      const ticket = await Ticket.findById(id).populate('client').populate('assignee');
-      const activity = await Activity.find({ticketId:id}).populate('ticketId');
-  
-      console.log('Tickets')
-      if (!ticket) {
-        return res.status(404).json({ error: 'Ticket not found' });
-      }
-  
+      const ticket = await Ticket.findById(id)
+      .populate('client', 'Customer_Name _id')
+      .populate('assignee', 'name _id')
+      .populate('contact', 'name _id');
+    const activity = await Activity.find({ ticketId: id });
+    
+    console.log('Ticket', ticket);
+    
+    if (!ticket) {
+      return res.status(404).json({ error: 'Ticket not found' });
+    }
+
+    let date = ticket.date.toISOString().slice(0, 10)
+    
+      // Now you can use the 'formattedTicket' object as needed.
+    
+   
       // Format the date to display only date and time
-      const formattedDate = formatDate(ticket.date);
+      // const formattedDate = formatDate(ticket.date);
   
-      // Replace the original ticket.date with the formatted date
-      ticket.date = (ticket.date).toISOString().slice(0, 19).replace('T', ' ');;
+      // // Replace the original ticket.date with the formatted date
+      // ticket.date = (ticket.date).toISOString().slice(0, 10).replace('T', ' ');;
   
+      // ticket.save();
       res.render('main/ticket-details', {
-        ticket,
+        ticket ,
+        date,
         designation: 'NOC',
         isAuthenticated: true,
         pageTitle: 'Tickets',
@@ -248,10 +264,43 @@ async function getNewTicket(req, res) {
     }
   }
 
+
+  async function updateTicketAssigneeAndDate(req, res) {
+    const { newAssigneeId, newDate } = req.body;
+    const ticketId = req.params.id;
+  
+    try {
+      // Find the ticket by its ID
+      const ticket = await Ticket.findById(ticketId);
+  
+      if (!ticket) {
+        return res.status(404).json({ error: 'Ticket not found' });
+      }
+  
+      // Update the assignee field with the newAssigneeId
+      ticket.assignee = newAssigneeId;
+      ticket.status = "Assigned"
+      // Update the date with the newDate (assuming newDate is a valid date)
+      if (newDate) {
+        ticket.date = new Date(newDate);
+      }
+  
+      // Save the updated ticket
+      const updatedTicket = await ticket.save();
+      console.log("Updated: ", updatedTicket)
+      // Redirect to the appropriate page after the update (adjust the URL as needed)
+      return res.redirect('/tickets');
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      return res.status(500).json({ error: 'An error occurred while updating the ticket.' });
+    }
+  }
+  
 module.exports = { 
 getAllData,
 getNewTicket,
 createTicket,
 getTicket,
-postActivity
+postActivity,
+updateTicketAssigneeAndDate
 };
