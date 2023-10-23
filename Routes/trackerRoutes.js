@@ -7,6 +7,8 @@ const isAdmin = require('../middleware/isAdmin');
 const ismm = require('../middleware/ismm');
 const User = require('../Models/user');
 const Tracker = require('../Models/tracker');
+const adminsettings = require('../Controllers/adminsettings');
+
 const isManagement = require('../middleware/isManagement');
 isPass = isAdmin | ismm
 const multer = require('multer');
@@ -127,6 +129,7 @@ router.post('/document/grant-access/', isAuth, customerTrackerController.grantDo
 
 const Document = require('../Models/document');
 
+router.get('/admin/user/user-record', isAdmin, adminsettings.getUserById)
 
 // open Pdf
 router.get("/:id", async (req, res) => {

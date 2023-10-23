@@ -116,7 +116,7 @@ exports.updateUserProfile = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.user._id;
 
         // Find the user by ID
         const user = await User.findById(userId).populate('assignedTasks');

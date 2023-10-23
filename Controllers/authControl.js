@@ -397,7 +397,7 @@ router.post('/password-reset-link', async (req, res) => {
     res.status(500).redirect('/500')
   }
 });
-
+ 
 
 
 router.get('/logout', (req, res) => {
