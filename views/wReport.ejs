@@ -32,7 +32,7 @@
 </style>
 
 <%- include('includes/head') %>
-
+ 
 <body class="sidebar-dark">
 
 	<div class="main-wrapper">
@@ -197,36 +197,34 @@
 															Supplier 
 														</th>
 														<th>
-															Product
+															Date Received
 														</th>
-														
+														<th>
+															<a href="#" class="float-right mx-2 text-secondary" data-toggle="modal" data-target="#UploadDoc" data-whatever="">
+																<i class="smallIcons" data-feather="upload-cloud" aria-hidden="true"></i>
+															</a>
+														</th>
 													</tr>
 												</thead>
 												<tbody>
-													<tr class="table-warning text-dark">
-														<td>
-															1
-														</td>
-														<td>
-															Cedric Kelly
-														</td>
-														<td>
-															Photoshop
-														</td>
-														
-													</tr>
-													<tr class="table-warning text-dark">
-														<td>
-															2
-														</td>
-														<td>
-															Haley Kennedy
-														</td>
-														<td>
-															Flash
-														</td>
-														
-													</tr>
+													<% for (i in rates) {%>
+														<tr class="table-warning text-dark">
+															<td>
+																<%= (i)%>
+															</td>
+															<td>
+																<%= rates[i].carrier.Customer_Name %>
+
+															</td>
+															<td>
+																<%= rates[i].dateReceived %>
+															</td>
+															<td>
+	
+															</td>
+														</tr>
+													<% } %>
+													
 												
 												</tbody>
 											</table>
@@ -276,9 +274,11 @@
 																<%- updates[i].update%>
 															</td>
 															<td>
-																<a href="#" data-toggle="modal" data-target="#Edit<%= updates[i]._id%>" data-whatever="@fat" >
-																	<i class="appIcons text-muted my-notSection" data-feather="edit-2" ></i>
-																</a>
+																<% if (updates[i].postedBy._id === user._id) {%>
+																	<a href="#" data-toggle="modal" data-target="#Edit<%= updates[i]._id%>" data-whatever="@fat" >
+																		<i class="appIcons text-muted my-notSection" data-feather="edit-2" ></i>
+																	</a>
+																<% } %>
 															</td>
 														</tr>
 														<!-- Update Modal -->
@@ -348,7 +348,7 @@
 										<br>
 											
 											<button type="button" class="btn btn-info btn-icon my-3 hvr-bounce-in animate__animated animate__backInDown">
-												<i data-feather="refresh-ccw"></i>
+												<a href="/wr/reports/report/<%=weeklyReports._id%>"><i data-feather="refresh-ccw"></i></a>
 											</button>
 											<br>
 											<form action="/wr/reports/report/submission/<%=weeklyReports._id%>" method="post">
@@ -395,6 +395,62 @@
         $("#Notes").modal("close");
     });
 </script>
+
+<!-- Add Rates -->
+<div class="modal fade " id="UploadDoc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div  style="">
+		<div class="modal-dialog " >
+		<div class="modal-content ">
+			<div class="modal-header">
+			<h4 class="modal-title" id="exampleModalLabel"> Upload Accepted Rates </code></h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			</div>
+			<div class="modal-body">
+			<form method="post" action="/upload-rates/<%= weeklyReports._id%>" enctype="multipart/form-data">
+				<div class="form-group row ">
+					<div class="col">
+						<label>Title:</label>
+						<input value="" class="form-control mb-4 mb-md-0" name="documentTitle">
+					</div>
+					<div class="col">
+						<label>Permission: </label>
+							<select name="carrier" class="form-control form-control-sm mb-3">
+								<option  selected=""></option>
+								<%for (i in trackers) {%>
+									<option  value="<%= trackers[i]._id%>">
+										<%= trackers[i].Customer_Name%>
+									</option>
+								<% } %>
+																							
+							</select>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<label>Document: </label>
+						<input type="file" name="file" id="myDropify" class="border">				
+					</div>
+					
+					<div class="col-md-6">
+						<label>Date Received: </label>
+						<div class="input-group date datepicker" id="datePickerExample">
+							<input name="dateReceived" type="text" class="form-control"><span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer moveModal">
+					<button type="submit" class="btn btn-secondary">Upload Rate</button>
+				</div>
+			</form>
+			</div>
+			
+		</div>
+		</div>
+	</div>
+</div>
 
 <!-- Add  edit updates -->
 <div class="modal fade" id="plus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

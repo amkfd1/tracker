@@ -7,6 +7,8 @@ const Note = require('../Models/note');
 const User = require('../Models/user');
 const fs = require('fs');
 const Ticket = require('../Models/ticket');
+const Rate = require('../Models/rate');
+const multer = require('multer')
 const Task = require('../Models/task');
 
 const Update = require('../Models/update');
@@ -181,13 +183,13 @@ const renderWReport = async (req, res) => {
       tickets.forEach((tick) => {
         const date = new Date(tick.date);
         tick.date = date.toISOString().split('T')[0];
-        console.log("This is the date: ", tick.date);
+        // console.log("This is the date: ", tick.date);
         ticks.push(tick);
       });
-      print("This is ticket: ", ticks)
-      console.log("First Monday: ", lastMonday);
-      console.log("Now: ", today);
-      console.log("This is ticket: ", tickets);
+      // print("This is ticket: ", ticks)
+      // console.log("First Monday: ", lastMonday);
+      // console.log("Now: ", today);
+      // console.log("This is ticket: ", tickets);
 
       const performances = await Performance.find({
         date: { $gte: lastMonday, $lt: today }
@@ -233,9 +235,25 @@ const renderWReport = async (req, res) => {
           UnopenedTask.push(task)
         }
       })
+
+      // get trackers to allow selection
+      const trackers = await Tracker.find()
+
+      let allRates = []
+      const rates = await Rate.find({ wklReport: req.params.id }).populate('carrier', 'Customer_Name _id');
+      for (i in rates ){
+        let rate = {
+          carrier: rates[i].carrier ,
+          wklReport: rates[i].wklReport,
+          dateReceived: rates[i].dateReceived.toISOString().split('T')[0], 
+          documentPath: rates[i].documentPath,
+          documentTitle: rates[i].documentTitle,
+        }
+        allRates.push(rate)
+      }
       // print("Your updates: ", weeklyReports.update)
       weeklyReports.save();
-      // print("Performance: ", weeklyReports)
+      print("RATES: ", rates)
       res.render('wReport', { 
         weeklyReports,
         performance: carrierPerformanceArray,
@@ -247,7 +265,9 @@ const renderWReport = async (req, res) => {
         user: req.user,
         ReportDateRange,
         mytask,
-        UnopenedTask
+        UnopenedTask,
+        trackers,
+        rates: allRates
      });
     } catch (error) {
       // Handle errors, e.g., database connection issues
@@ -420,8 +440,58 @@ async function getAllWeeklyReports(req, res) {
   }
 }
 
-  
-  
+// Define storage for uploaded Excel files
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads'); // Change the destination folder as needed
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname); // Rename the file as needed
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// Controller function to upload an Excel document
+const uploadRates = upload.single('file'); // Assuming you have a file input named 'file' in your form
+
+const processRatesUpload = async (req, res) => {
+   let {
+      carrier,
+      dateReceived,
+      documentTitle
+    } = req.body
+      let id  = req.params.id
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // The file has been uploaded to the 'uploads' folder with the specified name
+
+    // You can save the file information to your database if needed
+    const documentPath = req.file.filename;
+
+    // Create a new Rates document and save it to the database with the file path
+    const newRate = new Rate({
+      documentPath,
+      carrier,
+      dateReceived,
+      documentTitle,
+      wklReport: id
+
+
+    });
+
+    await newRate.save();
+// console.log("Uploading Rates: ", newRate)
+    // Respond with a success message
+    res.status(200).redirect('/wr/reports/report/'+id);
+  } catch (error) {
+    console.error('Error processing Excel file:', error);
+    res.status(500).json({ error: 'An error occurred while uploading the Excel file' });
+  }
+};
 
 module.exports = { 
     createWeeklyReport,
@@ -434,7 +504,10 @@ module.exports = {
     renderWReportSingle,
     fetchLastMondayData,
     submitWeeklyReport,
-    getAllWeeklyReports
+    getAllWeeklyReports,
+    uploadRates,
+    processRatesUpload
+
 
 
 };

@@ -13,7 +13,10 @@ const {
   renderWReportSingle,
   fetchLastMondayData,
   submitWeeklyReport,
-  getAllWeeklyReports
+  getAllWeeklyReports,
+  processRatesUpload,
+  uploadRates
+
 } = require('../Controllers/weeklyReportsControl');
 const {
   createUpdate,
@@ -54,7 +57,9 @@ router.post('/wr/report/update/create', isAuth, createUpdate);
 
 
 
-// Staff Updates functions
+// upload Rates 
+// Define a route for uploading Excel documents
+router.post('/upload-rates/:id', uploadRates, processRatesUpload);
 
 // Create a new update
 router.post('/w/updates', isAuth, createUpdate);
