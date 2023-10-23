@@ -39,7 +39,7 @@ router.post('/create', createWeeklyReport);
 router.get('/wr/reports/report/:id', isAuth, renderWReport);
 
 // Update Updates schema within a WeeklyReport
-router.put('/update-updates/:weeklyReportId', updateUpdates);
+router.put('/update-updates/:id', updateUpdates);
 
 // Delete an update within a WeeklyReport
 router.delete('/delete-update/:weeklyReportId/:updateId', deleteUpdate);
@@ -49,6 +49,9 @@ router.delete('/delete/:id', deleteWeeklyReport);
 
 // Update the status of a WeeklyReport
 router.put('/update-status/:id', updateStatus);
+
+router.post('/wr/report/update/create', isAuth, createUpdate);
+
 
 
 // Staff Updates functions

@@ -63,7 +63,7 @@ const getUpdates = async (req, res) => {
   
   // Update an existing update by its ID
 const updateUpdate = async (req, res) => {
-    try {
+    try { 
       const { update } = req.body;
       const updatedUpdate = await Update.findByIdAndUpdate(
         req.params.id,
@@ -75,7 +75,7 @@ const updateUpdate = async (req, res) => {
         return res.status(404).json({ error: 'Update not found' });
       }
   
-      res.status(200).json(updatedUpdate);
+      res.status(200).redirect('/reports/generate');
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
     }
@@ -86,6 +86,7 @@ const updateUpdate = async (req, res) => {
 const updateUserUpdate = async (req, res) => {
   try {
     const updateId = req.params.id;
+    const reportId = req.body.rid;
     const userId = req.user._id; // Assuming req.user contains the logged-in user's information
 
     // Find the update by ID and check if the postedBy matches the logged-in user's ID
@@ -101,7 +102,7 @@ const updateUserUpdate = async (req, res) => {
     // Save the updated update
     await update.save();
 
-    res.status(200).json({ message: 'Update updated successfully', update });
+    res.status(200).redirect('/wr/reports/report/'+reportId);
   } catch (error) {
     console.error('Error updating update:', error);
     res.status(500).json({ error: 'Server error' });

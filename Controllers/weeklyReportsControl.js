@@ -165,7 +165,7 @@ const renderWReport = async (req, res) => {
   firstMonday.setDate(now.getDate() + daysUntilMonday);
     try {
       const updates = await Update.find({
-        dateCreated: { $gte: lastMonday, $lt: new Date() }
+        dateUpdated: { $gte: lastMonday, $lt: new Date() }
       }).populate('postedBy', 'name _id');
       
       const formattedLastMonday = lastMonday.toLocaleString(undefined, startR);
@@ -177,8 +177,14 @@ const renderWReport = async (req, res) => {
       const tickets = await Ticket.find({
         date: { $gte: lastMonday, $lt: today }
       }).populate('client', '_id Customer_Name').populate('assignee', '_id name');
-
-      print("This is ticket: ", tickets)
+      let ticks = []
+      tickets.forEach((tick) => {
+        const date = new Date(tick.date);
+        tick.date = date.toISOString().split('T')[0];
+        console.log("This is the date: ", tick.date);
+        ticks.push(tick);
+      });
+      print("This is ticket: ", ticks)
       console.log("First Monday: ", lastMonday);
       console.log("Now: ", today);
       console.log("This is ticket: ", tickets);
@@ -217,7 +223,7 @@ const renderWReport = async (req, res) => {
 
       weeklyReports.update = updates/* Add the updates data */;
       // weeklyReports.dateGenerated = new Date();
-      weeklyReports.tickets = tickets/* Add the tickets data */;
+      weeklyReports.tickets = ticks/* Add the tickets data */;
 
       const mytask = await Task.find({taskFor: req.user._id}).populate('assignedBy', 'name');
       let UnopenedTask = []
@@ -227,13 +233,13 @@ const renderWReport = async (req, res) => {
           UnopenedTask.push(task)
         }
       })
-      print("Your Tasks: ", mytask)
+      // print("Your updates: ", weeklyReports.update)
       weeklyReports.save();
       // print("Performance: ", weeklyReports)
       res.render('wReport', { 
         weeklyReports,
         performance: carrierPerformanceArray,
-        tickets: weeklyReports.tickets,
+        tickets: ticks,
         updates: weeklyReports.update,
         pageTitle: "Reports",
         designation: 'NOC-TL',

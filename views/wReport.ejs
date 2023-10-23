@@ -8,18 +8,25 @@
     body *:not(#my-section):not(#my-section *){
         visibility:hidden;
     }
+	
     #my-section{
         position: absolute;
         top: 0;
         left: 0;
 		/* page: 1; */
-		margin-left: -25%;
+		margin-left: -20%;
 		visibility: visible;
 		align-items: center;
 		justify-content: center;
 		min-width: 120%;
 		min-height: 500%;
-		zoom: 1;
+		zoom: 1.2;
+    }
+
+	#my-notSection{
+        
+		visibility: hidden;
+		
     }
 }
 </style>
@@ -36,7 +43,7 @@
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
 				
-				<div class="card " style=" width: 100%; height: 100vh; ">
+				<div class="card mt-5" style=" width: 100%; height: 100vh; ">
 					<div class="card-body card-body-alt px-5" >
 						<div class="row">
 							<div class="col-md-11" id= "my-section">
@@ -52,7 +59,7 @@
 														Weekly Operation Report
 													</td>
 													<td class="text-muted text-center">
-														<%= weeklyReports.dateGenerated %>
+														<%= ReportDateRange %>
 													</td>
 													
 												</tr>
@@ -92,46 +99,35 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<td>
-														1
-													</td>
-													<td>
-														Ventel
-													</td>
-													<td>
-														$46,548
-													</td>
-													<td>
-														$50,000
-													</td>
-													<td>
-														20,048
-													</td>
-													<td class="text-success">
-														True
-													</td>
-												</tr>
-												<tr>
-													<td>
-														1
-													</td>
-													<td>
-														Qatama
-													</td>
-													<td>
-														$66,153
-													</td>
-													<td>
-														$100,000
-													</td>
-													<td>
-														51,978
-													</td>
-													<td class="text-success">
-														True
-													</td>
-												</tr>
+												<% let counter = 0%>
+												<%for (i in performance) {%>
+													<%counter = counter + 1%>
+													<tr>
+														<td>
+															<%= counter%>
+														</td>
+														<td>
+															<%= performance[i].carrier.Customer_Name%>
+
+														</td>
+														<td>
+															$ <%= performance[i].carrier.CB%>
+
+														</td>
+														<td>
+															
+															$ <%= performance[i].carrier.CL%>
+
+														</td>
+														<td>
+															<%= performance[i].totalMinutesRoutesTerminated%>
+
+														</td>
+														<td class="text-success">
+															True
+														</td>
+													</tr>
+												<% } %>
 												
 											</tbody>
 										</table>
@@ -174,7 +170,7 @@
 															<%= tickets[i].subject%>
 														</td>
 														<td>
-															<%= tickets[i].date%>
+															<%= (tickets[i].date).toISOString().split('T')[0];%>
 														</td>
 														<td class="text-green">
 															<%= tickets[i].status%>
@@ -182,20 +178,7 @@
 													</tr>
 												<% } %>
 												
-													<tr>
-														<td>
-															<%= %>
-														</td>
-														<td>
-															<%= %>
-														</td>
-														<td>
-															<%= %>
-														</td>
-														<td>
-															<%= %>
-														</td>
-													</tr>
+													
 											</tbody>
 										</table>
 										<!-- End tickets -->
@@ -264,7 +247,9 @@
 															Other Update
 														</th>
 														<th>
-	
+															<a href="#" data-toggle="modal" data-target="#plus" data-whatever="@fat" >
+																<i data-feather="plus"></i>
+															</a>
 														</th>
 														
 													</tr>
@@ -280,21 +265,61 @@
 														}
 													</style>
 													
-													<tr class="table-primary text-dark">
+													<%for (i in updates) {%>
+														<tr class="table-primary text-dark">
 														
-														<td>
-															Other Update
-														</td>
-														
-														<td>
-															Updates to be added here for future reference.
-														</td>
-														<td>
-															<a href="#" data-toggle="modal" data-target="#Edit" data-whatever="@fat" >
-																<i class="appIcons text-muted" data-feather="edit-2" ></i>
-															</a>
-														</td>
-													</tr>
+															<td>
+																<%= updates[i].postedBy.name%>
+															</td>
+															
+															<td>
+																<%- updates[i].update%>
+															</td>
+															<td>
+																<a href="#" data-toggle="modal" data-target="#Edit<%= updates[i]._id%>" data-whatever="@fat" >
+																	<i class="appIcons text-muted my-notSection" data-feather="edit-2" ></i>
+																</a>
+															</td>
+														</tr>
+														<!-- Update Modal -->
+														<div class="modal fade" id="Edit<%= updates[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+															<div class="modal-dialog" role="document">
+															  <div class="modal-content">
+																<div class="modal-header">
+																  <h5 class="modal-title" id="exampleModalLabel">Edit Updates</h5>
+																  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																	<span aria-hidden="true">&times;</span>
+																  </button>
+																</div>
+																<div class="modal-body">
+																  <form action="/w/updates/<%= updates[i]._id%>" method="post">
+																	<!-- <script>
+																		new FroalaEditor('#textarea');
+																	  </script> -->
+																	<div class="row">
+																		<div class="col-md-12 grid-margin stretch-card">
+																				<div class="card-body">
+																					<textarea class="form-control" id="textareab" rows="10" name="update"><%- updates[i].update%></textarea>
+																				</div>
+																		</div>
+																	</div>
+														  
+																<div class=" page-content d-flex justify-content-center align-items-center">
+																<div class="modal-footer">
+																  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+																  <button type="submit" class="btn btn-primary"><i data-feather="plus"></i> 
+																  Update
+																</button>
+																</div>
+															  </div>
+															  <input type="hidden" name="rid" value="<%= weeklyReports._id%>" id="">
+																  </form>
+																</div>
+															  
+															  </div>
+															</div>
+														   </div>
+													<% } %>
 												</tbody>
 											</table>
 										</div>
@@ -326,7 +351,7 @@
 												<i data-feather="refresh-ccw"></i>
 											</button>
 											<br>
-											<form action="/wr/reports/report/submission/652c4b1990319fc2ae508af0" method="post">
+											<form action="/wr/reports/report/submission/<%=weeklyReports._id%>" method="post">
 												<button type="submit" class="btn btn-success hvr-bounce-in btn-icon animate__animated animate__backInDown">
 													
 														<i  data-feather="check"></i>
@@ -371,11 +396,8 @@
     });
 </script>
 
-
-<%- include('includes/end') %>
-
-   <!-- Add  edit updates -->
-   <div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Add  edit updates -->
+<div class="modal fade" id="plus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 	  <div class="modal-content">
 		<div class="modal-header">
@@ -385,14 +407,12 @@
 		  </button>
 		</div>
 		<div class="modal-body">
-		  <form action="/w/updates/652c3fd967240a7ebd93c39c" method="post">
-			<script>
-				new FroalaEditor('#textarea');
-			  </script>
+		  <form action="/wr/report/update/create" method="post">
+			
 			<div class="row">
 				<div class="col-md-12 grid-margin stretch-card">
 						<div class="card-body">
-							<textarea class="form-control" id="textarea" name="update"></textarea>
+							<textarea class="form-control text-light" rows="10" id="textareab" name="update"></textarea>
 						</div>
 				</div>
 			</div>
@@ -410,3 +430,11 @@
 	  
 	  </div>
 	</div>
+   </div>
+
+<%- include('includes/end') %>
+<script>
+	new FroalaEditor('#textareab');
+  </script>
+   
+   <!--   edit updates -->
