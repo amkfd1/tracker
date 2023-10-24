@@ -335,12 +335,151 @@ const getManagementDash = async (req, res) => {
       res.status(500).redirect('/500');
     }
   };
+ 
+  // Get all Tasks for MM
+  const getTasks = async (req, res) => {
+    const atasks = await Task.find().populate('reference').populate('assignedBy').populate('taskFor');
+   print("This is one task: ", atasks[0].assignedBy.name)
+    let tasks = []
+    atasks.forEach(task => {
+      let taskk = {
+        _id: task._id,
+        title: task.title,
+        taskFor: task.taskFor.name,
+        date: (task.date).toISOString().split('T')[0],
+        description: task.description,
+        status: task.status,
+        files: task.files,
+        notes: task.notes,
+        assignedBy: task.assignedBy.name,
+        reference: task.reference,
+        deadline: (task.deadline).toISOString().split('T')[0],
+      }
+      tasks.push(taskk)
+    })
+  
+    console.log(" tasks: ", tasks)
+    res.render('tasks', {
+      tasks,
+      pageTitle: "MM | Tasks",
+      user: req.user,
+      designation: req.user.designation
+  
+    })
+  }
 
+  const getSingleTask = async (req, res) => {
+    try {
+      const _id = req.params.id;
+      const tasks = await Task.find({ _id}).populate('taskFor').populate('assignedBy');
+      let task ={
+              _id: tasks[0]._id,
+              title: tasks[0].title,
+              description: tasks[0].description,
+              taskFor: tasks[0].taskFor.name,
+              assignedBy: tasks[0].assignedBy.name,
+              designation:req.user.designation,
+              notes: tasks[0].notes,
+              files: tasks[0].files,
+              deadline: (tasks[0].deadline).toISOString().slice([0],[10]),
+              status: tasks[0].status
+          }
+     
+      
+      // console.log("Getting Task Notes: ", task)
+      let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
+      let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0]
+      console.log('This is your task ', task)
+      res.status(200).render('mm-task', {
+          pageTitle: task.title,
+          tasks: task,
+          isAuthenticated: req.user.isLoggedIn,
+          message: flash,
+          error,
+          user: req.user,
+          stages: ['Close', 'Complete'], 
+          isManagement: false,
+          designation: req.user.designation
+
+      });
+      } catch (error) {
+      print({ message: 'Error fetching tasks for user', error: error.message });
+      req.flash('server_error', "Error fetching Task. Try Again")
+      res.status(201).redirect('/mm/dashboard');
+  }
+};
+
+// Create Task
+createTask = async (req, res) => {
+  try {
+      let { title, description,  reference, taskFor, deadline } = req.body;
+      if(reference){
+          reference = req.body.reference;
+      }else {
+          reference = null;
+      }
+      let assignedBy = req.user._id;
+      const newTask = new Task({
+          title,
+          description,
+          assignedBy,
+          reference,
+          taskFor,
+          deadline,
+          status: 'Active'
+      });
+      
+      const savedTask = await newTask.save();
+      print('Body: ', newTask)
+      print('USER', assignedBy)
+      req.flash('update_success', "Task Successfully created ")
+      // res.status(201).redirect('/track/home');
+      // res.status(201).json(savedTask);
+     
+      return res.status(200).redirect('/mm/dashboard')
+      
+  } catch (error) {
+      print({ message: 'Error creating task', error: error.message });
+      req.flash('server_error', "Error creating task. Try Again")
+      if (req.user.designation === "Admin" || req.user.designation === "Management"){
+          return res.status(500).redirect('/track/home')
+        }else {
+          return res.status(500).redirect('/mm/dashboard')
+        }
+  }
+};
+
+const getAddTask = async function (req, res) {
+  try {
+    const trackers = await Tracker.find().populate('account_manager');
+    const users = await User.find().populate('assignedTasks');
+    console.log('Trackers: ', trackers);
+    console.log('Users: ', users);
+
+   
+
+    res.status(200).render('new-task', {
+      pageTitle: "Add New Task",
+      trackers,
+      users,
+      // error: error,
+      user: req.user,
+      // message: flash,
+      isAuthenticated: req.user.isLoggedIn,
+      designation: req.user.designation
+    });
+  } catch (error) {
+    console.error(error);
+    res.redirect('/mm/dashboard');
+  }
+};
 
 
   module.exports = 
 { 
    
     getManagementDash,
-    
+    getAddTask,
+    getTasks,
+    getSingleTask
 };

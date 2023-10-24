@@ -27,8 +27,11 @@
 <body class="sidebar-dark">
 
 	<div class="main-wrapper">
-	<%- include('includes/_sidebar') %>
-
+		<%if (designation != "Admin" || designation != "Management" ) {%>
+			<%- include('includes/_sidebar-mm') %>
+		<%} else {%>
+			<%- include('includes/_sidebar') %>
+		<%}%>
 		<div class="page-wrapper">
 			<%- include('includes/_navbar.ejs') %>
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
@@ -37,7 +40,7 @@
 				<div class="card " style=" width: 100%; height: 100vh; ">
 					<div class="card-body cardbody card-body-alt px-5" >
 						<!-- MAin car END -->
-						<h5 class="card-title mb-3">VoIP SERVICE</h5>
+						<h5 class="card-title mt-2 mb-3">VoIP SERVICE</h5>
 		
 									<section class="">
 										<div class="table-responsive ">
@@ -67,7 +70,13 @@
 		
 														<tr>
 															<td class="py-1">
-																<a href="/track/tracker/<%= voip[i]._id%>"><%= voip[i].Customer_Name%></a>
+																<%if (designation != "Admin" || designation != "Management" ) {%>
+																	<a href="/mm/client/<%= sms[i]._id%>"><%= sms[i].Customer_Name%></a>
+
+																<%} else {%>
+																	<a href="/track/tracker/<%= sms[i]._id%>"><%= sms[i].Customer_Name%></a>
+
+																<%}%>
 															</td>
 															<td>
 																<div class="dropdown">

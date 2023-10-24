@@ -1,0 +1,425 @@
+<!-- head Includes -->
+<%- include('partials/head') %>
+
+<body class="sidebar-dark">
+	<div class="main-wrapper">
+		<%- include('includes/_sidebar-mm') %>
+	
+			<div class="page-wrapper">
+				<%- include('includes/_navbar.ejs') %>
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				<div class="card bodycard">
+					
+					<div class="card-body card-body-alt px-5" >
+						<!-- <h5 class="card-title mb-3"><%= tasks.title %></h5> -->
+						<p class="card-description"></p>
+						
+						<% if (message) { %>
+									
+							<div id="alert-message" class="alert  text-center alert-success alert-dismissible fade show" role="alert">
+							  <i data-feather="check"></i> <strong><%= message %></strong>
+							</div>
+						  
+					  <% } else if (error)  {%>
+						<div id="alert-message" class="alert  text-center alert-danger alert-dismissible fade show" role="alert">
+							<i data-feather="x"></i> <strong><%= error%></strong>
+						  </div>
+						  <% } else {}%>
+						
+						 
+						  <div class="card-body">
+									
+							<div class="form-group">
+								<!-- top Content -->
+								<div class="row">
+									<div class="col-md-6">
+										<div class="card-title">
+											<h5><%= tasks.title %></h5>
+										</div>
+										<div class="text-muted">
+											<p class="tx-10">
+												Assigned By: <code><%= tasks.assignedBy %></code>
+											</p>
+										</div>
+									</div>
+									<div class="col-md-6 float-right">
+										<table class="table table-striped " >
+											<thead class="border-info">
+												<tr>
+													<th>
+														Status
+													</th>
+													<th>
+														Assignee
+													</th>
+													<th>
+														Deadline
+													</th>
+													<th>
+
+													</th>
+													<th>
+
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												
+													<tr>
+														<td class="text-success">
+															<%= tasks.status %>
+															
+														</td>
+								
+														<td>
+															<%= tasks.taskFor %>
+														</td>
+								
+														<td>
+															<%= tasks.deadline %>
+														</td>
+
+															<td>
+																
+																
+																<div class="d-flex justify-content-center align-items-center">
+																	
+																	<%if (tasks.status === "Close") {%>
+																		<%if (designation === "Admin") {%>
+																		<a href="" class="mx-2 text-danger" data-toggle="modal" data-target="#deleteTask" data-whatever="@fat">
+																			<i class="appIcons" data-feather="trash-2"></i>
+																		</a>
+																		<% } %>
+																		<% } else {%>
+																		<a href="" class="mx-2 text-warning" data-toggle="modal" data-target="#closeTask" data-whatever="@fat">
+																			<i class="appIcons" data-feather="x-square"></i>
+																		</a>
+																		<%if (designation === "Admin") {%>
+																			<a href="" class="mx-2 text-danger" data-toggle="modal" data-target="#deleteTask" data-whatever="@fat">
+																				<i class="appIcons" data-feather="trash-2"></i>
+																			</a>
+																		<% } %>
+																	<%}%>
+																	
+																</div>
+																
+															</td>
+													
+													</tr>
+												
+											</tbody>
+										</table>
+									</div>
+									
+									
+								</div>
+								<!-- Second row content -->
+								<div class="row">
+									<div class="card-title">
+										<h5 class="ml-2">Description:</h5>
+									</div>
+									<div class=" container bg-dark w-100 my-3" >
+										<div class="px-0 py-1 my-3 " >
+											<div class="card-body">
+											  <p class="text-body my-2"><%- tasks.description%></p>
+											</div>
+										  </div>
+									</div>
+								</div>
+								
+								<div class="row">
+									
+								</div>
+									<div class="col-md-12">
+										<div class="aside-body">
+											<ul class="nav nav-tabs mt-3" role="tablist">
+											  <li class="nav-item">
+												<a class="nav-link active" id="notes-tab" data-toggle="tab" href="#notes" role="tab" aria-controls="notes" aria-selected="true">
+												  <div class="d-flex flex-row flex-lg-column flex-xl-row align-items-center">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square icon-sm mr-sm-2 mr-lg-0 mr-xl-2 mb-md-1 mb-xl-0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+													<p class="d-none d-sm-block">Notes</p>
+													<div class="badge badge-pill badge-secondary mx-3 ml-auto"><%=tasks.notes.length%></div>
+				
+												  </div>
+												</a>
+											  </li>
+											  <li class="nav-item">
+												<a class="nav-link" id="file-tab" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">
+												  <div class="d-flex flex-row flex-lg-column flex-xl-row align-items-center">
+													<i data-feather="file" class=" feather feather-file icon-sm mr-sm-2 mr-lg-0 mr-xl-2 mb-md-1 mb-xl-0"></i>
+													<p class="d-none d-sm-block">Files</p>
+												  </div>
+												</a>
+											  </li>
+											  <li class="nav-item mx-5">
+												
+											  </li>
+											
+											</ul>
+											</ul>
+											<div class="tab-content mt-3 ps ps--active-y">
+											  <div class="tab-pane fade show active" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+												<div>
+													<p class="text-muted my-3">Recent Notes 
+														<span class="float-right">
+															<a class="mb-b float-right" href="#" data-toggle="modal" data-target="#addTaskNote" data-whatever="@fat">
+																<i data-feather="file-plus" class=" "></i>
+															</a>
+														</span>
+													</p>
+												  <ul class="list-unstyled chat-list px-1">
+													<% (tasks.notes).forEach(note => { %>
+													<li class="chat-item pr-1 my-2">
+														<a href="javascript:;" class="d-flex align-items-center">
+					  
+														  <div class="d-flex justify-content-between flex-grow border-bottom">
+															<div>
+															  <p class="text-body font-weight-bold my-2"><%= note.postedBy%></p>
+															  <p class="text-muted tx-13 my-1"><%= note.note%></p>
+															</div>
+															<div class="d-flex flex-column align-items-end">
+															  <p class="text-muted tx-13 mb-1"><%= note.date%></p>
+															</div>
+														  </div>
+														</a>
+													  </li>
+													  <% }) %>
+												
+													
+												  </ul>
+												</div>
+											  </div>
+											  <div class="tab-pane fade" id="files" role="tabpanel" aria-labelledby="files-tab">
+												<p class="text-muted my-3">Related Files 
+													<span class="float-right">
+														<a class="mb-b float-right" href="#" data-toggle="modal" data-target="#uploadDocTask" data-whatever="@fat">
+															<i data-feather="upload" class=" "></i>
+														</a>
+													</span>
+												</p>
+												<ul class="list-unstyled chat-list px-1">
+													<% (tasks.files).forEach(file => { %>
+													<li class="chat-item pr-1">
+														<a href="/tasks/doc/<%= tasks._id%>" target="_blank" class="d-flex align-items-center">
+														<div class="row">
+															<div class="col">
+															
+																<img class="mr-3" alt="file" src="../../../assets/images/none.png" width="35px" height="40px">
+							
+																
+															</div>
+															<div class="col flex-grow border-bottom">
+																<div>
+																	<a class="text-body"><%= file.filename%></a>
+																
+																</div>
+																<div class="col">
+																	<!-- <div class="d-flex flex-column align-items-end">
+																		<a href="" class="mb-2" data-toggle="modal" data-target="#deleteFile" data-whatever="@fat">
+																			<i class="text-danger icon-md" data-feather="trash"></i>
+																		</a>
+																	</div> -->
+																</div>
+															</div>
+														</div>
+														</a>
+													</li>
+													<% }) %>
+												</ul>
+											  </div>
+											
+											<div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 251px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 94px;"></div></div></div>
+										  </div>
+									</div>
+									<!-- <<<<<<<<<<<<<<<<<<<<<<<<<end of wizards>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+								</div>
+							
+						</div>
+							  
+					
+					
+					
+					
+					</div>
+
+				</div>
+				
+				
+				
+
+			</div>
+
+		
+			
+		</div>
+		
+	</div>
+
+
+
+
+<!-- add Not to a Task -->
+
+<div class="modal fade" id="addTaskNote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Task - Add Note </h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  <form action="/tasks/<%=tasks._id%>/note" method="post">
+
+			 
+			<div class="form-group">
+			  <label for="message-text" class="col-form-label">Note:</label>
+			  <textarea name="note" id="maxlength-textarea" class="form-control" maxlength="1000" rows="8" placeholder="This textarea has a limit of 1000 chars."></textarea>
+			</div>
+  
+			<div class=" page-content d-flex justify-content-center align-items-center">
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-primary">Save Note</button>
+			</div>
+		  </div>
+		  </form>
+		</div>
+		
+	  </div>
+	</div>
+  </div>
+
+  <!-- Upload Doc to a Task -->
+<div class="modal fade" id="uploadDocTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Edit Task</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<!-- < tasks._id> -->
+		  <form action="/tasks/<%=tasks._id%>/file" method="post" enctype="multipart/form-data">
+			
+			  <!-- <form action="/file-upload" class="dropzone dz-clickable" id="exampleDropzone"> -->
+				<input type="file" name="document" id="myDropify" class="border">	
+				<!-- </form> -->
+			
+			<div class=" page-content d-flex justify-content-center align-items-center">
+			  <div class="modal-footer">
+				<!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+				<button type="submit" class="btn btn-success">
+					<i data-feather="save"></i>Save File</button>
+			</div>
+		  </div>
+		  </form>
+		</div>
+		
+	  </div>
+	</div>
+  </div>
+
+  <div class="modal fade" id="deleteFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Delete File</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<!-- < tasks._id> -->
+		  <form action="/tasks/<%=tasks._id%>/file/0" method="post">
+            <div class=" page-content d-flex justify-content-center align-items-center">
+                <h6> Are you sure you want to delete file? </h6>
+               
+            </div>
+			
+			<div class=" page-content d-flex justify-content-center align-items-center">
+			  <div class="modal-footer">
+				<!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+				<button type="submit" class="btn btn-danger">
+					<i data-feather="trash"></i>Delete File</button>
+			</div>
+		  </div>
+		  </form>
+		</div>
+		
+	  </div>
+	</div>
+  </div>
+
+  <div class="modal fade" id="deleteTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title text-danger" id="exampleModalLabel">Delete Task</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<!-- < tasks[i]._id> -->
+		  <form action="/tasks/<%= tasks._id%>" method="post">
+            <div class="text-center justify-content-center align-items-center">
+                <h6> Are you sure you want to delete task? </h6>
+                <br>
+                <p class="text-muted"> (Deleting a task also delete all notes and files associated with the task)</p>
+               <br>
+            </div>
+			
+			<div class=" page-content d-flex justify-content-center align-items-center">
+			  <div class="modal-footer">
+				<!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+				<button type="submit" class="btn btn-danger">
+					<i data-feather="trash"></i>Delete File</button>
+			</div>
+		  </div>
+		  </form>
+		</div>
+		
+	  </div>
+	</div>
+  </div>
+
+  <div class="modal fade" id="closeTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-warning" id="exampleModalLabel">Close Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- < tasks[i]._id> -->
+        <form action="/tasks/close/<%= tasks._id%>" method="post">
+              <div class="text-center justify-content-center align-items-center">
+                  <h6> Are you sure you want to close task? </h6>
+                  <br>
+                  <p class="text-muted"> (Closing a task disables all related functions)</p>
+                 <br>
+              </div>
+        
+        <div class=" page-content d-flex justify-content-center align-items-center">
+          <div class="modal-footer">
+          <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+          <button type="submit" class="btn btn-warning">
+            <i data-feather="check"></i>Close Task</button>
+        </div>
+        </div>
+        </form>
+      </div>
+      
+      </div>
+    </div>
+    </div>
+
+<!-- End Includes -->
+<%- include('partials/end') %>

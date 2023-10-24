@@ -27,7 +27,11 @@
 <body class="sidebar-dark">
 
 	<div class="main-wrapper">
-	<%- include('includes/_sidebar') %>
+		<%if (designation != "Admin" || designation != "Management" ) {%>
+			<%- include('includes/_sidebar-mm') %>
+		<%} else {%>
+			<%- include('includes/_sidebar') %>
+		<%}%>
 
 		<div class="page-wrapper">
 			<%- include('includes/_navbar.ejs') %>

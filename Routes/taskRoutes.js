@@ -23,9 +23,9 @@ const upload = multer({ storage: storage });
 
    
 
-router.post('/tasks', isAdmin, taskController.createTask);
+router.post('/tasks', isAuth, taskController.createTask);
 router.post('/tasks/:taskId/files', isAuth, upload.single('document'), taskController.addFileToTask);
-router.post('/tasks/:taskId/notes', isAdmin, taskController.addNoteToTask);
+router.post('/tasks/:taskId/notes', isAuth, taskController.addNoteToTask);
 router.put('/tasks/:taskId', taskController.editTask);
 router.post('/tasks/:taskId', taskController.deleteTask);
 router.post('/tasks/close/:id', taskController.editTaskStatus);

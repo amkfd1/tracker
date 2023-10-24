@@ -2,12 +2,17 @@ const express = require('express');
 const router = express.Router();
 const mmController = require('../Controllers/mmController');
 const taskController = require('../Controllers/taskController');
+const weeklyReport = require('../Controllers/weeklyReportsControl');
 const performanceControl = require('../Controllers/performanceControl');
 const customerTrackerController = require('../Controllers/trackerControl');
+const staffController = require('../Controllers/staffControl');
+
 const fs = require('fs');
 const isAuth = require('../middleware/verifyAuth');
 const isAdmin = require('../middleware/isAdmin');
 const ismm = require('../middleware/ismm');
+const Tracker = require('../Models/tracker');
+const User = require('../Models/user');
 
 const multer = require('multer');
 
@@ -37,6 +42,8 @@ router.get('/task/:taskId', ismm, taskController.getAdminSingleTask);
 router.post('/updateStage/:id', ismm, customerTrackerController.updateTrackerStage);
 router.get('/tracker/:id', ismm, customerTrackerController.getSingleTracker);
 router.post('/add-stats', ismm, performanceControl.addPerformanceAdmin);
+router.get('/all/tasks', ismm, mmController.getTasks);
+router.get('/tasks/:id', ismm, mmController.getSingleTask);
 
 // cREATE OR ADD NEW SECTIONS
 router.post('/updateAddress/:id', ismm, customerTrackerController.updateAddress);
@@ -81,5 +88,29 @@ router.post('/upload/update/:id', ismm, upload.single('document'), customerTrack
 router.post('/document/send/:id', ismm, customerTrackerController.grantDocumentPermission);
 router.post('/assign/account-manager/:id', ismm, customerTrackerController.assignTaskToUser);
 
+router.get('/tasks/new-task/create', ismm, mmController.getAddTask);
 
+router.get('/sms/carriers', ismm, customerTrackerController.getSmsCarriers);
+router.get('/voip/carriers', ismm, customerTrackerController.getVoipCarriers);
+router.get('/reports', isAuth, weeklyReport.getAllWeeklyReports);
+router.get('/reports/generate', ismm, weeklyReport.fetchLastMondayData);
+router.get('/client/:id',ismm, customerTrackerController.getSingleTracker);
+
+router.get('/register/newClient/', ismm, async function (req, res) {
+  
+  let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
+  let error = req.flash('tracker_404' )[0] || req.flash('unauthorized')[0] || req.flash('server_error')[0]; 
+
+    console.log(error, flash)
+    res.render('edit-add', {
+        pageTitle: "Add New Tracker",
+        new: true,
+        error,
+        user: req.user,
+        message: flash,
+        isAuthenticated: req.user.isLoggedIn,
+        isManagement: req.user.designation,
+        designation: req.user.designation
+    });
+});
 module.exports = router;

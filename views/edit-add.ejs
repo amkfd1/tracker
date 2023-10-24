@@ -3,8 +3,14 @@
 
 <body class="sidebar-dark">
 	<div class="main-wrapper">
+		<%if (designation != "Admin" || designation != "Management" ) {%>
+			<%- include('includes/_sidebar-mm') %>
+		<%} else {%>
+			<%- include('includes/_sidebar') %>
+		<%}%>
 		<div class="page-wrapper ">
-			<%- include('includes/_navbar.ejs') %>
+			<%- include('includes/_navbar') %>
+			
 
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
@@ -25,7 +31,7 @@
 							<i data-feather="x"></i> <strong><%= error%></strong>
 						  </div>
 						  <% } else {}%>
-						<% if (designation == "Admin" ) {%>
+						<% if (designation == "Admin" || designation == "HoIT"  || designation == "NOC-TL" || designation == "Management" ) {%>
 							<form action="/track/newClient" method="POST" class="forms-sample">
 						<% } else {%>
 							<form action="/mm/newClient" method="POST" class="forms-sample">
@@ -213,14 +219,14 @@
 									</div>
 									<div class="col-md-5">
 										<label>Date Initiated: </label>
-										<div class="input-group date datepicker" id="datePickerExample">
+										<div class="input-group date datepicker" >
 											<input  name="date_started" type="text" class="form-control"><span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
 										</div>
 										<!-- <input class="form-control"> -->
 									</div>
 									<div class="col-md-4 mt-3">
 										<label>Date Concluded: </label>
-										<div class="input-group date datepicker" id="datePickerExample">
+										<div class="input-group date datepicker" >
 											<input  name="date_finished" type="text" class="form-control"><span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
 										</div>
 	
@@ -254,13 +260,7 @@
 			</div>
 
 		
-			<!-- Nav Includes -->
 			
-			<%if (designation === "Admin") {%>
-				<%- include('includes/_sidebar') %>
-			<% } else {%>
-				<%- include('partials/mmNav') %>
-			<% } %>
 		</div>
 		
 	</div>

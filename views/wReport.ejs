@@ -36,7 +36,12 @@
 <body class="sidebar-dark">
 
 	<div class="main-wrapper">
-	<%- include('includes/_sidebar') %>
+		<%if (designation != "Admin" || designation != "Management" ) {%>
+			<%- include('includes/_sidebar-mm') %>
+		<%} else {%>
+			<%- include('includes/_sidebar') %>
+		<%}%>
+
 
 		<div class="page-wrapper">
 			<%- include('includes/_navbar.ejs') %>
@@ -334,36 +339,41 @@
 	
 							<div class="col-md-1">
 								<div class=" bg-transparent" >
-									
-
-									<div  class="float-right mr-4 " >
-										<div style="position: fixed;" class="text-muted">
-											
-												<button type="button" class="btn btn-secondary btn-icon hvr-bounce-in animate__animated animate__backInDown ">
-													<i class="link-icon" data-feather="printer"  onclick="window.print()"> </i>
-												</button>
-										<br>
-											
-											<button type="button" class="btn btn-info btn-icon my-3 hvr-bounce-in animate__animated animate__backInDown">
-												<a href="/wr/reports/report/<%=weeklyReports._id%>"><i data-feather="refresh-ccw"></i></a>
-											</button>
+									<%if (designation != "Admin" || designation != "Management" ) {%>
+										<div  class="float-right mr-4 " >
+											<div style="position: fixed;" class="text-muted">
+												
+													<button type="button" class="btn btn-secondary btn-icon hvr-bounce-in animate__animated animate__backInDown ">
+														<i class="link-icon" data-feather="printer"  onclick="window.print()"> </i>
+													</button>
 											<br>
-											<form action="/wr/reports/report/submission/<%=weeklyReports._id%>" method="post">
-												<button type="submit" class="btn btn-success hvr-bounce-in btn-icon animate__animated animate__backInDown">
-													
-														<i  data-feather="check"></i>
-													
+												
+												<button type="button" class="btn btn-info btn-icon my-3 hvr-bounce-in animate__animated animate__backInDown">
+													<a href="/wr/reports/report/<%=weeklyReports._id%>"><i data-feather="refresh-ccw"></i></a>
 												</button>
-											</form>
-											
-											
-											
-											
-											<!-- <button type="button" class="btn my-3 w-100 btn-outline-info" " >Print</button>
-											<button type="button" class="btn my-3 w-100 btn-outline-secondary">Sync Report</button>
-											<button type="button" class="btn my-3 w-100 btn-outline-primary">Submit</button> -->
+												<br>
+												<form action="/wr/reports/report/submission/<%=weeklyReports._id%>" method="post">
+													<button type="submit" class="btn btn-success hvr-bounce-in btn-icon animate__animated animate__backInDown">
+														
+															<i  data-feather="check"></i>
+														
+													</button>
+												</form>
+												
+												
+												
+												
+												<!-- <button type="button" class="btn my-3 w-100 btn-outline-info" " >Print</button>
+												<button type="button" class="btn my-3 w-100 btn-outline-secondary">Sync Report</button>
+												<button type="button" class="btn my-3 w-100 btn-outline-primary">Submit</button> -->
+											</div>
 										</div>
-									</div>
+									<%} else {%>
+										
+									<%}%>
+							
+
+									
 								</div>
 							</div>
 						</div>

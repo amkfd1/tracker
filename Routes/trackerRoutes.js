@@ -104,7 +104,6 @@ router.get('/tasks/new-task', isAdmin, async function (req, res) {
         pageTitle: "Add New Tracker",
         trackers,
         users,
-        new: true,
         error,
         user: req.user,
         message: flash,

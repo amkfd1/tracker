@@ -27,10 +27,15 @@
 <body class="sidebar-dark">
 
 	<div class="main-wrapper">
-	<%- include('includes/_sidebar') %>
+		<%if (designation != "Admin" || designation != "Management" ) {%>
+			<%- include('includes/_sidebar-mm') %>
+		<%} else {%>
+			<%- include('includes/_sidebar') %>
+		<%}%>
 
 		<div class="page-wrapper">
-			<%- include('includes/_navbar.ejs') %>
+			<%- include('includes/_navbar') %>
+			
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
 				
@@ -72,9 +77,16 @@
                                                                 <%= tasks[i].date%>
                                                             </td>
                                                             <td>
-                                                               <a href="/admin/task/<%= tasks[i]._id%>">
-																<%= tasks[i].title%>
-															   </a> 
+																<%if (designation != "Admin" || designation != "Management" ) {%>
+																	<a href="/mm/tasks/<%= tasks[i]._id%>">
+																		<%= tasks[i].title%>
+																	</a> 
+																<%} else {%>
+																	<a href="/admin/task/<%= tasks[i]._id%>">
+																		<%= tasks[i].title%>
+																	</a> 
+																<%}%>
+                                                               
         
                                                             </td>
                                                             <td>

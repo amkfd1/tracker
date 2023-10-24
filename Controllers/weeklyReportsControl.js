@@ -454,7 +454,9 @@ async function getAllWeeklyReports(req, res) {
     return res.render('WeeklyReportsList', {
       pageTitle: 'Weekly Reports',
       user: req.user,
-      wkReports: wklr
+      wkReports: wklr,
+      designation: req.user.designation,
+      isAuthenticated: req.user.isLoggedin
 
     });
   } catch (error) {
