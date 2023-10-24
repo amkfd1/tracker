@@ -193,7 +193,7 @@ const renderWReport = async (req, res) => {
       // console.log("This is ticket: ", tickets);
 
       const performances = await Performance.find({
-        date: { $gte: firstMonday, $lt: new Date() }
+        date: { $gte: lastMonday, $lt: today }
       }).populate('tracker', 'Customer_Name CB CL _id');
 
       // Initialize an object to store carrier performances
@@ -254,7 +254,7 @@ const renderWReport = async (req, res) => {
       }
       // print("Your updates: ", weeklyReports.update)
       weeklyReports.save();
-      print("Performances: ", performances)
+      print("Performances: ", req.user._id)
       
       res.render('wReport', { 
         weeklyReports,
