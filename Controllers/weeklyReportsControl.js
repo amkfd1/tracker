@@ -267,7 +267,7 @@ const renderWReport = async (req, res) => {
       
       res.render('wReport', { 
         weeklyReports,
-        performance: performancesFromLastMonday,
+        performance: pperformances,
         tickets: ticks,
         updates: weeklyReports.update,
         pageTitle: "Reports",
