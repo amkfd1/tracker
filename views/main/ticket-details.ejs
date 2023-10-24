@@ -154,9 +154,12 @@
 															<h5>Assignee:</h5> 
 														</div>
 														<div class="col-lg-6">
+																
+															<%if (ticket.assignee) {%>
 																<span> 
-																	<%= ticket.assignee.name%>
+																<%= ticket.assignee.name%>
 																</span>
+															<%}%>
 														</div>
 													</div>
 												</li>
