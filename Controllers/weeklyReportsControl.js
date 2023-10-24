@@ -127,7 +127,7 @@ async function fetchLastMondayData(req, res) {
       newReport.dateGenerated = new Date();
       newReport.tickets = tickets/* Add the tickets data */;
 
-      print("Your Weekly Report: ", tickets)
+      print("Your Weekly Report Performances: ", performances)
       // Save the newReport to the database
       await newReport.save();
 
@@ -193,7 +193,7 @@ const renderWReport = async (req, res) => {
       // console.log("This is ticket: ", tickets);
 
       const performances = await Performance.find({
-        date: { $gte: lastMonday, $lt: today }
+        date: { $gte: firstMonday, $lt: new Date() }
       }).populate('tracker', 'Customer_Name CB CL _id');
 
       // Initialize an object to store carrier performances
@@ -254,9 +254,8 @@ const renderWReport = async (req, res) => {
       }
       // print("Your updates: ", weeklyReports.update)
       weeklyReports.save();
-      print("User: ", req.user._id)
-      print("Updates User: ", weeklyReports.update[0].postedBy._id )
-      print(weeklyReports.update[0].postedBy._id == req.user._id)
+      print("Performances: ", performances)
+      
       res.render('wReport', { 
         weeklyReports,
         performance: carrierPerformanceArray,
