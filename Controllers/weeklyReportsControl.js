@@ -195,7 +195,7 @@ const renderWReport = async (req, res) => {
       const performances = await Performance.find({
         date: { $gte: lastMonday, $lt: today }
       }).populate('tracker', 'Customer_Name CB CL _id');
-
+      console.log('This is unfiltered Performance: ', performances)
       // Initialize an object to store carrier performances
       const carrierPerformances = {};
 
@@ -254,7 +254,7 @@ const renderWReport = async (req, res) => {
       }
       // print("Your updates: ", weeklyReports.update)
       weeklyReports.save();
-      print("Performances: ", req.user._id)
+      print("Performances: ", performances)
       
       res.render('wReport', { 
         weeklyReports,
