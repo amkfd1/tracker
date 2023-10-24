@@ -201,7 +201,7 @@ const renderWReport = async (req, res) => {
       // Filter performances that occurred from last Monday to today
     const performancesFromLastMonday = pperformances.filter((performance) => {
       const performanceDate = new Date(performance.date); // Assuming 'date' is a property in your performance object
-      return performanceDate >= lastMonday && performanceDate <= currentDate;
+      return performanceDate >= lastMonday && performanceDate <= new Date();
     
       });
       console.log('This is unfiltered Performance: ', performancesFromLastMonday)
@@ -209,7 +209,7 @@ const renderWReport = async (req, res) => {
       const carrierPerformances = {};
 
       // Iterate through performances and organize them by carrier
-      performances.forEach((performance) => {
+      pperformances.forEach((performance) => {
         const carrierId = performance.tracker._id.toString();
 
         // Initialize carrier if it doesn't exist in the object
@@ -267,7 +267,7 @@ const renderWReport = async (req, res) => {
       
       res.render('wReport', { 
         weeklyReports,
-        performance: pperformances,
+        performance: carrierPerformanceArray,
         tickets: ticks,
         updates: weeklyReports.update,
         pageTitle: "Reports",
