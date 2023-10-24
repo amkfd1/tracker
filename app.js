@@ -111,7 +111,19 @@ app.use('/', tasksRoutes);
 app.use('/', weeklyRoutes);
 app.use('/', ticketRoutes);
 
+// Global file download 
+app.get('/download/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, 'uploads', filename);
 
+  console.log('Your File: ', filePath)
+  res.download(filePath, filename, (err) => {
+    if (err) {
+      // Handle errors (e.g., file not found)
+      res.status(404).send('File not found');
+    }
+  });
+});
 
   mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })

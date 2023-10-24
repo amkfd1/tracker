@@ -18,12 +18,13 @@ const path = require('path');
 const print = console.log
 
  // Calculate the date of the last Monday
- const today = new Date();
- const monday = new Date(today);
+//  const today =rs new Date();
+//  const monday = new Date(today);
 
+ const today = new Date();
  const lastMonday = new Date(today);
  lastMonday.setDate(today.getDate() - ((today.getDay() - 1 + 7) % 7));
- monday.setDate(today.getDate() - ((today.getDay() - 1 + 7) % 7));
+ lastMonday.setHours(0, 0, 0, 0); // Set to midnight
   // Format lastMonday and today to display date and time (without seconds)
   const options = {
     year: 'numeric',
@@ -54,7 +55,7 @@ async function fetchLastMondayData(req, res) {
       const existingReport = await WeeklyReport.findOne({
         dateGenerated: { $gte: lastMonday, $lt: new Date() }
       });
-
+      console.log("This Is last Monday's report: ", existingReport)
       if (existingReport) {
           // Redirect to the existing report if it exists
           return res.redirect(`/wr/reports/report/${existingReport._id}`);
@@ -253,7 +254,9 @@ const renderWReport = async (req, res) => {
       }
       // print("Your updates: ", weeklyReports.update)
       weeklyReports.save();
-      print("RATES: ", rates)
+      print("User: ", req.user._id)
+      print("Updates User: ", weeklyReports.update[0].postedBy._id )
+      print(weeklyReports.update[0].postedBy._id == req.user._id)
       res.render('wReport', { 
         weeklyReports,
         performance: carrierPerformanceArray,
@@ -265,7 +268,7 @@ const renderWReport = async (req, res) => {
         user: req.user,
         ReportDateRange,
         mytask,
-        UnopenedTask,
+        UnopenedTask, 
         trackers,
         rates: allRates
      });
@@ -427,11 +430,23 @@ async function getAllWeeklyReports(req, res) {
   try {
     // Find all weekly reports in the collection
     const weeklyReports = await WeeklyReport.find({});
+    let wklr = []
+    for (i in weeklyReports){
+      let report= {
+        isSubmitted: weeklyReports[i].isSubmitted,
+        _id: weeklyReports[i]._id,
+        update: weeklyReports[i].update,
+        alertActive: weeklyReports[i].alertActive,
+        tickets: weeklyReports[i].tickets,
+        dateGenerated: weeklyReports[i].dateGenerated.toISOString().split('T')[0],
+      }
+      wklr.push(report)
+    }
     console.log("REPORTS: ", weeklyReports)
     return res.render('WeeklyReportsList', {
       pageTitle: 'Weekly Reports',
       user: req.user,
-      wkReports: weeklyReports
+      wkReports: wklr
 
     });
   } catch (error) {

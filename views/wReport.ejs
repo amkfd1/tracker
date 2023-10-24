@@ -210,10 +210,13 @@
 													<% for (i in rates) {%>
 														<tr class="table-warning text-dark">
 															<td>
-																<%= (i)%>
+																<%= (i + 1)%>
 															</td>
 															<td>
-																<%= rates[i].carrier.Customer_Name %>
+																<a href="/download/<%= rates[i].documentPath%>" target="_blank">
+																	<%= rates[i].carrier.Customer_Name %>
+
+																</a>
 
 															</td>
 															<td>
@@ -245,7 +248,7 @@
 															Other Update
 														</th>
 														<th>
-															<a href="#" data-toggle="modal" data-target="#plus" data-whatever="@fat" >
+															<a href="#" data-toggle="modal" data-target=".addUpdate" >
 																<i data-feather="plus"></i>
 															</a>
 														</th>
@@ -274,25 +277,19 @@
 																<%- updates[i].update%>
 															</td>
 															<td>
-																<% if (updates[i].postedBy._id === user._id) {%>
-																	<a href="#" data-toggle="modal" data-target="#Edit<%= updates[i]._id%>" data-whatever="@fat" >
+																<% if ((updates[i].postedBy._id).toString() == (user._id).toString()) {%>
+																	<a href="#" data-toggle="modal" data-target=".Edit<%= updates[i]._id%>"  >
 																		<i class="appIcons text-muted my-notSection" data-feather="edit-2" ></i>
 																	</a>
 																<% } %>
 															</td>
 														</tr>
 														<!-- Update Modal -->
-														<div class="modal fade" id="Edit<%= updates[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-															<div class="modal-dialog" role="document">
-															  <div class="modal-content">
-																<div class="modal-header">
-																  <h5 class="modal-title" id="exampleModalLabel">Edit Updates</h5>
-																  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																	<span aria-hidden="true">&times;</span>
-																  </button>
-																</div>
-																<div class="modal-body">
-																  <form action="/w/updates/<%= updates[i]._id%>" method="post">
+														  <!-- Edit  -->
+														<div class="modal fade Edit<%= updates[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+															<div class="modal-dialog modal-lg">
+															<div class="modal-content card-body-alt">
+																<form action="/w/updates/<%= updates[i]._id%>" method="post">
 																	<!-- <script>
 																		new FroalaEditor('#textarea');
 																	  </script> -->
@@ -314,11 +311,11 @@
 															  </div>
 															  <input type="hidden" name="rid" value="<%= weeklyReports._id%>" id="">
 																  </form>
-																</div>
-															  
-															  </div>
 															</div>
-														   </div>
+															</div>
+														</div>
+
+
 													<% } %>
 												</tbody>
 											</table>
@@ -487,6 +484,34 @@
 	  </div>
 	</div>
    </div>
+
+
+   <!-- Edit  -->
+   <div class="modal fade addUpdate" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content card-body-alt">
+		<form action="/wr/report/update/create" method="post">
+			
+			<div class="row">
+				<div class="col-md-12 grid-margin stretch-card">
+						<div class="card-body">
+							<textarea rows="20" class="form-control text-light h-100" style="min-height: 100%;" id="textareab" name="update"></textarea>
+						</div>
+				</div>
+			</div>
+  
+		<div class=" page-content d-flex justify-content-center align-items-center">
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		  <button type="submit" class="btn btn-secondary"> 
+		  Post Update
+		</button>
+		</div>
+	  </div>
+		  </form>
+	  </div>
+	</div>
+  </div>
 
 <%- include('includes/end') %>
 <script>

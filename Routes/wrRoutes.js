@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const isAuth = require('../middleware/verifyAuth');
-
+const path = require('path');
 const {
   createWeeklyReport,
   // updateWeeklyReport,
@@ -31,7 +31,7 @@ router.get('/reports', isAuth, getAllWeeklyReports);
 
 router.get('/reports/generate', isAuth, fetchLastMondayData);
 
-router.get('/reports/:id', fetchLastMondayData);
+router.get('/reports/:id', fetchLastMondayData); 
 
 router.post('/wr/reports/report/submission/:id', submitWeeklyReport);
 
@@ -75,5 +75,8 @@ router.post('/w/updates/:id', isAuth, updateUserUpdate);
 
 // Delete an update by its ID
 router.delete('/w/updates/:id', deleteUpdate);
+
+
+
 
 module.exports = router;

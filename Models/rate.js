@@ -24,7 +24,7 @@ const ratesSchema = new mongoose.Schema({
   // Path to the document
   documentPath: {
     type: String,
-    required: true,
+   
   },
   documentTitle:{
     type: String
