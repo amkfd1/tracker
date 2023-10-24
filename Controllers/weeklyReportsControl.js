@@ -196,10 +196,15 @@ const renderWReport = async (req, res) => {
         date: { $gte: lastMonday, $lt: today }
       }).populate('tracker', 'Customer_Name CB CL _id');
 
-      const pperformances = await Performance.find({
-        date: { $gte: lastMonday, $lt: today }
-      }).populate('tracker', 'Customer_Name CB CL _id');
-      console.log('This is unfiltered Performance: ', pperformances)
+      const pperformances = await Performance.find().populate('tracker', 'Customer_Name CB CL _id');
+      
+      // Filter performances that occurred from last Monday to today
+    const performancesFromLastMonday = pperformances.filter((performance) => {
+      const performanceDate = new Date(performance.date); // Assuming 'date' is a property in your performance object
+      return performanceDate >= lastMonday && performanceDate <= currentDate;
+    
+      });
+      console.log('This is unfiltered Performance: ', performancesFromLastMonday)
       // Initialize an object to store carrier performances
       const carrierPerformances = {};
 
