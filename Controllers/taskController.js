@@ -89,11 +89,11 @@ exports.addFileToTask = async (req, res) => {
           }
     }
 };
-
+ 
 
 exports.addNoteToTask = async (req, res) => {
     try {
-        const taskId = req.params.taskId;
+        const taskId = req.params.id;
         const { note } = req.body;
         let postedBy = req.user.name
         
@@ -113,7 +113,7 @@ exports.addNoteToTask = async (req, res) => {
         if (req.user.designation === "Admin" || req.user.designation === "Management"){
             return res.status(200).redirect('/track/home')
           }else {
-            return res.status(200).redirect('/mm/task/'+req.params.taskId)
+            return res.status(200).redirect('/mm/tasks/'+req.params.taskId)
 
           }
 

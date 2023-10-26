@@ -15,7 +15,7 @@ router.get('/monthly-summary',  performanceControl.getMonthlyPerformances);
 
 router.get('/carrier-stats',  performanceControl.getTotalCarrierVoip);
 
-router.post('/admin/add-stats', isAdmin, performanceControl.addPerformanceAdmin);
+router.post('/admin/add-stats', isAuth, performanceControl.addPerformanceAdmin);
 
 router.post('/add-stats', isAuth, performanceControl.addPerformanceStaff);
 

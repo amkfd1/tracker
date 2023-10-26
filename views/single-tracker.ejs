@@ -422,7 +422,14 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form method="post" action="/track/assign/account-manager/<%= Tracker._id%>" >
+							<%if (designation != "Admin" || designation != "Management" ) {%>
+								<form method="post" action="/mm/assign/account-manager/<%= Tracker._id%>" >
+
+							<%} else {%>
+								<form method="post" action="/track/assign/account-manager/<%= Tracker._id%>" >
+
+							<%}%>
+						
 							<div class="form-group row ">
 								<div class="col">
 									<label>Title:</label>
@@ -463,7 +470,11 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form method="post" action="/mm/addContact/<%= Tracker._id%>">
+							<%if (designation != "Admin" || designation != "Management" ) {%>
+								<form method="post" action="/mm/addContact/<%= Tracker._id%>">
+							<%} else {%>
+								<form method="post" action="/track/addContact/<%= Tracker._id%>">
+							<%}%>
 							<div class="form-group row ">
 								<div class="col">
 									<label>Platform:</label>
@@ -498,7 +509,11 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form action="/mm/updateAddress/<%= Tracker._id%>" method="post">
+							<%if (designation != "Admin" || designation != "Management" ) {%>
+								<form action="/mm/updateAddress/<%= Tracker._id%>" method="post">
+							<%} else {%>
+								<form action="/track/updateAddress/<%= Tracker._id%>" method="post">
+							<%}%>
 							
 							<div class="form-group row ml-3 mr-3" >
 								
@@ -566,7 +581,12 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form action="/track/updateService/<%= Tracker._id%>" method="post">
+							<%if (designation != "Admin" || designation != "Management" ) {%>
+								<form action="/mm/updateService/<%= Tracker._id%>" method="post">
+							<%} else {%>
+								<form action="/track/updateService/<%= Tracker._id%>" method="post">
+							<%}%>
+							
 							<div class="form-group row ">
 								<div class="col-md-6">
 									<label>Service Type:</label>
@@ -621,7 +641,11 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form action="/track/updateTechnical/<%= Tracker._id%>" method="post">
+							<%if (designation != "Admin" || designation != "Management" ) {%>
+								<form action="/mm/updateTechnical/<%= Tracker._id%>" method="post">
+							<%} else {%>
+								<form action="/track/updateTechnical/<%= Tracker._id%>" method="post">
+							<%}%>
 							<div class="form-group row ">
 								<div class="col-md-6">
 									<label>Service Type:</label>
@@ -684,7 +708,11 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form action="/track/updateTesting/<%= Tracker._id%>" method="post">
+							<%if (designation != "Admin" || designation != "Management" ) {%>
+								<form action="/mm/updateTesting/<%= Tracker._id%>" method="post">
+							<%} else {%>
+								<form action="/track/updateTesting/<%= Tracker._id%>" method="post">
+							<%}%>
 							<div class="form-group row ">
 								<div class="col-md-4">
 									<label>Routes To Test:</label>
@@ -742,7 +770,11 @@
 						</button>
 						</div>
 						<div class="modal-body">
-						<form method="post" action="/mm/document/grant-access/" >
+							<%if (designation != "Admin" || designation != "Management" ) {%>
+								<form method="post" action="/mm/document/grant-access/" >
+							<%} else {%>
+								<form method="post" action="/track/document/grant-access/" >
+							<%}%>
 							<div class="form-group row ">
 								<div class="col">
 									<label>Document:</label>
@@ -800,7 +832,11 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form action="/mm/addNote" method="post">
+					<%if (designation != "Admin" || designation != "Management" ) {%>
+						<form action="/mm/addNote" method="post">
+					<%} else {%>
+						<form action="/track/addNote" method="post">
+					<%}%>
 					<div class="form-group">
 						<div class="row">
 							<div class="col">
@@ -847,7 +883,12 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<form action="/mm/add-stats" method="post">
+						<%if (designation != "Admin" || designation != "Management" ) {%>
+							<form action="/admin/add-stats" method="post">
+						<%} else {%>
+							<form action="/admin/add-stats" method="post">
+						<%}%>
+						
 						<div class="form-group">
 							<div class="row">
 								<div class="col">
@@ -905,7 +946,11 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<form action="/admin/add-stats" method="post">
+						<%if (designation != "Admin" || designation != "Management" ) {%>
+							<form action="/admin/add-stats" method="post">
+								<%} else {%>
+							<form action="/admin/add-stats" method="post">
+								<%}%>
 						<div class="form-group">
 							<div class="row">
 								<div class="col">

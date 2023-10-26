@@ -219,7 +219,7 @@ const getManagementDash = async (req, res) => {
       }
   
       const completedPercentile = (trackers.filter(tracker => tracker.overallCompletion == 100).length / trackers.length) * 100;
-      print("COMPLETED PERCENTILE:  ", completedPercentile )
+      // print("COMPLETED PERCENTILE:  ", completedPercentile )
       // Fetch data from the Performance schema
       const performances = await Performance.find().populate('tracker');
       // console.log("PERFORMANCES: ", performances)
@@ -273,7 +273,7 @@ const getManagementDash = async (req, res) => {
           profile: reqUser.profile
         };
         users.push(user);
-        console.log("COMPLETION PERCENTILE: ",overallCompletion )
+        // console.log("COMPLETION PERCENTILE: ",overallCompletion )
       }
 
       let tasks = []
@@ -390,15 +390,13 @@ const getManagementDash = async (req, res) => {
       let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
       let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0]
       console.log('This is your task ', task)
-      res.status(200).render('mm-task', {
+      return res.status(200).render('mm-task', {
           pageTitle: task.title,
           tasks: task,
           isAuthenticated: req.user.isLoggedIn,
           message: flash,
           error,
-          user: req.user,
-          stages: ['Close', 'Complete'], 
-          isManagement: false,
+          user: req.user, 
           designation: req.user.designation
 
       });
@@ -436,7 +434,7 @@ createTask = async (req, res) => {
       // res.status(201).redirect('/track/home');
       // res.status(201).json(savedTask);
      
-      return res.status(200).redirect('/mm/dashboard')
+      return res.status(200).redirect('/mm/tasks/'+savedTask._id)
       
   } catch (error) {
       print({ message: 'Error creating task', error: error.message });
@@ -474,6 +472,117 @@ const getAddTask = async function (req, res) {
   }
 };
 
+const addNoteToTask = async (req, res) => {
+  const taskId = req.params.id;
+
+  try {
+      const { note } = req.body;
+      let postedBy = req.user.name
+      
+      const task = await Task.findById(taskId);
+      if (!task) {
+          print({ message: 'Task not found' });
+          req.flash('server_error', "Error adding file to task. Try Again")
+          return res.status(201).redirect('/track/home');
+      }
+      
+      task.notes.push({note,postedBy});
+      const updatedTask = await task.save();
+      req.flash('update_success', "Note Successfully added ")
+      // res.status(201).redirect('/track/home');
+      // res.json(updatedTask);
+      print('The body: ', postedBy, "\n Body: ", req.body)
+      
+      return res.status(200).redirect('/mm/tasks/'+req.params.id)
+
+      
+
+  } catch (error) {
+      print({ message: 'Error adding note to task', error: error.message });
+      req.flash('server_error', "Error adding note to task. Try Again")
+      // res.status(201).redirect('/track/home');
+      
+          return res.status(500).redirect('/mm/task/'+req.params.taskId)
+
+       
+  }
+};
+
+
+
+const addFileToTask = async (req, res) => {
+  try {
+      const taskId = req.params.taskId;
+      const { filename } = req.file;
+      let uploadedBy = req.user.name;
+      const task = await Task.findById(taskId);
+      console.log("This is the task: ", task)
+      if (!task) {
+          print({ message: 'Task not found' });
+          req.flash('server_error', "Error adding file to task. Try Again")
+          return res.status(201).redirect('/track/home');
+      }
+      
+      task.files.push({ filename, uploadedBy });
+      const updatedTask = await task.save();
+      print("This is File: ", filename, "\nPath: ", filePath)
+      req.flash('update_success', "File Successfully added ")
+      // res.status(201).redirect('/track/home');
+      
+          return res.status(200).redirect('/mm/task'+req.params.taskId)
+       
+  } catch (error) {
+      print({ message: 'Error adding file to task', error: error.message });
+      req.flash('server_error', "Error adding file to task. Try Again")
+      // res.status(201).redirect('/track/home');
+      
+          return res.status(200).redirect('/mm/task'+req.params.taskId)
+
+    
+  }
+};
+
+const deleteTask = async (req, res) => {
+  const taskId = req.params.id;
+  try {
+      
+      
+      const deletedTask = await Task.findByIdAndDelete(taskId);
+      
+      if (!deletedTask) {
+          print({ message: 'Task not found' });
+          req.flash('server_error', "Error adding file to task. Try Again")
+          return res.status(201).redirect('/track/home');
+      }
+      
+    if(deletedTask.files.length > 0){
+      deletedTask.files.forEach(file => {
+          fs.unlink('uploads/'+file.filename, async (err) => {
+              if (err) {
+                  throw err;
+              }
+  
+              console.log('Deleted file successfully.');
+          const updatedTask = await deletedTask.save();
+  
+          });
+      });
+    }else {
+      console.log("There is no files in the document")
+    }
+      // res.json({ message: 'Task deleted successfully' });
+      req.flash('update_success', "Task deleted successfully")
+
+      return res.status(201).redirect('/mm/all/tasks');
+
+  } catch (error) {
+      print({ message: 'Error deleting task', error: error.message });
+      req.flash('server_error', "Error deleting task. Try Again")
+      res.status(201).redirect('/mm/tasks/'+taskId);
+  }
+};
+
+
 
   module.exports = 
 { 
@@ -481,5 +590,10 @@ const getAddTask = async function (req, res) {
     getManagementDash,
     getAddTask,
     getTasks,
-    getSingleTask
+    getSingleTask,
+    createTask,
+    addFileToTask,
+    addNoteToTask,
+    deleteTask
+    
 };

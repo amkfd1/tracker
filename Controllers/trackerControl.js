@@ -1696,11 +1696,11 @@ const getVoipCarriers = async (req, res) => {
         sms.push(tracker);
       }
     }
-
+    console.log("VOIP: ", voip)
       return res.render('voip-carriers', {
         pageTitle: 'List | Carriers',
         user: req.user,
-        voip,
+        voip: voip,
         sms,
         stages,
         users:[],

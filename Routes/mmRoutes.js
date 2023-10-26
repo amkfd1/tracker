@@ -52,11 +52,13 @@ router.post('/updateTechnical/:id', ismm, customerTrackerController.updateTech);
 router.post('/updateTesting/:id', ismm, customerTrackerController.updateTesting);
 router.post('/addContact/:id', ismm, customerTrackerController.addContact);
 router.post('/addNote/', ismm, customerTrackerController.addNote);
-router.post('/tasks', ismm, taskController.createTask);
-router.post('/tasks/:taskId/files', ismm, upload.single('document'), taskController.addFileToTask);
-router.post('/tasks/:taskId/notes', ismm, taskController.addNoteToTask);
-router.put('/tasks/:taskId',ismm, taskController.editTask);
-router.post('/tasks/:taskId', ismm, taskController.deleteTask);
+router.post('/tasks', ismm, mmController.createTask);
+router.post('/tasks/task/del/:id', ismm, mmController.deleteTask);
+
+router.post('/tasks/:taskId/file', ismm, upload.single('document'), mmController.addFileToTask);
+router.post('/tasks/:id/add-note', ismm, mmController.addNoteToTask);
+// router.put('/tasks/:taskId',ismm, taskController.editTask);
+// router.post('/tasks/:id', ismm, taskController.deleteTask);
 router.post('/tasks/close/:id', ismm, taskController.editTaskStatus);
 
 router.get('/newClient/', ismm, async function (req, res) {
