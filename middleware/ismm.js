@@ -41,7 +41,8 @@ const authenticateUser = async (req, res, next) => {
     const { designation, role } = req.user; // Assuming the user object is available in the request
 
     // console.log("CURRENT USER: ", req.user)
-    if (designation !== 'NOC-TL' && designation !== 'HoIT') {
+    if (designation === 'NOC' || designation === 'Technical' || designation === 'Support') {
+      console.log("You're neither Admin nor middle management", req.user.designation)
       return res.redirect('/');
     }
   

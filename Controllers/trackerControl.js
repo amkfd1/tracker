@@ -657,7 +657,7 @@ const updateTech = async (req, res) => {
     tracker.Tech_info.status = status;
 
 
-    // Save the updated Tracker document
+    // Save the updated Tracker document ++++++++++++
     await tracker.save();
     // console.log("Changing: ", req.body)
     req.flash('update_success','Technical Info Updated')

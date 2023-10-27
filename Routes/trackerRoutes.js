@@ -53,12 +53,12 @@ router.get('/search', customerTrackerController.searchCustomerByName);
 router.get('/tracker/:id', isAdmin, customerTrackerController.getSingleTracker);
 
 // cREATE OR ADD NEW SECTIONS
-router.post('/updateAddress/:id', isAuth, customerTrackerController.updateAddress);
-router.post('/updateService/:id', isAuth, customerTrackerController.updateService);
-router.post('/updateTechnical/:id', isAuth, customerTrackerController.updateTech);
-router.post('/updateTesting/:id', isAuth, customerTrackerController.updateTesting);
-router.post('/addContact/:id', isAuth, customerTrackerController.addContact);
-router.post('/addNote/', isAuth, customerTrackerController.addNote);
+router.post('/updateAddress/:id', ismm, customerTrackerController.updateAddress);
+router.post('/updateService/:id', ismm, customerTrackerController.updateService);
+router.post('/updateTechnical/:id', ismm, customerTrackerController.updateTech);
+router.post('/updateTesting/:id', ismm, customerTrackerController.updateTesting);
+router.post('/addContact/:id', ismm, customerTrackerController.addContact);
+router.post('/addNote/', ismm, customerTrackerController.addNote);
 
 
 router.post('/add-stats',  customerTrackerController.addPerformance);
