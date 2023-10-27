@@ -83,7 +83,7 @@ router.get('/wr/reports/generate', isAuth, mmController.fetchLastMondayData);
 // router.get('/wr/reports/report/:id', isAuth, mmController.renderWReport);
 router.get('/wr/reports', ismm, mmController.getAllWeeklyReports);
 
-
+router.post('/tasks/close/:id', ismm, taskController.editTaskStatus);
 // Use the upload middleware in your route handler
 router.post('/upload/:id', ismm, upload.single('document'), customerTrackerController.uploadDocument);
 // Use the upload middleware in your route handler
