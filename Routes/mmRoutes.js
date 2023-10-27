@@ -79,8 +79,10 @@ router.get('/newClient/', ismm, async function (req, res) {
 });
 router.post('/newClient',ismm, customerTrackerController.addCustomerTracker);
 
+router.get('/wr/reports/generate', isAuth, mmController.fetchLastMondayData);
+// router.get('/wr/reports/report/:id', isAuth, mmController.renderWReport);
+router.get('/wr/reports', ismm, mmController.getAllWeeklyReports);
 
- 
 
 // Use the upload middleware in your route handler
 router.post('/upload/:id', ismm, upload.single('document'), customerTrackerController.uploadDocument);
@@ -94,8 +96,8 @@ router.get('/tasks/new-task/create', ismm, mmController.getAddTask);
 
 router.get('/sms/carriers', ismm, customerTrackerController.getSmsCarriers);
 router.get('/voip/carriers', ismm, customerTrackerController.getVoipCarriers);
-router.get('/reports', isAuth, weeklyReport.getAllWeeklyReports);
-router.get('/reports/generate', ismm, weeklyReport.fetchLastMondayData);
+// router.get('/reports', ismm, weeklyReport.getAllWeeklyReports);
+// router.get('/reports/generate', ismm, weeklyReport.fetchLastMondayData);
 router.get('/client/:id',ismm, customerTrackerController.getSingleTracker);
 
 router.get('/register/newClient/', ismm, async function (req, res) {

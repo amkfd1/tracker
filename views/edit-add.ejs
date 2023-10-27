@@ -48,7 +48,7 @@
 								
 								<div class="form-group row ">
 									<div class="col-md-5 border-right">
-										<label>Company Name:*</label>
+										<label>Company Name:<code>*</code></label>
 										<input required value="" name="Customer_Name" class="form-control mb-4 mb-md-0" >
 										<div class="row mt-3">
 											<div class="col">
@@ -121,7 +121,7 @@
 								</h4>
 								<div class="form-group row ">
 									<div class="col-md-4">
-										<label>Service Type:*</label>
+										<label>Service Type:<code>*</code></label>
 										
 												<select required name="service_name" class="form-control form-control-sm mb-3">
 													<option  selected="         "></option>
@@ -132,16 +132,21 @@
 										
 									</div>
 									<div class="col-md-3">
-										<label>Interested Routes: </label>
-										<input class="form-control" name="routes">
+										<label>Interested Routes:<code>*</code> </label>
+										<input required class="form-control" name="routes">
 									</div>
 									<div class="col-md-3">
 										<label>Rates Offered: </label>
 										<input class="form-control" name="rates_offered">
 									</div>
 									<div class="col-md-2">
-										<label>Currency:* </label>
-										<input Value="USD" class="form-control" name="currency">
+										<label>Currency:<code>*</code> </label>
+										<select required name="currency" class="form-control form-control-sm mb-3">
+											<option  selected="         "></option>
+											<option  value="NGN">₦</option>
+											<option  value="USD">$</option>
+											<option  value="EUR">€</option>
+										</select>
 									</div>
 									<div class="col-md-6 mt-3">
 										<label>Status: </label>
@@ -167,7 +172,7 @@
 								</h4>
 								<div class="form-group row ">
 									<div class="col-md-2">
-										<label>Service Type:</label>
+										<label>Service Type:<code>*</code></label>
 										<select required name="TI_service_name" class="form-control form-control-sm mb-3">
 											<option  selected="         "></option>
 											<option  value="VoIP">VoIP</option>

@@ -43,9 +43,9 @@ const authenticateUser = async (req, res, next) => {
     //   return res.redirect('/track/home');
     // }
     let desig = req.user.designation
-  if(desig === 'NOC-TL' || desig === "HoIT"){
-    return res.redirect('/mm/dashboard')
-  }
+  // if(desig === 'NOC-TL' || desig === "HoIT"){
+  //   return res.redirect('/mm/dashboard')
+  // }
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {

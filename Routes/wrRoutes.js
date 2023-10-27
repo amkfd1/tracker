@@ -29,7 +29,7 @@ const {
 //get report
 router.get('/reports', isAuth, getAllWeeklyReports);
 
-// router.get('/reports/generate', isAuth, fetchLastMondayData);
+router.get('/reports/generate', isAuth, fetchLastMondayData);
 
 router.get('/reports/:id', fetchLastMondayData); 
 
