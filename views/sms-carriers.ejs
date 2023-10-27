@@ -74,7 +74,7 @@
 														<tr>
 															<td class="py-1">
 																<%if (designation != "Admin" || designation != "Management" ) {%>
-																	<a href="/mm/client/<%= sms[i]._id%>"><%= sms[i].Customer_Name%></a>
+																	<a href="/mm/tracker/<%= sms[i]._id%>"><%= sms[i].Customer_Name%></a>
 
 																<%} else {%>
 																	<a href="/track/tracker/<%= sms[i]._id%>"><%= sms[i].Customer_Name%></a>

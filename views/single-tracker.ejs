@@ -603,7 +603,12 @@
 								</div>
 								<div class="col-md-6">
 									<label>Currency: </label>
-									<input class="form-control" name="currency" value="<%= Tracker.service_interest.currency%>">
+									<select required name="currency" class="form-control form-control-sm mb-3">
+										<option  selected="         "></option>
+										<option  value="NGN">₦</option>
+										<option  value="USD">$</option>
+										<option  value="EUR">€</option>
+									</select>
 								</div>
 								<div class="col-md-6 mt-3 ">
 									<div class="justify-content-center">
