@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const isAuth = require('../middleware/verifyAuth');
+const ismm = require('../middleware/ismm');
+
 const path = require('path');
 const {
   createWeeklyReport,
@@ -29,7 +31,7 @@ const {
 //get report
 router.get('/reports', isAuth, getAllWeeklyReports);
 
-router.get('/reports/generate', isAuth, fetchLastMondayData);
+router.get('/reports/generate', ismm, fetchLastMondayData);
 
 router.get('/reports/:id', fetchLastMondayData); 
 
@@ -39,7 +41,7 @@ router.post('/wr/reports/report/submission/:id', submitWeeklyReport);
 router.post('/create', createWeeklyReport);
 
 // Update a WeeklyReport by ID
-router.get('/wr/reports/report/:id', isAuth, renderWReport);
+router.get('/wr/reports/report/:id', ismm, renderWReport);
 
 // Update Updates schema within a WeeklyReport
 router.put('/update-updates/:id', updateUpdates);

@@ -265,6 +265,7 @@ const renderWReport = async (req, res) => {
       weeklyReports.save();
       print("Performances: ", pperformances)
       
+     if(req.user.desgination == 'Admin' || req.user.designation == 'Management'){
       res.render('wReport', { 
         weeklyReports,
         performance: carrierPerformanceArray,
@@ -280,6 +281,24 @@ const renderWReport = async (req, res) => {
         trackers,
         rates: allRates
      });
+    }else {
+      res.render('wReport-mm', { 
+        weeklyReports,
+        performance: carrierPerformanceArray,
+        tickets: ticks,
+        updates: weeklyReports.update,
+        pageTitle: "Reports",
+        designation: 'NOC-TL',
+        isAuthenticated: true,
+        user: req.user,
+        ReportDateRange,
+        mytask,
+        UnopenedTask, 
+        trackers,
+        rates: allRates
+     });
+    }
+
     } catch (error) {
       // Handle errors, e.g., database connection issues
       console.error('Error fetching weekly reports:', error);
