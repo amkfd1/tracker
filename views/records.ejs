@@ -14,7 +14,12 @@
 		<%- include('includes/_sidebar') %>
 
 		<div class="page-wrapper">
-			<%- include('includes/_navbar.ejs') %>
+            <%if (designation == "Admin" || designation == "Management" ) {%>
+                <%- include('includes/_sidebar') %>
+              <%} else {%>
+                <%- include('includes/_sidebar-mm') %>
+                
+              <%}%>
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
 				<div class="card " style=" width: 100%; height: 100vh; ">

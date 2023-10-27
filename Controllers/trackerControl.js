@@ -571,7 +571,7 @@ const updateAddress = async (req, res) => {
     // console.log("Changing: ", req.body)
     req.flash('update_success','Address Updated')
     // res.status(200).redirect('/track/tracker/'+req.params.id);
-    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+    if (req.user.designation == "Admin" || req.user.designation == "Management"){
       return res.status(200).redirect('/track/tracker/'+req.params.id)
     }else {
       return res.status(200).redirect('/mm/tracker/'+req.params.id)
