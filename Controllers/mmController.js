@@ -894,6 +894,48 @@ async function getAllWeeklyReports(req, res) {
   }
 }
 
+const updateCreditProfile = async (req, res) => {
+  const { id } = req.params; // Get the tracker ID from the request params
+
+  try {
+    const { CB, CL} = req.body; // Get the updated address from the request body
+    console.log("Body: ", req.body.street)
+    // Find the Tracker document by ID
+    const tracker = await Tracker.findById(id);
+
+    if (!tracker) {
+      req.flash('tracker_404','Client not found')
+      return res.status(404).redirect('/track/tracker'+id);
+    }
+
+    // Update the address fields
+    tracker.CB = CB;
+    tracker.CL= CL;
+   
+
+
+    // Save the updated Tracker document
+    await tracker.save();
+    // console.log("Changing: ", req.body)
+    req.flash('update_success','Testing Updated')
+    // res.status(200).redirect('/track/tracker/'+req.params.id);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(200).redirect('/track/tracker/'+req.params.id)
+    }else {
+      return res.status(200).redirect('/mm/tracker/'+req.params.id)
+    }
+  } catch (error) {
+    console.error('Error updating Technical Info:', error);
+    req.flash('server_error','A server error occured. Try Again');
+    // res.status(500).redirect('/track/tracker/'+id);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(500).redirect('/track/tracker/'+req.params.id)
+    }else {
+      return res.status(500).redirect('/mm/tracker/'+req.params.id)
+    }
+  }
+
+};
 
 
 
@@ -919,6 +961,7 @@ async function getAllWeeklyReports(req, res) {
     deleteTask,
     fetchLastMondayData,
     renderWReport,
-    getAllWeeklyReports
+    getAllWeeklyReports,
+    updateCreditProfile
     
 };

@@ -58,7 +58,7 @@ router.post('/tasks/task/del/:id', ismm, mmController.deleteTask);
 router.post('/tasks/:taskId/file', ismm, upload.single('document'), mmController.addFileToTask);
 router.post('/tasks/:id/add-note', ismm, mmController.addNoteToTask);
 // router.put('/tasks/:taskId',ismm, taskController.editTask);
-// router.post('/tasks/:id', ismm, taskController.deleteTask);
+router.post('/update/carrier/credit/:id', ismm, mmController.updateCreditProfile);
 router.post('/tasks/close/:id', ismm, taskController.editTaskStatus);
 
 router.get('/newClient/', ismm, async function (req, res) {
