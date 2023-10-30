@@ -462,6 +462,8 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
       let error = req.flash('tracker_404' )[0] || req.flash('unauthorized')[0] || req.flash('server_error')[0]; 
       // console.log("unauthorized message: ", error);
       // console.log('Tracker: ', tracker)
+      const userId = req.user._id;
+      const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
       res.render('staff-single', {
         pageTitle: tracker.Customer_Name,
         Tracker: tracker,
@@ -470,9 +472,11 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
         user: req.user,
         isAuthenticated: req.user && req.user.isLoggedIn,
         isLegal: isLegal,
+        designation: req.user.designation,
         isAccountManager: isAccountManager,
         mytasks: mytasks,
         role: role,
+        tasks,
         isStaff: false,
         message:flash,
         error: error,
