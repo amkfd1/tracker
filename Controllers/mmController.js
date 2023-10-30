@@ -838,7 +838,8 @@ const renderWReport = async (req, res) => {
       // print("Your updates: ", weeklyReports.update)
       weeklyReports.save();
       // print("Performances: ", pperformances)
-      
+      const userId = req.user._id;
+      const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
       res.render('wReport-mm', { 
         weeklyReports,
         performance: carrierPerformanceArray,
@@ -850,6 +851,7 @@ const renderWReport = async (req, res) => {
         user: req.user,
         ReportDateRange,
         mytask,
+        tasks,
         UnopenedTask, 
         trackers,
         rates: allRates
@@ -880,12 +882,15 @@ async function getAllWeeklyReports(req, res) {
       wklr.push(report)
     }
     // console.log("REPORTS: ", weeklyReports)
+    const userId = req.user._id;
+    const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
     return res.render('WeeklyReportsList', {
       pageTitle: 'Weekly Reports',
       user: req.user,
       wkReports: wklr,
       designation: req.user.designation,
-      isAuthenticated: req.user.isLoggedin
+      isAuthenticated: req.user.isLoggedin,
+      tasks
 
     });
   } catch (error) {

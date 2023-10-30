@@ -11,18 +11,20 @@
 </style>
 <body class="sidebar-dark">
 	<div class="main-wrapper">
-    <%- include('includes/_sidebar-mm') %>
+    <%if (designation == "Admin" || designation == "Management" ) {%>
+      <%- include('includes/_sidebar') %>
+    <%} else {%>
+      <%- include('includes/_sidebar-mm') %>
+      
+    <%}%>
   
       <div class="page-wrapper">
-        <%if (designation == "Admin" || designation == "Management" ) {%>
-          <%- include('includes/_sidebar') %>
-        <%} else {%>
-          <%- include('includes/_sidebar-mm') %>
-          
-        <%}%>
+       
+        <%- include('includes/_navbar.ejs') %>
+
 			<div class="page-content d-flex align-items-center justify-content-center mt-4" style="margin-top: 0;">
 
-				<div class="card " style=" width: 100%; height: 100vh; ">
+				<div class="card mt-3" style=" width: 100%; height: 100vh; ">
                     
 					<div class="card-body card-body-alt px-5" >
 						

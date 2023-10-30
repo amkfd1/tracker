@@ -27,19 +27,18 @@
 <body class="sidebar-dark">
 
 	<div class="main-wrapper">
-		<%if (designation != "Admin" || designation != "Management" ) {%>
-			<%- include('includes/_sidebar-mm') %>
-		<%} else {%>
-			<%- include('includes/_sidebar') %>
-		<%}%>
+		<%- include('includes/_navbar') %>
+
 
 		<div class="page-wrapper">
 			<%if (designation == "Admin" || designation == "Management" ) {%>
 				<%- include('includes/_sidebar') %>
-			  <%} else {%>
+			  <%} else if (designation == "HoIT" || designation == "NOC-TL" ) {%>
 				<%- include('includes/_sidebar-mm') %>
 				
-			  <%}%>
+			  <%} else {%>
+				<%- include('includes/_sidebar_Staff') %>
+			<% } %>
 			
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
