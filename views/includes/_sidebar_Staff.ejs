@@ -18,7 +18,7 @@
           <li class="nav-item nav-category">Tasks</li>
           
           <li class="nav-item">
-            <a href="#" class="nav-link" data-toggle="modal" data-target=".bd-example-modal-lg">
+            <a href="#" class="nav-link" data-toggle="modal" data-target=".myClients">
               <i class="link-icon" data-feather="clipboard"></i>
               <span class="link-title">My Tasks</span>
             </a>
@@ -136,7 +136,7 @@
         </div> -->
         <div class="list-group mt-5">
           
-          <a href="#" class="list-group-item list-group-item-action mt-5 d-flex" data-toggle="modal" data-target=".bd-example-modal-lg">
+          <a href="#" class="list-group-item list-group-item-action mt-5 d-flex" data-toggle="modal" data-target=".myTasks">
             <i class="mdi mdi-face-profile mx-2"></i>
             My Accounts <span class="ml-3 float-right">
               <h6><%= user.assignedTasks.length %></h6>
@@ -171,7 +171,7 @@
     </nav> -->
 
       	<!-- Expand Notes -->
-			<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			<div class="modal fade myTasks" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-lg">
 				  <div class="modal-content card-body-alt">
             <div class="card-body-alt" style="max-height: 80rem;">
