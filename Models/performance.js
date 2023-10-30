@@ -9,7 +9,6 @@ const performanceSchema = new Schema({
   },
   date: {
     type: Date,
-    default: Date.now,
   },
   asr: {
     type: Number,

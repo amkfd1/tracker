@@ -208,15 +208,16 @@ const getMonthlyPerformances = async (req, res) => {
 //   };
 
 const addPerformanceAdmin = async (req, res) => {
-  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent, date, date_finished } = req.body;
+  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent, date, } = req.body;
+  date.toString().slice(0, 10);
 console.log('THis is Stats Inputs: ', req.body)
-let currentDate = new Date().toISOString().slice(0, 10);
+// let currentDate = new Date().toISOString().slice(0, 10);
   try {
-    if (!isNaN(date_finished)) {
+    if (!isNaN(date)) {
       // Save parsedDate to the database
-      currentDate = date_finished
+      // currentDate = date_finished
     } else {
-      console.error('Invalid date format:', date_finished);
+      console.error('Invalid date format:', date);
       // Handle the error or provide feedback to the user
     }
       // Get the current date in 'YYYY-MM-DD' format
@@ -225,7 +226,7 @@ let currentDate = new Date().toISOString().slice(0, 10);
       // Check if a performance record with the same trackerId and current date already exists
       let existingPerformance = await Performance.findOne({
           tracker: trackerId,
-          date:date_finished // { $gte: new Date(date), $lt: new Date(date).setDate(new Date(date).getDate() + 1) },
+          date: { $gte: new Date(date), $lt: new Date(date).setDate(new Date(date).getDate() + 1) },
       });
 
       // print("Existing: ")
@@ -233,7 +234,7 @@ let currentDate = new Date().toISOString().slice(0, 10);
           // Create a new performance record using the 'Performance' model
           existingPerformance = new Performance({
               tracker: trackerId,
-              date: date || currentDate ,
+              date: date,
           });
       }
 
@@ -241,10 +242,11 @@ let currentDate = new Date().toISOString().slice(0, 10);
       if (!req.body.sms) {
           existingPerformance.asr = asr;
           existingPerformance.acd = acd;
+          existingPerformance.date = date;
           existingPerformance.minutesRoutesTerminated = minutesRoutesTerminated;
       } else if (req.body.sms) {
           existingPerformance.totalSMS = smsSent
-          existingPerformance.date = currentDate;
+          existingPerformance.date = date;
       }
 
       // Save the performance record to the database

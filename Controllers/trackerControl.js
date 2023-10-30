@@ -1481,8 +1481,8 @@ const getManagementDash = async (req, res) => {
 
 
 const addPerformance = async (req, res) => {
-  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent } = req.body;
-
+  const { trackerId, asr, acd, minutesRoutesTerminated, smsSent, date } = req.body;
+console.log("This is body input: ", req.body)
   try {
 
       // Get the current date in 'YYYY-MM-DD' format
@@ -1491,7 +1491,8 @@ const addPerformance = async (req, res) => {
       // Check if a performance record with the same trackerId and current date already exists
       let existingPerformance = await Performance.findOne({
           tracker: trackerId,
-          date: { $gte: new Date(currentDate), $lt: new Date(currentDate).setDate(new Date(currentDate).getDate() + 1) },
+          date
+          // date: { $gte: new Date(currentDate), $lt: new Date(currentDate).setDate(new Date(currentDate).getDate() + 1) },
       });
 
       print("Existing: ")
@@ -1499,7 +1500,7 @@ const addPerformance = async (req, res) => {
           // Create a new performance record using the 'Performance' model
           existingPerformance = new Performance({
               tracker: trackerId,
-              date: currentDate,
+              date,
           });
       }
 
