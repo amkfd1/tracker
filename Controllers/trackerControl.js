@@ -1697,6 +1697,8 @@ const getVoipCarriers = async (req, res) => {
         sms.push(tracker);
       }
     }
+    const userId = req.user._id;
+    const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
     console.log("VOIP: ", voip)
       return res.render('voip-carriers', {
         pageTitle: 'List | Carriers',
@@ -1705,6 +1707,7 @@ const getVoipCarriers = async (req, res) => {
         // sms,
         stages,
         users:[],
+        tasks,
         trackers,
         designation: req.user.designation,
         isAuthenticated: req.user.isAuthenticated,
@@ -1772,6 +1775,8 @@ const getSmsCarriers = async (req, res) => {
         sms.push(tracker);
       }
     }
+    const userId = req.user._id;
+    const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
 
       return res.render('sms-carriers', {
         pageTitle: 'List | Carriers',
@@ -1780,6 +1785,7 @@ const getSmsCarriers = async (req, res) => {
         sms,
         stages,
         users:[],
+        tasks,
         // trackers,
         designation: req.user.designation,
         isAuthenticated: req.user.isAuthenticated,
