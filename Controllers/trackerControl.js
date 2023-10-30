@@ -1702,7 +1702,7 @@ const getVoipCarriers = async (req, res) => {
         pageTitle: 'List | Carriers',
         user: req.user,
         voip: voip,
-        sms,
+        // sms,
         stages,
         users:[],
         trackers,
@@ -1780,7 +1780,7 @@ const getSmsCarriers = async (req, res) => {
         sms,
         stages,
         users:[],
-        trackers,
+        // trackers,
         designation: req.user.designation,
         isAuthenticated: req.user.isAuthenticated,
         // overallCompletion
