@@ -10,14 +10,14 @@ const fs = require('fs');
 
 router.get('/tickets', isAuth, tController.getAllData);
 
-router.get('/tickets/form', tController.getNewTicket);
+router.get('/tickets/form', isAuth, tController.getNewTicket);
 
 router.post('/tickets/new-ticket', isAuth, tController.createTicket);
 
 router.post('/tickets/assign-ticket/:id', isAuth, tController.updateTicketAssigneeAndDate);
 
 
-router.get('/ticket/:id', tController.getTicket);
+router.get('/ticket/:id', isAuth, tController.getTicket);
 
 router.post('/tickets/new-activity/:id', isAuth, tController.postActivity);
 

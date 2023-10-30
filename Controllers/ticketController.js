@@ -94,13 +94,16 @@ async function getAllData(req, res) {
 
     // console.log(tickets)
     // You can return the data in the response
+    const userId = req.user._id;
+    const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
     res.status(200).render("main/helpdesk",{
       tickets,
       users,
-      designation: req.user.designation,
-      isAuthenticated: true,
       pageTitle: 'Tickets',
-      user: req.user
+      designation: req.user.designation,
+      user: req.user,
+      tasks
+
     });
   } catch (error) {
     // Handle any errors that occur during the fetch
@@ -144,7 +147,8 @@ async function getNewTicket(req, res) {
 
 
 
-
+    const userId = req.user._id;
+    const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
 
 
       // You can return the data in the response
@@ -159,7 +163,11 @@ async function getNewTicket(req, res) {
         department: department,
         priority: priority,
         type: type,
-        nop: nop
+        nop: nop,
+        designation: req.user.designation,
+        user: req.user,
+        tasks
+  
 
       });
     } catch (error) {
@@ -199,6 +207,9 @@ async function getNewTicket(req, res) {
       // ticket.date = (ticket.date).toISOString().slice(0, 10).replace('T', ' ');;
   
       // ticket.save();
+      const userId = req.user._id;
+      const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
+  
       res.render('main/ticket-details', {
         ticket ,
         date,
@@ -207,6 +218,9 @@ async function getNewTicket(req, res) {
         pageTitle: 'Tickets',
         user: {},
         activities: activity,
+        designation: req.user.designation,
+        user: req.user,
+        tasks
   
 
 
