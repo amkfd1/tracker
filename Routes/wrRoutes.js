@@ -33,15 +33,15 @@ router.get('/reports', isAuth, getAllWeeklyReports);
 
 router.get('/reports/generate', ismm, fetchLastMondayData);
 
-router.get('/reports/:id', fetchLastMondayData); 
+router.get('/reports/:id', isAuth, fetchLastMondayData); 
 
-router.post('/wr/reports/report/submission/:id', submitWeeklyReport);
+router.post('/wr/reports/report/submission/:id', ismm, submitWeeklyReport);
 
 // Create a new WeeklyReport
 router.post('/create', createWeeklyReport);
 
 // Update a WeeklyReport by ID
-router.get('/wr/reports/report/:id', ismm, renderWReport);
+router.get('/wr/reports/report/:id', isAuth, renderWReport);
 
 // Update Updates schema within a WeeklyReport
 router.put('/update-updates/:id', updateUpdates);

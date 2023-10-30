@@ -74,7 +74,8 @@ router.post('/update-profile/:id', isAuth, staffController.updateEmergencyContac
 
 router.get('/ss/reports', isAuth, staffController.getAllWeeklyReportsStaff);
 
-router.get('/ss/reports/generate', isAuth, fetchLastMondayData);
+router.get('/ss/reports/generate', isAuth, staffController.fetchLastMondayData);
+router.get('/ss/wr/reports/report/:id', isAuth, staffController.renderWReport);
 
 router.get('/reports/:id', isAuth, fetchLastMondayData); 
 

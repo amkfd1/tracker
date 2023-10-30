@@ -31,7 +31,7 @@ const print = console.log
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit' 
   };
   const startR = {
     year: 'numeric',
@@ -264,7 +264,8 @@ const renderWReport = async (req, res) => {
       // print("Your updates: ", weeklyReports.update)
       weeklyReports.save();
       print("Performances: ", pperformances)
-      
+      const userId = req.user._id;
+      const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
      if(req.user.desgination == 'Admin' || req.user.designation == 'Management'){
       res.render('wReport', { 
         weeklyReports,
@@ -276,7 +277,8 @@ const renderWReport = async (req, res) => {
         isAuthenticated: req.user.isLoggedin,
         user: req.user,
         ReportDateRange,
-        mytask,
+        mytasks: tasks,
+        tasks,
         UnopenedTask, 
         trackers,
         rates: allRates
@@ -292,7 +294,8 @@ const renderWReport = async (req, res) => {
         isAuthenticated: req.user.isLoggedin,
         user: req.user,
         ReportDateRange,
-        mytask,
+        mytasks:tasks,
+        tasks,
         UnopenedTask, 
         trackers,
         rates: allRates

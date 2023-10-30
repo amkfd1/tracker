@@ -17,6 +17,31 @@ const Performance = require('../Models/performance');
 const path = require('path');
 const print = console.log
 
+
+const today = new Date();
+const lastMonday = new Date(today);
+lastMonday.setDate(today.getDate() - ((today.getDay() - 1 + 7) % 7));
+lastMonday.setHours(0, 0, 0, 0); // Set to midnight
+ // Format lastMonday and today to display date and time (without seconds)
+ const options = {
+   year: 'numeric',
+   month: '2-digit',
+   day: '2-digit',
+   hour: '2-digit',
+   minute: '2-digit'
+ };
+ const startR = {
+   year: 'numeric',
+   month: '2-digit',
+   day: '2-digit',
+   
+ };
+
+
+
+
+
+// End of Variables
 const updateTech = async (req, res) => {
     try {
       const { id } = req.params; // Get the tracker ID from the request params
@@ -805,6 +830,305 @@ async function getAllWeeklyReportsStaff(req, res) {
   }
 }
 
+async function fetchLastMondayData(req, res) {
+  try {
+     
+      // 88888888888888888888888888888888888
+
+      // Calculate the date range for the current week (from Monday)
+      //  const today = new Date();
+      //  const monday = new Date(today);
+      //  monday.setDate(today.getDate() - ((today.getDay() - 1 + 7) % 7));
+
+      // Check if a report already exists for the current week
+      const existingReport = await WeeklyReport.findOne({
+        dateGenerated: { $gte: lastMonday, $lt: new Date() }
+      });
+      console.log("This Is last Monday's report: ", existingReport)
+      if (existingReport) {
+          // Redirect to the existing report if it exists
+          return res.redirect(`/ss/wr/reports/report/${existingReport._id}`);
+          // return console.log("Report Found: ")
+      }
+
+      // Create a new report for the current week
+      const newReport = new WeeklyReport({ date: lastMonday });
+      console.log("Creating new Report: ", newReport)
+      // Fetch performances from last Monday
+      const performances = await Performance.find({
+        date: { $gte: lastMonday, $lt: today }
+      }).populate('tracker', 'Customer_Name CB CL _id');
+
+      // Initialize an object to store carrier performances
+      const carrierPerformances = {};
+
+      // Iterate through performances and organize them by carrier
+      performances.forEach((performance) => {
+        const carrierId = performance.tracker._id.toString();
+
+        // Initialize carrier if it doesn't exist in the object
+        if (!carrierPerformances[carrierId]) {
+            carrierPerformances[carrierId] = {
+                carrier: {
+                    _id: carrierId,
+                    Customer_Name: performance.tracker.Customer_Name,
+                    CB: performance.tracker.CB,
+                    CL: performance.tracker.CL,
+                },
+                totalMinutesRoutesTerminated: 0,
+            };
+        }
+
+        // Add the minutesRoutesTerminated to the carrier's total
+        carrierPerformances[carrierId].totalMinutesRoutesTerminated += performance.minutesRoutesTerminated;
+      });
+
+      // Convert the object of carrier performances to an array
+      const carrierPerformanceArray = Object.values(carrierPerformances);
+
+      // console.log("Performances from Active carriers: ", carrierPerformanceArray)
+      // Fetch tickets from last Monday
+      const tickets = await Ticket.find({
+        date: { $gte: lastMonday, $lt: today }
+      }).populate('client', '_id Customer_Name').populate('assignee', '_id name');
+
+      // console.log("TICKETS: ", tickets)
+      // Fetch all weekly reports from the database
+   
+
+      const formattedLastMonday = lastMonday.toLocaleString(undefined, startR);
+      const formattedToday = today.toLocaleString(undefined, options);
+
+      // Combine the formatted dates into ReportDateRange
+      const ReportDateRange = `${formattedLastMonday} - ${formattedToday}`;
+
+      const updates = await Update.find({
+        dateCreated: { $gte: lastMonday, $lt: new Date() }
+      }).populate('postedBy', 'name _id');
+
+      // print("Performance: ", performances)
+      // print("Tickets: ", tickets)
+      // print("weeklyReports: ", weeklyReports)
+
+      // console.log("Updates: ", updates)
+
+      newReport.update = updates/* Add the updates data */;
+      newReport.dateGenerated = new Date();
+      newReport.tickets = tickets/* Add the tickets data */;
+
+      print("Your Weekly Report Performances: ", performances)
+      // Save the newReport to the database
+      await newReport.save();
+
+        return res.redirect(`/ss/wr/reports/report/${newReport._id}`);
+
+
+      // Respond with the fetched data
+      // return res.status(200).render('wReport',{
+      //     performances: carrierPerformanceArray,
+      //     tickets,
+      //     updates,
+      //     report: newReport,
+      //     pageTitle: "Reports",
+      //     designation: 'NOC-TL',
+      //     isAuthenticated: true,
+      //     user: req.user,
+      //     ReportDateRange
+      // });
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      return res.status(500).json({ error: 'Server error' });
+  }
+}
+
+
+
+const renderWReport = async (req, res) => {
+  // Fetch all weekly reports from the database
+  const weeklyReports = await WeeklyReport.findById(req.params.id);
+  // print("One Report: ", weeklyReports)
+
+  const now = new Date();
+  const dayOfWeek = now.getDay(); // 0 (Sunday) to 6 (Saturday)
+  const daysUntilMonday = (dayOfWeek === 0) ? 1 : (8 - dayOfWeek);
+
+  const firstMonday = new Date(now);
+  firstMonday.setDate(now.getDate() + daysUntilMonday);
+    try {
+      const updates = await Update.find({
+        dateUpdated: { $gte: lastMonday, $lt: new Date() }
+      }).populate('postedBy', 'name _id');
+      
+      const formattedLastMonday = lastMonday.toLocaleString(undefined, startR);
+      const formattedToday = today.toLocaleString(undefined, options);
+
+      // Combine the formatted dates into ReportDateRange
+      const ReportDateRange = `${formattedLastMonday} - ${formattedToday}`;
+
+      const tickets = await Ticket.find({
+        date: { $gte: lastMonday, $lt: today }
+      }).populate('client', '_id Customer_Name').populate('assignee', '_id name');
+      let ticks = []
+      tickets.forEach((tick) => {
+        const date = new Date(tick.date);
+        tick.date = date.toISOString().split('T')[0];
+        // console.log("This is the date: ", tick.date);
+        ticks.push(tick);
+      });
+      // print("This is ticket: ", ticks)
+      // console.log("First Monday: ", lastMonday);
+      // console.log("Now: ", today);
+      // console.log("This is ticket: ", tickets);
+
+      const performances = await Performance.find({
+        date: { $gte: lastMonday, $lt: today }
+      }).populate('tracker', 'Customer_Name CB CL _id');
+
+      const pperformances = await Performance.find().populate('tracker', 'Customer_Name CB CL _id');
+      
+      // Filter performances that occurred from last Monday to today
+    const performancesFromLastMonday = pperformances.filter((performance) => {
+      const performanceDate = new Date(performance.date); // Assuming 'date' is a property in your performance object
+      return performanceDate >= lastMonday && performanceDate <= new Date();
+    
+      });
+      console.log('This is unfiltered Performance: ', performancesFromLastMonday)
+      // Initialize an object to store carrier performances
+      const carrierPerformances = {};
+
+      // Iterate through performances and organize them by carrier
+      pperformances.forEach((performance) => {
+        const carrierId = performance.tracker._id.toString();
+
+        // Initialize carrier if it doesn't exist in the object
+        if (!carrierPerformances[carrierId]) {
+            carrierPerformances[carrierId] = {
+                carrier: {
+                    _id: carrierId,
+                    Customer_Name: performance.tracker.Customer_Name,
+                    CB: performance.tracker.CB,
+                    CL: performance.tracker.CL,
+                },
+                totalMinutesRoutesTerminated: 0,
+            };
+        }
+
+        // Add the minutesRoutesTerminated to the carrier's total
+        carrierPerformances[carrierId].totalMinutesRoutesTerminated += performance.minutesRoutesTerminated;
+      });
+
+      // Convert the object of carrier performances to an array
+      const carrierPerformanceArray = Object.values(carrierPerformances);
+
+
+      weeklyReports.update = updates/* Add the updates data */;
+      // weeklyReports.dateGenerated = new Date();
+      weeklyReports.tickets = ticks/* Add the tickets data */;
+
+      const mytask = await Task.find({taskFor: req.user._id}).populate('assignedBy', 'name');
+      let UnopenedTask = []
+      mytask.forEach( (task) => {
+
+        if (task.isOpened){
+          UnopenedTask.push(task)
+        }
+      })
+
+      // get trackers to allow selection
+      const trackers = await Tracker.find()
+
+      let allRates = []
+      const rates = await Rate.find({ wklReport: req.params.id }).populate('carrier', 'Customer_Name _id');
+      for (i in rates ){
+        let rate = {
+          carrier: rates[i].carrier ,
+          wklReport: rates[i].wklReport,
+          dateReceived: rates[i].dateReceived.toISOString().split('T')[0], 
+          documentPath: rates[i].documentPath,
+          documentTitle: rates[i].documentTitle,
+        }
+        allRates.push(rate)
+      }
+      // print("Your updates: ", weeklyReports.update)
+      weeklyReports.save();
+      print("Performances: ", pperformances)
+      const userId = req.user._id;
+    const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
+     if(req.user.desgination == 'Admin' || req.user.designation == 'Management'){
+      res.render('wReport', { 
+        weeklyReports,
+        performance: carrierPerformanceArray,
+        tickets: ticks,
+        updates: weeklyReports.update,
+        pageTitle: "Report |" + new Date(),
+        designation: req.user.designation,
+        isAuthenticated: req.user.isLoggedin,
+        user: req.user,
+        ReportDateRange,
+        mytask: tasks,
+        tasks: tasks,
+        UnopenedTask, 
+        trackers,
+        rates: allRates
+     });
+    }else {
+      res.render('wReport-mm', { 
+        weeklyReports,
+        performance: carrierPerformanceArray,
+        tickets: ticks,
+        updates: weeklyReports.update,
+        pageTitle: "Reports | " + new Date(),
+        designation: req.user.designation,
+        isAuthenticated: req.user.isLoggedin,
+        user: req.user,
+        ReportDateRange,
+        mytask: tasks,
+        tasks: tasks,
+        UnopenedTask, 
+        trackers,
+        rates: allRates
+     });
+    }
+
+    } catch (error) {
+      // Handle errors, e.g., database connection issues
+      console.error('Error fetching weekly reports:', error);
+      res.status(500).send('Server Error');
+    }
+  };
+  
+  // Controller function to render the "wReport-Single" HTML template for a specific report by ID
+  const renderWReportSingle = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      // Fetch the specific weekly report by ID from the database
+      const weeklyReport = await WeeklyReport.findById(id);
+  
+      if (!weeklyReport) {
+        // Report not found, handle this case as needed
+        return res.status(404).send('Report not found');
+      }
+  
+      // Render the "wReport-Single" template with the fetched data
+      res.render('wReport-Single', { 
+        weeklyReport,  
+        user: req.user,
+        pageTitle: "Weekly Report",
+        designation: req.user.designation,
+        isAuthenticated: req.user.isLoggedin,
+        user: req.user,
+        ReportDateRange: "",
+      
+      });
+    } catch (error) {
+      // Handle errors, e.g., database connection issues
+      console.error('Error fetching weekly report:', error);
+      res.status(500).send('Server Error');
+    }
+  };
+
+
   module.exports = 
 { 
     updateTesting,
@@ -822,7 +1146,10 @@ async function getAllWeeklyReportsStaff(req, res) {
     addFileToTask,
     deleteFileFromTask,
     editTaskStatus,
-    getAllWeeklyReportsStaff
+    getAllWeeklyReportsStaff,
+    fetchLastMondayData,
+    renderWReportSingle,
+    renderWReport
     
     
 };

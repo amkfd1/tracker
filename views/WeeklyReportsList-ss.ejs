@@ -28,7 +28,14 @@
 
 	<div class="main-wrapper">
 		
-			<%- include('includes/_sidebar_Staff') %>
+		<%if (designation == "Admin" || designation == "Management" ) {%>
+			<%- include('includes/_sidebar') %>
+		  <%} else if (designation == "HoiT" || designation == "NOC-TL" ) {%>
+			<%- include('includes/_sidebar-mm') %>
+			
+		  <%} else {%>
+			<%- include('includes/_sidebar_staff') %>
+		<% } %>
 			
 		  
 
@@ -74,7 +81,7 @@
                                                             <%= counter%>
                                                         </td>
                                                         <td>
-                                                          <a href="/reports/<%= wkReports[i]._id%>"> 
+                                                          <a href="/wr/reports/report/<%= wkReports[i]._id%>"> 
                                                             <%= wkReports[i].dateGenerated%>
                                                         </a> 
                                                         </td>
