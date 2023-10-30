@@ -416,87 +416,8 @@
 				
 
 			</div>
-            	<!-- Expand Notes -->
-			<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
-				  <div class="modal-content card-body-alt">
-            <div class="card-body-alt" style="max-height: 80rem;">
-              <div class="card-body" >
-                  <div class="d-flex justify-content-between align-items-baseline mb-2">
-                    <h6 class="card-title mb-0">Users</h6>
-                   
-                  </div>
-                  <div class="d-flex flex-column mt-3" >
-                   
-                    <%for (i in users) {%>
-                      <a href="#" class="d-flex align-items-center border-bottom pb-3" data-toggle="modal" data-target="#records<%=[i]%>">
-                          <div class="mr-3">
-                            <img src="https://via.placeholder.com/35x35" class="rounded-circle wd-35" alt="user">
-                          </div>
-                          <div class="w-100">
-                            <div class="d-flex justify-content-between">
-                              <h6 class="text-body my-2"><%= users[i].name%></h6>
-                              <p class="my-2 <%if (users[i].role == 'Admin') {%>text-success<%} else {%> text-info tx-12 <%}%>"><%= users[i].role%></p>
-                            </div>
-                            <p class="text-muted tx-13">Has <%= users[i].assignedTasks%> Assigned Accounts</p>
-                          </div>
-                        </a>
-                        <%- include('partials/records') %>
-                    <% } %>
-                  </div>
-                </div>
-              </div>
-				  </div>
-				</div>
-			  </div>
-	      <div class="modal fade myClients" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
-				  <div class="modal-content card-body-alt">
-					<table class="table table-striped " >
-						<thead class="border-info">
-							<tr>
-								<th>
-									Title
-								</th>
-								<th>
-									Assigned To
-								</th>
-								<th>
-									Status
-								</th>
-								<th>
-									Deadline
-								</th>
-								
-							</tr>
-						</thead>
-						<tbody>
-							<% for (i in tasks) {%>
-								<tr>
-									<td>
-										<a href="/mm/task/<%= tasks[i]._id%>"><%= tasks[i].title%></a>
-									</td>
-
-									<td>
-										<%= tasks[i].taskFor%>
-
-									</td>
-
-									<td>
-										<%= tasks[i].status%>
-									</td>
-
-                  <td>
-										<%= tasks[i].deadline%>
-									</td>
-								</tr>
-							<% } %>
-							
-						</tbody>
-					</table>
-				  </div>
-				</div>
-			  </div>
+          
+	     
 
           <!-- Add  Task -->
           <div class="modal fade" id="tasks_" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

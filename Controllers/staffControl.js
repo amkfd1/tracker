@@ -6,6 +6,13 @@ const Note = require('../Models/note');
 const User = require('../Models/user');
 const fs = require('fs');
 const Task = require('../Models/task');
+const WeeklyReport = require('../Models/weeklyReport');
+const Ticket = require('../Models/ticket');
+const Rate = require('../Models/rate');
+const multer = require('multer')
+
+const Update = require('../Models/update');
+const Performance = require('../Models/performance');
 
 const path = require('path');
 const print = console.log
@@ -759,6 +766,45 @@ const editTaskStatus = async (req, res) => {
   }
 };
 
+// Function to get all weekly reports for staff
+async function getAllWeeklyReportsStaff(req, res) {
+  try {
+    // Find all weekly reports in the collection
+    const weeklyReports = await WeeklyReport.find({});
+    let wklr = []
+    for (i in weeklyReports){
+      let report= {
+        isSubmitted: weeklyReports[i].isSubmitted,
+        _id: weeklyReports[i]._id,
+        update: weeklyReports[i].update,
+        alertActive: weeklyReports[i].alertActive,
+        tickets: weeklyReports[i].tickets,
+        dateGenerated: weeklyReports[i].dateGenerated.toISOString().split('T')[0],
+      }
+      wklr.push(report)
+    }
+    const userId = req.user._id;
+    const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
+    console.log("REPORTS: ", weeklyReports)
+    return res.render('WeeklyReportsList-ss', {
+      pageTitle: 'Weekly Reports',
+      user: req.user,
+      wkReports: wklr,
+      designation: req.user.designation,
+      isAuthenticated: req.user.isLoggedin,
+      mytasks: tasks,
+      tasks,
+      completedPercentile: "",
+      incompletePercentile: ""
+
+
+    });
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    return res.status(500).json({ error: 'An error occurred while fetching weekly reports.' });
+  }
+}
+
   module.exports = 
 { 
     updateTesting,
@@ -775,7 +821,8 @@ const editTaskStatus = async (req, res) => {
     addNoteToTask,
     addFileToTask,
     deleteFileFromTask,
-    editTaskStatus
+    editTaskStatus,
+    getAllWeeklyReportsStaff
     
     
 };

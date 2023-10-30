@@ -209,8 +209,10 @@ const getMonthlyPerformances = async (req, res) => {
 
 const addPerformanceAdmin = async (req, res) => {
   const { trackerId, asr, acd, minutesRoutesTerminated, smsSent, date, } = req.body;
-  date.toString().slice(0, 10);
-console.log('THis is Stats Inputs: ', req.body)
+  // date.toString().slice(0, 10);
+
+  // let newDate = moment(date).format()
+// console.log('THis is Stats Inputs: ', newDate)
 // let currentDate = new Date().toISOString().slice(0, 10);
   try {
     if (!isNaN(date)) {
@@ -234,7 +236,7 @@ console.log('THis is Stats Inputs: ', req.body)
           // Create a new performance record using the 'Performance' model
           existingPerformance = new Performance({
               tracker: trackerId,
-              date: date,
+              date: new Date(date),
           });
       }
 
@@ -242,11 +244,11 @@ console.log('THis is Stats Inputs: ', req.body)
       if (!req.body.sms) {
           existingPerformance.asr = asr;
           existingPerformance.acd = acd;
-          existingPerformance.date = date;
+          existingPerformance.date = new Date(date);
           existingPerformance.minutesRoutesTerminated = minutesRoutesTerminated;
       } else if (req.body.sms) {
           existingPerformance.totalSMS = smsSent
-          existingPerformance.date = date;
+          existingPerformance.date = new Date(date);
       }
 
       // Save the performance record to the database

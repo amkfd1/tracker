@@ -18,7 +18,7 @@ const authenticateUser = async (req, res, next) => {
     const userId = decoded.userId;
 
     // Find the user in the database
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).populate('assignedTasks', "Customer_Name _Id CB, CL");
 
     if (!user) {
       req.flash('not_found', "User not found")

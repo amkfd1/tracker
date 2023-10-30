@@ -5,7 +5,22 @@ const fs = require('fs');
 const isAuth = require('../middleware/verifyAuth');
 const customerTrackerController = require('../Controllers/trackerControl');
 const adminsettings = require('../Controllers/adminsettings');
+const {
+  createWeeklyReport,
+  // updateWeeklyReport,
+  updateUpdates,
+  deleteUpdate,
+  deleteWeeklyReport,
+  updateStatus,
+  renderWReport,
+  renderWReportSingle,
+  fetchLastMondayData,
+  submitWeeklyReport,
+  getAllWeeklyReports,
+  processRatesUpload,
+  uploadRates
 
+} = require('../Controllers/weeklyReportsControl');
 const multer = require('multer');
 
 // Set up Multer storage and file upload configuration
@@ -43,7 +58,7 @@ router.post('/updateTesting/:id', isAuth, staffController.updateTesting);
 // router.post('/addContact/:id', isAuth, customerTrackerController.addContact);
 router.post('/updateStage/:id', isAuth, staffController.updateTrackerStage);
 
-// Staff Task Management
+// Staff Task Management 
 router.get('/tasks/task/:taskId', isAuth, staffController.getSingleTask);
 router.post('/tasks/:taskId/file', isAuth, upload.single('document'), staffController.addFileToTask);
 router.post('/tasks/:taskId/note', isAuth, staffController.addNoteToTask);
@@ -54,6 +69,14 @@ router.post('/tasks/update-status/:taskId', isAuth, staffController.editTaskStat
 router.post('/update-profile/:id', isAuth, staffController.updateEmergencyContact);
 
 // open Pdf
+
+router.get('/ss/reports', isAuth, staffController.getAllWeeklyReportsStaff);
+
+router.get('/ss/reports/generate', isAuth, fetchLastMondayData);
+
+router.get('/reports/:id', isAuth, fetchLastMondayData); 
+
+  
 const uploadDirectory = 'upload';
 
 

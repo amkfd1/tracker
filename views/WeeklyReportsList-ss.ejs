@@ -1,0 +1,134 @@
+<style>
+	.smallIcons{
+		max-width: 15px;
+		max-height: 15px;
+	}
+
+	@media print{
+    body *:not(#my-section):not(#my-section *){
+        visibility:hidden;
+    }
+    #my-section{
+        position: absolute;
+        top: 0;
+        left: 0;
+		/* page: 1; */
+		margin-left: -25%;
+		visibility: visible;
+		align-items: center;
+		justify-content: center;
+		min-width: 120%;
+		min-height: 500%;
+		zoom: 1;
+    }
+}
+</style>
+<%- include('includes/head') %>
+<body class="sidebar-dark">
+
+	<div class="main-wrapper">
+		
+			<%- include('includes/_sidebar_Staff') %>
+			
+		  
+
+		<div class="page-wrapper">
+			<%- include('includes/_navbar.ejs') %>
+			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
+
+				
+				<div class="card bodycard">
+					<div class="card-body card-body-alt px-5" >
+						
+									<!--SMS Section Table-->
+									<section class="">
+										<h5 class="card-title ">Weekly Reports</h5>
+		
+										<div class="table-responsive ">
+											<table class="table table-striped" id="smsTable">
+												<thead class="text-center">
+													<tr>
+														<th>
+															#
+														</th>
+                                                        <th>
+															Date
+														</th>
+														<th>
+															Status
+														</th>
+														<th>
+                                                            Tickets
+                                                        </th>
+                                                        <th>
+                                                            Updates
+                                                        </th>											
+													</tr>
+												</thead> 
+												<tbody>
+                                                    <% let counter = 0%>
+                                                   <%for (i in wkReports) {%>
+                                                    <tr>
+                                                        <%counter = counter + 1%>
+                                                        <td>
+                                                            <%= counter%>
+                                                        </td>
+                                                        <td>
+                                                          <a href="/reports/<%= wkReports[i]._id%>"> 
+                                                            <%= wkReports[i].dateGenerated%>
+                                                        </a> 
+                                                        </td>
+                                                        <td>
+                                                            <%= wkReports[i].isSubmitted.submitted%>
+                                                        </td>
+                                                        <td>
+                                                            <%= (wkReports[i].tickets).length%>
+                                                        </td>
+                                                        <td>
+                                                            <%= (wkReports[i].update).length%>
+                                                        </td>
+                                                    </tr>
+                                                   
+                                                    <% } %>
+                                                </tbody>
+											</table>
+										</div>					
+									</section>		
+						
+
+
+
+
+
+
+
+						<!-- MAin car END -->
+					</div>
+					
+				
+				
+				</div>
+				
+				
+
+			</div>
+
+
+				
+			
+		</div>
+		
+	</div>
+
+	
+<script>
+    // Add an event listener to the element with the ID "sendNotes"
+    document.getElementById("sendNote").addEventListener("click", function() {
+        // Close the modal with the ID "Notes"
+        $("#Notes").modal("close");
+    });
+</script>
+
+
+<%- include('includes/end') %>
+
