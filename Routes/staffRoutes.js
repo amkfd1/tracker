@@ -39,6 +39,8 @@ const upload = multer({ storage: storage });
 
 
 
+router.get('/ss/sms/carriers', isAuth, customerTrackerController.getSmsCarriers);
+router.get('/ss/voip/carriers', isAuth, customerTrackerController.getVoipCarriers);
 
 router.get('/', isAuth, staffController.getAllCustomerTrackers);
 router.post('/document/grant-access/', isAuth, staffController.grantDocumentPermission);
