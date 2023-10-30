@@ -355,13 +355,16 @@
 													<a href="/wr/reports/report/<%=weeklyReports._id%>"><i data-feather="refresh-ccw"></i></a>
 												</button>
 												<br>
-												<form action="/wr/reports/report/submission/<%=weeklyReports._id%>" method="post">
-													<button type="submit" class="btn btn-success hvr-bounce-in btn-icon animate__animated animate__backInDown">
-														
-															<i  data-feather="check"></i>
-														
-													</button>
-												</form>
+												<% if (designation == "HoIT" || designation == "NOC-TL" ) {%>
+													<form action="/wr/reports/report/submission/<%=weeklyReports._id%>" method="post">
+														<button type="submit" class="btn btn-success hvr-bounce-in btn-icon animate__animated animate__backInDown">
+															
+																<i  data-feather="check"></i>
+															
+														</button>
+													</form>
+													
+												  <% } %>
 												
 												
 												
