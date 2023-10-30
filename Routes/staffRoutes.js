@@ -76,8 +76,8 @@ router.get('/ss/reports', isAuth, staffController.getAllWeeklyReportsStaff);
 
 router.get('/ss/reports/generate', isAuth, staffController.fetchLastMondayData);
 router.get('/ss/wr/reports/report/:id', isAuth, staffController.renderWReport);
-router.get('/sms/carriers', isAuth, customerTrackerController.getSmsCarriers);
-router.get('/voip/carriers', isAuth, customerTrackerController.getVoipCarriers);
+router.get('/ss/sms/carriers', isAuth, customerTrackerController.getSmsCarriers);
+router.get('/ss/voip/carriers', isAuth, customerTrackerController.getVoipCarriers);
 
 router.get('/reports/:id', isAuth, fetchLastMondayData); 
 
