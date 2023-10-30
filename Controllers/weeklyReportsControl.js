@@ -63,7 +63,7 @@ async function fetchLastMondayData(req, res) {
       }
 
       // Create a new report for the current week
-      const newReport = new WeeklyReport({ date: monday });
+      const newReport = new WeeklyReport({ date: lastMonday });
       console.log("Creating new Report: ", newReport)
       // Fetch performances from last Monday
       const performances = await Performance.find({
