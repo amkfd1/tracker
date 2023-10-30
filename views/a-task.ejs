@@ -6,11 +6,13 @@
 		<%- include('includes/_sidebar') %>
 	
 			<div class="page-wrapper">
-				<%if (designation != "Admin" || designation != "Management" ) {%>
-					<%- include('includes/_sidebar-mm') %>
-				<%} else {%>
+				<%if (designation == "Admin" || designation == "Management" ) {%>
 					<%- include('includes/_sidebar') %>
-				<%}%>
+				  <%} else if (designation == "HoiT" || designation == "NOC-TL" ) {%>
+					<%- include('includes/_sidebar-mm') %>
+				  <%} else {%>
+					<%- include('includes/_sidebar_Staff') %>
+				<% } %>
 			<div class="page-content d-flex align-items-center justify-content-center" style="margin-top: 0;">
 
 				<div class="card bodycard">

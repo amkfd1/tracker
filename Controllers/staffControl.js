@@ -493,7 +493,7 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
     try {
         const _id = req.params.taskId;
         const task = await Task.find({ _id}).populate('taskFor').populate('assignedBy').populate('reference');
-        let tasks =[]
+        let taskss =[]
         let notes = []
         let referencet = {}
         task.forEach(task => {
@@ -518,22 +518,24 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
             date: task.date,
 
           }
-          tasks.push(task_)
+          taskss.push(task_)
         })
         // print(req.user)
         let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
         let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0]
         // console.log('This is your task ', task)
+        const userId = req.user._id;
+    const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
         res.status(200).render('task', {
             pageTitle: tasks[0].title,
-            tasks: tasks[0],
+            task: taskss[0],
             isAuthenticated: req.user.isLoggedIn,
             message: flash,
             error,
             designation: req.user.designation,
             user: req.user,
-            task: {},
-            stages: ['Ongoing', 'Complete']
+            tasks,
+            stages: []
 
 
         });

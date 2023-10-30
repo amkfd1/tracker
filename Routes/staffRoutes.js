@@ -61,7 +61,7 @@ router.post('/updateTesting/:id', isAuth, staffController.updateTesting);
 router.post('/updateStage/:id', isAuth, staffController.updateTrackerStage);
 
 // Staff Task Management 
-router.get('/tasks/task/:taskId', isAuth, staffController.getSingleTask);
+router.get('/ss/tasks/task/:taskId', isAuth, staffController.getSingleTask);
 router.post('/tasks/:taskId/file', isAuth, upload.single('document'), staffController.addFileToTask);
 router.post('/tasks/:taskId/note', isAuth, staffController.addNoteToTask);
 router.post('/tasks/:taskId/file/:fileIndex', staffController.deleteFileFromTask);

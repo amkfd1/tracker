@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-   
+    
 
 router.post('/tasks', isAuth, taskController.createTask);
 router.post('/tasks/:taskId/files', isAuth, upload.single('document'), taskController.addFileToTask);
