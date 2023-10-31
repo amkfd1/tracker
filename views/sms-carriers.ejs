@@ -76,13 +76,16 @@
 		
 														<tr>
 															<td class="py-1">
-																<%if (designation != "Admin" || designation != "Management" ) {%>
+																<%if (designation == "Admin" || designation == "Management" ) {%>
+																	<a href="/track/tracker/<%= sms[i]._id%>"><%= sms[i].Customer_Name%></a>
+																<%} else if (designation == "HoIT" || designation == "NOC-TL" ) {%>
 																	<a href="/mm/tracker/<%= sms[i]._id%>"><%= sms[i].Customer_Name%></a>
 
 																<%} else {%>
-																	<a href="/track/tracker/<%= sms[i]._id%>"><%= sms[i].Customer_Name%></a>
+																	<a href="/client/<%= sms[i]._id%>"><%= sms[i].Customer_Name%></a>
 
-																<%}%>
+																<% } %>
+																
 															</td>
 															<td>
 																<div class="dropdown">
