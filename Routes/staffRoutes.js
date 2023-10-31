@@ -67,7 +67,7 @@ router.post('/tasks/:taskId/note', isAuth, staffController.addNoteToTask);
 router.post('/tasks/:taskId/file/:fileIndex', staffController.deleteFileFromTask);
 router.post('/tasks/update-status/:taskId', isAuth, staffController.editTaskStatus);
 
-
+ 
 router.post('/update-profile/:id', isAuth, staffController.updateEmergencyContact);
 
 // open Pdf

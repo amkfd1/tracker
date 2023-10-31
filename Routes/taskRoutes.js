@@ -44,7 +44,7 @@ router.get("/tasks/doc/:id", async (req, res) => {
   // var docId = req.query.doc;
 console.log("Task Id: ", req.params.id)
   const document = await Task.findById(req.params.id);
-  let dpath = 'uploads/'+document.files[0].filename
+  let path = 'uploads/'+document.files[0].filename
     if (!document) {
       return res.status(404).json({ error: 'Document not found' });
     }

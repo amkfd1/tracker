@@ -472,7 +472,7 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
         user: req.user,
         isAuthenticated: req.user && req.user.isLoggedIn,
         isLegal: isLegal,
-        designation: req.user.designation,
+        designation: req.user.designation, 
         isAccountManager: isAccountManager,
         mytasks: mytasks,
         role: role,
@@ -539,7 +539,7 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
             designation: req.user.designation,
             user: req.user,
             tasks,
-            stages: []
+            stages: ['Received', 'Ongoing', 'Complete']
 
 
         });
@@ -723,14 +723,14 @@ const addNoteToTask = async (req, res) => {
       task.notes.push({note,postedBy});
       const updatedTask = await task.save();
       req.flash('update_success', "Note Successfully added ")
-      res.status(201).redirect('/tasks/task/'+taskId);
+      res.status(201).redirect('/ss/tasks/task/'+taskId);
       // res.json(updatedTask);
       print('The body: ', postedBy, "\n Body: ", req.body)
 
   } catch (error) {
       print({ message: 'Error adding note to task', error: error.message });
       req.flash('server_error', "Error adding note to task. Try Again")
-      res.status(201).redirect('/tasks/task/'+taskId);
+      res.status(201).redirect('/ss/tasks/task/'+taskId);
   }
 };
 
@@ -789,11 +789,23 @@ const editTaskStatus = async (req, res) => {
     }
 
     req.flash('update_success', "Task status updated successfully");
-    return res.status(200).redirect('/tasks/task/' + taskId);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(200).redirect('/admin/task/'+taskId)
+    }else if (req.user.designation === "HoIT" || req.user.designation === "NOC-TL") {
+      return res.status(200).redirect('/mm/task/'+taskId)
+    } else {
+      return res.status(201).redirect('/ss/tasks/task/'+taskId);
+    }
   } catch (error) {
     console.error("Error editing task status:", error.message);
     req.flash('server_error', "Error updating task status. Please try again");
-    return res.status(500).redirect('/tasks/task/' + taskId);
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+      return res.status(200).redirect('/admin/task/'+taskId)
+    }else if (req.user.designation === "HoIT" || req.user.designation === "NOC-TL") {
+      return res.status(200).redirect('/mm/task/'+taskId)
+    } else {
+      return res.status(201).redirect('/ss/tasks/task/'+taskId);
+    }
   }
 };
 

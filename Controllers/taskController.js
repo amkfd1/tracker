@@ -112,9 +112,11 @@ exports.addNoteToTask = async (req, res) => {
         print('The body: ', postedBy, "\n Body: ", req.body)
         if (req.user.designation === "Admin" || req.user.designation === "Management"){
             return res.status(200).redirect('/track/home')
-          }else {
+          }else if (req.user.designation === "HoIT" || req.user.designation === "NOC-TL"){
             return res.status(200).redirect('/mm/tasks/'+req.params.taskId)
 
+          }else {
+            return res.status(200).redirect('/ss/tasks/task/'+req.params.taskId)
           }
 
     } catch (error) {
@@ -122,10 +124,12 @@ exports.addNoteToTask = async (req, res) => {
         req.flash('server_error', "Error adding note to task. Try Again")
         // res.status(201).redirect('/track/home');
         if (req.user.designation === "Admin" || req.user.designation === "Management"){
-            return res.status(500).redirect('/track/home')
-          }else {
-            return res.status(500).redirect('/mm/task/'+req.params.taskId)
+            return res.status(200).redirect('/track/home')
+          }else if (req.user.designation === "HoIT" || req.user.designation === "NOC-TL"){
+            return res.status(200).redirect('/mm/tasks/'+req.params.taskId)
 
+          }else {
+            return res.status(200).redirect('/ss/tasks/task/'+req.params.taskId)
           }
     }
 };
@@ -181,17 +185,21 @@ exports. editTaskStatus = async (req, res) => {
     //   return res.status(200).redirect('/admin/task/'+taskId);
     if (req.user.designation === "Admin" || req.user.designation === "Management"){
         return res.status(200).redirect('/admin/task/'+taskId)
-      }else {
+      }else if (req.user.designation === "HoIT" || req.user.designation === "NOC-TL") {
         return res.status(200).redirect('/mm/task/'+taskId)
+      } else {
+        return res.status(201).redirect('/ss/tasks/task/'+taskId);
       }
     } catch (error) {
       console.error("Error editing task status:", error.message);
       req.flash('server_error', "Error updating task status. Please try again");
     //   return res.status(500).redirect('/admin/task/'+taskId);
-      if (req.user.designation === "Admin" || req.user.designation === "Management"){
-        return res.status(500).redirect('/admin/task/'+taskId)
-      }else {
-        return res.status(500).redirect('/mm/task/'+taskId)
+    if (req.user.designation === "Admin" || req.user.designation === "Management"){
+        return res.status(200).redirect('/admin/task/'+taskId)
+      }else if (req.user.designation === "HoIT" || req.user.designation === "NOC-TL") {
+        return res.status(200).redirect('/mm/task/'+taskId)
+      } else {
+        return res.status(201).redirect('/ss/tasks/task/'+taskId);
       }
     }
   };
