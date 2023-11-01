@@ -678,7 +678,7 @@ const updateEmergencyContact = async (req, res) => {
       // return res.status(404).redirect('/user/user-record/' );
 
       if (req.user.designation === "Admin" || req.user.designation === "Management"){
-        return res.status(200).redirect('/admin/task/'+taskId)
+        return res.status(200).redirect('/track/admin/user/user-record');
       }else if (req.user.designation === "HoIT" || req.user.designation === "NOC-TL") {
         return res.status(200).redirect('/mm/user/user-record/')
       } else {
