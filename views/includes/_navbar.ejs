@@ -68,18 +68,47 @@
 								</div> 
 								<div class="dropdown-body">
 									<ul class="profile-nav p-0 pt-3">
-										<li class="nav-item">
-											<a href="/track/admin/user/user-record%>" class="nav-link">
-												<i data-feather="user"></i>
-												<span>Profile</span>
-											</a> 
-										</li>
-										<li class="nav-item">
-											<a href="/track/admin/user/user-record" class="nav-link">
-												<i data-feather="edit"></i>
-												<span>Edit Profile</span>
-											</a>
-										</li>
+										<%if (designation == "Admin" || designation == "Management" ) {%>
+											<li class="nav-item">
+												<a href="/track/admin/user/user-record%>" class="nav-link">
+													<i data-feather="user"></i>
+													<span>Profile</span>
+												</a> 
+											</li>
+											<li class="nav-item">
+												<a href="/track/admin/user/user-record" class="nav-link">
+													<i data-feather="edit"></i>
+													<span>Edit Profile</span>
+												</a>
+											</li> 
+										  <%} else if (designation == "HoIT" || designation == "NOC-TL" ) {%>
+											<li class="nav-item">
+												<a href="/mm/user/user-record%>" class="nav-link">
+													<i data-feather="user"></i>
+													<span>Profile</span>
+												</a> 
+											</li>
+											<li class="nav-item">
+												<a href="/mm/user/user-record" class="nav-link">
+													<i data-feather="edit"></i>
+													<span>Edit Profile</span>
+												</a>
+											</li> 
+										  <%} else {%>
+											<li class="nav-item">
+												<a href="/ss/user/user-record%>" class="nav-link">
+													<i data-feather="user"></i>
+													<span>Profile</span>
+												</a> 
+											</li>
+											<li class="nav-item">
+												<a href="/ss/user/user-record" class="nav-link">
+													<i data-feather="edit"></i>
+													<span>Edit Profile</span>
+												</a>
+											</li> 
+										<% } %>
+										
 										
 										<li class="nav-item">
 											<a href="/auth/logout" class="nav-link text-danger">

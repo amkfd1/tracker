@@ -13,6 +13,7 @@ const isAdmin = require('../middleware/isAdmin');
 const ismm = require('../middleware/ismm');
 const Tracker = require('../Models/tracker');
 const User = require('../Models/user');
+const adminsettings = require('../Controllers/adminsettings');
 
 const multer = require('multer');
 
@@ -33,6 +34,7 @@ const storage = multer.diskStorage({
 // Create the Multer instance with the custom storage
 const upload = multer({ storage: storage });
 
+router.get('/user/user-record', ismm, adminsettings.getUserById)
 
 router.get('/dashboard', ismm, mmController.getManagementDash);
 

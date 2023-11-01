@@ -356,6 +356,7 @@ const task = await Task.find({taskFor:req.user._id}).populate('taskFor').populat
         error,
         mytasks,
         trackers,
+        designation: req.user.designation,
         userNotes, // Add the userNotes array to the response
         completedPercentile: completedPercentile.toFixed(2),
         incompletePercentile: (100 - completedPercentile).toFixed(2),
@@ -674,7 +675,16 @@ const updateEmergencyContact = async (req, res) => {
       await user.save();
 
       req.flash('update_success', "Emergency contact successfully updated")
-      return res.status(404).redirect('/user/user-record/'+userId );
+      // return res.status(404).redirect('/user/user-record/' );
+
+      if (req.user.designation === "Admin" || req.user.designation === "Management"){
+        return res.status(200).redirect('/admin/task/'+taskId)
+      }else if (req.user.designation === "HoIT" || req.user.designation === "NOC-TL") {
+        return res.status(200).redirect('/mm/user/user-record/')
+      } else {
+        return res.status(201).redirect('/ss/user/user-record/');
+      }
+    
   } catch (error) {
       res.status(500).json({ message: 'Error updating emergency contact', error: error.message });
   }

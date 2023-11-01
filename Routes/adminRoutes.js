@@ -3,12 +3,12 @@ const router = express.Router();
 const adminController = require('../Controllers/taskController');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' }); // Replace with your desired upload destination
+const isAuth = require('../middleware/verifyAuth');
 
+router.put('/users/:userId/lock', isAuth, adminController.lockUserAccess);
 
-router.put('/users/:userId/lock', adminController.lockUserAccess);
+router.post('/password-reset-link', isAuth, adminController.resetUserPassword);
 
-router.post('/password-reset-link', adminController.resetUserPassword);
-
-router.put('/users/:userId/profile', upload.single('image'), adminController.updateUserProfile);
+router.put('/users/:userId/profile', isAuth, upload.single('image'), adminController.updateUserProfile);
 
 module.exports = router;

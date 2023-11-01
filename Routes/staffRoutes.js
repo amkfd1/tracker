@@ -67,6 +67,8 @@ router.post('/tasks/:taskId/note', isAuth, staffController.addNoteToTask);
 router.post('/tasks/:taskId/file/:fileIndex', staffController.deleteFileFromTask);
 router.post('/tasks/update-status/:taskId', isAuth, staffController.editTaskStatus);
 
+// user profile
+router.get('/ss/user/user-record', isAuth, adminsettings.getUserById)
  
 router.post('/update-profile/:id', isAuth, staffController.updateEmergencyContact);
 
@@ -112,7 +114,7 @@ router.get("/client/doc/:id", async (req, res) => {
   console.log("File streaming has started.");
 });
 
- router.get('/user/user-record/:userId', isAuth, adminsettings.getUserById)
+//  router.get('/user/user-record/:userId', isAuth, adminsettings.getUserById)
 
  
 module.exports = router; 

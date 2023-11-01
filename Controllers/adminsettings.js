@@ -129,7 +129,11 @@ exports.getUserById = async (req, res) => {
         let flash = await req.flash('update_success')[0] || req.flash('permission')[0] || req.flash('register-success')[0];
         let error = req.flash('tracker_404' )[0] || req.flash('server_error')[0] || req.flash('unauthorized')[0] || req.flash('task_already_assigned')[0] || req.flash('account_manager_assigned')[0];
         console.log("image: ", user.profile.image)
-        res.render('records',{user, pageTitle: 'My Record', designation:req.user.designation, isAuthenticated:true,  message: flash,
+
+        // const userId = req.user._id;
+        const tasks = await Task.find({ taskFor: userId }).populate('taskFor');
+    
+        res.render('records',{user, pageTitle: 'My Record', designation:req.user.designation, isAuthenticated:true, tasks,  message: flash,
         error,});
     } catch (error) {
         // res.status(500).json({ message: 'Error fetching user information', error: error.message });
